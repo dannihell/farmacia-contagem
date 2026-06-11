@@ -409,6 +409,18 @@
 <!-- ECRÃ 1: IDENTIFICAÇÃO -->
 <div class="screen active" id="screen-login">
   <div style="padding-top: 8px;">
+
+    <!-- STOCK STATUS -->
+    <div class="card" id="stock-status-card">
+      <div class="card-title">Stock carregado</div>
+      <div id="stock-status-info" style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
+        A verificar...
+      </div>
+      <button class="btn btn-primary" id="btn-actualizar" onclick="actualizarStock()">
+        ↻ Actualizar stock
+      </button>
+    </div>
+
     <div class="card">
       <div class="card-title">Colaborador</div>
       <select id="sel-colaborador">
@@ -661,23 +673,21 @@ async function processarCNP(cnp) {
 }
 
 async function buscarProduto(cnp) {
-  // Simulação — substitui pela chamada real ao Zoho Analytics
-  // quando tiveres as credenciais configuradas acima
-  await new Promise(r => setTimeout(r, 300));
-
-  const mock = {
-    cnp,
-    nome: 'A CARREGAR...',
-    stockSifarma: Math.floor(Math.random() * 20),
-  };
-
-  // TODO: substituir por chamada real:
-  // const token = await getZohoToken();
-  // const data = await queryZoho(token, cnp);
-  // return { cnp, nome: data.NOME, stockSifarma: data.STK_FARMACIA };
-
-  mock.nome = 'Produto CNP ' + cnp;
-  return mock;
+  // Primeiro tenta o cache local
+  const cached = stockCache[cnp];
+  if (cached) {
+    return {
+      cnp,
+      nome: cached.nome || 'Sem nome',
+      stockSifarma: parseFloat(cached.stock) || 0,
+      validade: cached.validade || '',
+      familia: cached.familia || '',
+      subfamilia: cached.subfamilia || '',
+      prateleira: cached.prateleira || '',
+    };
+  }
+  // Se não está em cache, avisa
+  return { cnp, nome: 'Produto não encontrado no stock carregado', stockSifarma: 0, validade: '', erro: true };
 }
 
 function mostrarProduto(produto, cnp) {
@@ -691,7 +701,7 @@ function mostrarProduto(produto, cnp) {
   document.getElementById('prod-contado').textContent = 0;
   document.getElementById('prod-desvio').textContent = '—';
   document.getElementById('prod-desvio').className = 'stock-box-value';
-  document.getElementById('input-validade').value = '';
+  document.getElementById('input-validade').value = produto.validade || '';
   document.getElementById('produto-atual').style.display = 'block';
 }
 
