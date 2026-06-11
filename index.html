@@ -627,21 +627,14 @@ async function actualizarStock() {
   btn.innerHTML = 'A pedir exportacao...';
   if (el) el.textContent = 'A aguardar o servidor da farmacia...';
 
-  // Escrever pedido directamente no GitHub com token de permissoes minimas
+  // Chamar Cloudflare Worker que escreve o pedido no GitHub (token guardado no Cloudflare)
   try {
-    const shaResp = await fetch('https://api.github.com/repos/dannihell/farmacia-contagem/contents/data/pedido.json', {
-      headers: { 'Authorization': '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 }
+    await fetch('https://stock-pedido.danielgds.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'pedirExportacao' })
     });
-    const shaData = await shaResp.json();
-    const sha = shaData.sha;
-    const pedido = { pendente: true, timestamp: new Date().toISOString() };
-    const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(pedido))));
-    await fetch('https://api.github.com/repos/dannihell/farmacia-contagem/contents/data/pedido.json', {
-      method: 'PUT',
-      headers: { 'Authorization': 'token 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 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Stock request', content: contentB64, sha: sha })
-    });
-  } catch(e) { console.error('Erro ao escrever pedido:', e); }
+  } catch(e) { console.error('Erro ao enviar pedido:', e); }
 
   // Polling - ler stock.json do GitHub Raw (publico, sem token)
   const tsAntes = stockTimestamp;
