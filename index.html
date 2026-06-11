@@ -630,7 +630,7 @@ async function actualizarStock() {
   // Escrever pedido directamente no GitHub com token de permissoes minimas
   try {
     const shaResp = await fetch('https://api.github.com/repos/dannihell/farmacia-contagem/contents/data/pedido.json', {
-      headers: { 'Authorization': 'token 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' }
+      headers: { 'Authorization': 'token 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' }
     });
     const shaData = await shaResp.json();
     const sha = shaData.sha;
@@ -638,7 +638,7 @@ async function actualizarStock() {
     const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(pedido))));
     await fetch('https://api.github.com/repos/dannihell/farmacia-contagem/contents/data/pedido.json', {
       method: 'PUT',
-      headers: { 'Authorization': 'token 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', 'Content-Type': 'application/json' },
+      headers: { 'Authorization': 'token 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', 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: 'Stock request', content: contentB64, sha: sha })
     });
   } catch(e) { console.error('Erro ao escrever pedido:', e); }
