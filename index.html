@@ -627,9 +627,9 @@ async function actualizarStock() {
   btn.innerHTML = 'A pedir exportacao...';
   if (el) el.textContent = 'A aguardar o servidor da farmacia...';
 
-  // Enviar pedido ao Apps Script (que escreve no GitHub com token seguro)
+  // Enviar pedido ao Zoho Flow webhook
   try {
-    await fetch(APPS_SCRIPT_URL, {
+    await fetch('https://flow.zoho.com/781049798/flow/webhook/incoming?zapikey=1001.16217772b85ac8eb97d861c1ae5bbe70.faeaa02184c678075d2bc66b141370eb&isdebug=false', {
       method: 'POST',
       mode: 'no-cors',
       headers: {'Content-Type': 'application/json'},
