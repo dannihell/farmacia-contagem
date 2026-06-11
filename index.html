@@ -627,15 +627,21 @@ async function actualizarStock() {
   btn.innerHTML = 'A pedir exportacao...';
   if (el) el.textContent = 'A aguardar o servidor da farmacia...';
 
-  // Enviar pedido ao Zoho Flow webhook
+  // Escrever pedido directamente no GitHub com token de permissoes minimas
   try {
-    await fetch('https://flow.zoho.com/781049798/flow/webhook/incoming?zapikey=1001.16217772b85ac8eb97d861c1ae5bbe70.faeaa02184c678075d2bc66b141370eb&isdebug=false', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({action: 'pedirExportacao'})
+    const shaResp = await fetch('https://api.github.com/repos/dannihell/farmacia-contagem/contents/data/pedido.json', {
+      headers: { 'Authorization': 'token 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' }
     });
-  } catch(e) { console.error('Erro ao enviar pedido:', e); }
+    const shaData = await shaResp.json();
+    const sha = shaData.sha;
+    const pedido = { pendente: true, timestamp: new Date().toISOString() };
+    const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(pedido))));
+    await fetch('https://api.github.com/repos/dannihell/farmacia-contagem/contents/data/pedido.json', {
+      method: 'PUT',
+      headers: { 'Authorization': 'token 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', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Stock request', content: contentB64, sha: sha })
+    });
+  } catch(e) { console.error('Erro ao escrever pedido:', e); }
 
   // Polling - ler stock.json do GitHub Raw (publico, sem token)
   const tsAntes = stockTimestamp;
