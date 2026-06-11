@@ -587,9 +587,6 @@ const ZOHO_CONFIG = {
 // ============================================================
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgl_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec';
 const GITHUB_RAW = 'https://raw.githubusercontent.com/dannihell/farmacia-contagem/main';
-const GITHUB_TOKEN = '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';
-const GITHUB_REPO = 'dannihell/farmacia-contagem';
-const GITHUB_API = 'https://api.github.com';
 
 let stockCache = {};
 let stockTimestamp = null;
@@ -630,21 +627,15 @@ async function actualizarStock() {
   btn.innerHTML = 'A pedir exportacao...';
   if (el) el.textContent = 'A aguardar o servidor da farmacia...';
 
-  // Escrever pedido directamente no GitHub
+  // Enviar pedido ao Apps Script (que escreve no GitHub com token seguro)
   try {
-    const shaResp = await fetch(GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/data/pedido.json', {
-      headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'pedirExportacao'})
     });
-    const shaData = await shaResp.json();
-    const sha = shaData.sha;
-    const pedido = { pendente: true, timestamp: new Date().toISOString() };
-    const content_b64 = btoa(unescape(encodeURIComponent(JSON.stringify(pedido))));
-    await fetch(GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/data/pedido.json', {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + GITHUB_TOKEN, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'Stock request', content: content_b64, sha: sha })
-    });
-  } catch(e) { console.error('Erro ao escrever pedido:', e); }
+  } catch(e) { console.error('Erro ao enviar pedido:', e); }
 
   // Polling - ler stock.json do GitHub Raw (publico, sem token)
   const tsAntes = stockTimestamp;
