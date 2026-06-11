@@ -586,48 +586,23 @@ const ZOHO_CONFIG = {
 // Substitui com o URL do teu Google Apps Script (ver instruções)
 // ============================================================
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgl_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec';
-const GITHUB_TOKEN = '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';
-const GITHUB_REPO = 'dannihell/farmacia-contagem';
-const GITHUB_API = 'https://api.github.com';
+const GITHUB_RAW = 'https://raw.githubusercontent.com/dannihell/farmacia-contagem/main';
 
 let stockCache = {};
 let stockTimestamp = null;
 
-async function githubGetFile(path) {
-  const resp = await fetch(GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/' + path, {
-    headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
-  });
-  if (!resp.ok) return null;
-  const data = await resp.json();
-  return JSON.parse(atob(data.content.replace(/\n/g, '')));
-}
-
-async function githubGetSha(path) {
-  const resp = await fetch(GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/' + path, {
-    headers: { 'Authorization': 'token ' + GITHUB_TOKEN }
-  });
-  if (!resp.ok) return null;
-  return (await resp.json()).sha;
-}
-
-async function githubPutFile(path, content, sha, message) {
-  const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(content))));
-  const body = { message, content: contentB64 };
-  if (sha) body.sha = sha;
-  const resp = await fetch(GITHUB_API + '/repos/' + GITHUB_REPO + '/contents/' + path, {
-    method: 'PUT',
-    headers: { 'Authorization': 'token ' + GITHUB_TOKEN, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  return resp.ok;
-}
-
 async function verificarStatusStock() {
   try {
-    const data = await githubGetFile('data/stock.json');
+    const resp = await fetch(GITHUB_RAW + '/data/stock.json?t=' + Date.now());
+    if (!resp.ok) throw new Error('sem stock');
+    const data = await resp.json();
     actualizarUIStock(data);
+    if (data.produtos) { stockCache = data.produtos; stockTimestamp = data.timestamp; }
   } catch(e) {
-    document.getElementById('stock-status-info').textContent = 'Sem ligacao ao servidor.';
+    const el = document.getElementById('stock-status-info');
+    if (el) el.textContent = 'Stock nao disponivel. Carrega em Actualizar.';
+    const btn = document.getElementById('btn-actualizar');
+    if (btn) { btn.textContent = 'Actualizar stock'; btn.disabled = false; }
   }
 }
 
@@ -638,10 +613,9 @@ function actualizarUIStock(data) {
     const ts = new Date(data.timestamp);
     const hora = ts.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
     const dia = ts.toLocaleDateString('pt-PT', {day: '2-digit', month: '2-digit'});
-    el.innerHTML = '<span style="color:var(--green);font-weight:600;">checkmark ' + data.total + ' produtos</span> actualizado as ' + hora + ' de ' + dia;
-    if (data.produtos) { stockCache = data.produtos; stockTimestamp = data.timestamp; }
+    if (el) el.innerHTML = '<span style="color:var(--green);font-weight:600;">&#10003; ' + data.total + ' produtos</span> &mdash; actualizado as ' + hora + ' de ' + dia;
   } else {
-    el.textContent = 'Stock nao disponivel. Carrega em Actualizar.';
+    if (el) el.textContent = 'Stock nao disponivel. Carrega em Actualizar.';
   }
   if (btn) { btn.textContent = 'Actualizar stock'; btn.disabled = false; }
 }
@@ -651,38 +625,44 @@ async function actualizarStock() {
   const el = document.getElementById('stock-status-info');
   btn.disabled = true;
   btn.innerHTML = 'A pedir exportacao...';
-  el.textContent = 'A aguardar o servidor da farmacia...';
+  if (el) el.textContent = 'A aguardar o servidor da farmacia...';
+
+  // Escrever pedido via Apps Script (no-cors - nao precisa de token)
   try {
-    const sha = await githubGetSha('data/pedido.json');
-    await githubPutFile('data/pedido.json', { pendente: true, timestamp: new Date().toISOString() }, sha, 'Stock request');
-    const tsAntes = stockTimestamp;
-    let tentativas = 0;
-    const intervalo = setInterval(async () => {
-      tentativas++;
-      el.textContent = 'A aguardar exportacao... (' + (tentativas * 15) + 's)';
-      try {
-        const data = await githubGetFile('data/stock.json');
-        if (data && data.timestamp && data.timestamp !== tsAntes && data.total > 0) {
-          clearInterval(intervalo);
-          stockTimestamp = data.timestamp;
-          stockCache = data.produtos || {};
-          actualizarUIStock(data);
-          showToast('Stock actualizado - ' + data.total + ' produtos');
-          btn.disabled = false;
-        }
-      } catch(e) {}
-      if (tentativas >= 16) {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'pedirExportacao'})
+    });
+  } catch(e) {}
+
+  // Polling - ler stock.json do GitHub Raw (publico, sem token)
+  const tsAntes = stockTimestamp;
+  let tentativas = 0;
+  const intervalo = setInterval(async () => {
+    tentativas++;
+    if (el) el.textContent = 'A aguardar exportacao... (' + (tentativas * 15) + 's)';
+    try {
+      const resp = await fetch(GITHUB_RAW + '/data/stock.json?t=' + Date.now());
+      if (!resp.ok) return;
+      const data = await resp.json();
+      if (data && data.timestamp && data.timestamp !== tsAntes && data.total > 0) {
         clearInterval(intervalo);
-        el.textContent = 'Tempo esgotado. Verifica se o servidor esta activo.';
-        btn.textContent = 'Tentar de novo';
+        stockTimestamp = data.timestamp;
+        stockCache = data.produtos || {};
+        actualizarUIStock(data);
+        showToast('Stock actualizado - ' + data.total + ' produtos');
         btn.disabled = false;
       }
-    }, 15000);
-  } catch(e) {
-    el.textContent = 'Erro: ' + e.message;
-    btn.textContent = 'Actualizar stock';
-    btn.disabled = false;
-  }
+    } catch(e) {}
+    if (tentativas >= 16) {
+      clearInterval(intervalo);
+      if (el) el.textContent = 'Tempo esgotado. Verifica se o servidor esta activo.';
+      btn.textContent = 'Tentar de novo';
+      btn.disabled = false;
+    }
+  }, 15000);
 }
 
 window.addEventListener('load', () => { verificarStatusStock(); });
