@@ -448,7 +448,7 @@
   <div class="card" id="scan-card">
     <div class="card-title">Ler código de barras</div>
     <div class="scan-wrapper">
-      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric" readonly>
     </div>
     <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e pressiona Enter.</div>
   </div>
@@ -680,6 +680,17 @@ scanInput.addEventListener('keydown', function(e) {
     const cnp = scanInput.value.trim();
     if (cnp) processarCNP(cnp);
     scanInput.value = '';
+    return;
+  }
+  if (e.key === 'Backspace') {
+    e.preventDefault();
+    scanInput.value = scanInput.value.slice(0, -1);
+    return;
+  }
+  // Readonly bloqueia a escrita automática — construímos o valor manualmente
+  if (e.key.length === 1) {
+    e.preventDefault();
+    scanInput.value += e.key;
   }
 });
 
@@ -720,6 +731,13 @@ async function processarCNP(cnp) {
     return;
   }
 
+  // Se for o mesmo produto já em exibição (ainda não registado), só incrementa
+  if (produtoAtual && produtoAtual.cnp === cnp) {
+    ajustarContador(1);
+    showToast('+1 ' + produtoAtual.nome.substring(0, 20));
+    return;
+  }
+
   const produto = await buscarProduto(cnp);
   mostrarProduto(produto, cnp);
 }
@@ -741,15 +759,17 @@ async function buscarProduto(cnp) {
 
 function mostrarProduto(produto, cnp) {
   produtoAtual = { ...produto, cnp };
-  contadorAtual = 0;
+  contadorAtual = 1;
 
   document.getElementById('prod-nome').textContent = produto.nome;
   document.getElementById('prod-cnp').textContent = 'CNP: ' + cnp;
   document.getElementById('prod-stock-sifarma').textContent = produto.stockSifarma;
-  document.getElementById('counter-display').textContent = 0;
-  document.getElementById('prod-contado').textContent = 0;
-  document.getElementById('prod-desvio').textContent = '—';
-  document.getElementById('prod-desvio').className = 'stock-box-value';
+  document.getElementById('counter-display').textContent = 1;
+  document.getElementById('prod-contado').textContent = 1;
+  const desvio = 1 - produto.stockSifarma;
+  const elD = document.getElementById('prod-desvio');
+  elD.textContent = (desvio > 0 ? '+' : '') + desvio;
+  elD.className = 'stock-box-value ' + (desvio === 0 ? 'desvio-ok' : desvio > 0 ? 'desvio-pos' : 'desvio-neg');
   document.getElementById('input-validade').value = produto.validade || '';
   document.getElementById('produto-atual').style.display = 'block';
 }
