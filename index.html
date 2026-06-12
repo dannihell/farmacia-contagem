@@ -870,9 +870,9 @@ function construirAltCodeMap() {
 // 1) match direto no stock; 2) últimos 7 dígitos (QR/GS1); 3) código alternativo
 function resolverCNP(codigo) {
   if (stockCache[codigo]) return codigo;
-  if (/^\d{8,}$/.test(codigo)) {
+  if (codigo.length >= 8) {
     const ultimos7 = codigo.slice(-7);
-    if (stockCache[ultimos7]) return ultimos7;
+    if (/^\d{7}$/.test(ultimos7) && stockCache[ultimos7]) return ultimos7;
   }
   if (altCodeMap[codigo]) return altCodeMap[codigo];
   return codigo;
