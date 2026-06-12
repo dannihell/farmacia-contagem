@@ -460,6 +460,55 @@
       </select>
     </div>
     <button class="btn btn-primary" onclick="iniciarSessao()">Iniciar contagem</button>
+    <button class="btn" onclick="abrirVerificacaoRapida()">Verificação rápida (1 produto)</button>
+  </div>
+</div>
+
+<!-- ECRÃ VERIFICAÇÃO RÁPIDA -->
+<div class="screen" id="screen-rapida">
+  <div style="padding-top: 8px;">
+    <div class="card">
+      <div class="card-title">Ler código de barras</div>
+      <div class="scan-wrapper">
+        <input type="text" id="scan-input-rapida" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+      </div>
+      <div class="scan-hint">Verificação pontual ao balcão — não cria sessão de contagem.</div>
+    </div>
+
+    <div id="rapida-produto" style="display:none;">
+      <div class="product-card">
+        <div class="product-name" id="rapida-nome">—</div>
+        <div class="product-cnp" id="rapida-cnp">—</div>
+
+        <div class="stock-row">
+          <div class="stock-box">
+            <div class="stock-box-label">Sifarma</div>
+            <div class="stock-box-value" id="rapida-stock-sifarma">—</div>
+          </div>
+          <div class="stock-box">
+            <div class="stock-box-label">Contado</div>
+            <div class="stock-box-value" id="rapida-contado">0</div>
+          </div>
+          <div class="stock-box">
+            <div class="stock-box-label">Desvio</div>
+            <div class="stock-box-value" id="rapida-desvio">—</div>
+          </div>
+        </div>
+
+        <div class="counter-row">
+          <button class="counter-btn minus" onclick="ajustarContadorRapida(-1)">−</button>
+          <div class="counter-display" id="rapida-counter-display">0</div>
+          <button class="counter-btn plus" onclick="ajustarContadorRapida(1)">+</button>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-primary btn-sm" style="flex:1;" onclick="submeterRapida()">✓ Enviar para correção</button>
+          <button class="btn btn-sm" onclick="cancelarRapida()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="cancelarRapida()" style="margin-top:8px;">← Voltar</button>
   </div>
 </div>
 
@@ -532,6 +581,11 @@
     <div class="card-title">Pendentes — contado abaixo do stock Sifarma</div>
     <div id="lista-pendentes"></div>
   </div>
+
+  <!-- FINALIZAR GAVETA -->
+  <button class="btn btn-primary" id="btn-finalizar-gaveta" style="display:none; margin-bottom:12px;" onclick="finalizarGaveta()">
+    ✓ Finalizar gaveta — registar todos os pickados
+  </button>
 
   <!-- STATS -->
   <div class="stats-bar" id="stats-bar" style="display:none;">
@@ -647,20 +701,46 @@ function popularSelect(sel, valores, placeholder, extraOptionsHtml) {
   sel.value = '';
 }
 
+// Colaboradores: vêm principalmente de data.colaboradores no stock.json
+// (gerado a partir de SIFT_EMPREGADOS — ativos, por farmácia).
+// localStorage serve só de fallback temporário até ao próximo export noturno
+// (ex.: pessoa contratada hoje mesmo).
+function getColaboradoresExtra(farmacia) {
+  try {
+    const raw = localStorage.getItem('colaboradoresExtra_' + farmacia);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function adicionarColaboradorExtra(farmacia, nome) {
+  const lista = getColaboradoresExtra(farmacia);
+  if (!lista.includes(nome)) {
+    lista.push(nome);
+    try { localStorage.setItem('colaboradoresExtra_' + farmacia, JSON.stringify(lista)); } catch(e) {}
+  }
+}
+
+let colaboradoresServidor = {}; // farmacia -> [nomes] vindos do stock.json
+
+function popularColaboradores(farmacia) {
+  const cfg = FARMACIA_CONFIG[farmacia];
+  const base = cfg ? cfg.colaboradores : [];
+  const colaboradores = [...new Set([...base, ...(colaboradoresServidor[farmacia] || []), ...getColaboradoresExtra(farmacia)])];
+  popularSelect(document.getElementById('sel-colaborador'), colaboradores, 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
+}
+
 function onFarmaciaChange() {
   const farmacia = document.getElementById('sel-farmacia').value;
   const cfg = FARMACIA_CONFIG[farmacia];
-  const selCol = document.getElementById('sel-colaborador');
   const selLocal = document.getElementById('sel-local');
   document.getElementById('input-novo-colaborador').style.display = 'none';
   document.getElementById('input-novo-colaborador').value = '';
 
+  popularColaboradores(farmacia);
   if (!cfg) {
-    popularSelect(selCol, [], 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
     popularSelect(selLocal, [], 'Selecionar local...');
     return;
   }
-  popularSelect(selCol, cfg.colaboradores, 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
   popularSelect(selLocal, cfg.locais, 'Selecionar local...');
   verificarStatusStock();
 }
@@ -670,7 +750,133 @@ function onColaboradorChange() {
   document.getElementById('input-novo-colaborador').style.display = (v === '__novo__') ? 'block' : 'none';
 }
 
+// ============================================================
+// VERIFICAÇÃO RÁPIDA (1 produto, sem sessão)
+// ============================================================
+let rapidaProduto = null;
+let rapidaContador = 0;
+const scanInputRapida = () => document.getElementById('scan-input-rapida');
+
+function abrirVerificacaoRapida() {
+  const farmacia = document.getElementById('sel-farmacia').value;
+  if (!farmacia) { showToast('Seleciona a farmácia primeiro'); return; }
+  rapidaProduto = null;
+  rapidaContador = 0;
+  document.getElementById('rapida-produto').style.display = 'none';
+  document.getElementById('scan-input-rapida').value = '';
+  showScreen('screen-rapida');
+  scanInputRapida().focus();
+}
+
+function cancelarRapida() {
+  rapidaProduto = null;
+  document.getElementById('rapida-produto').style.display = 'none';
+  showScreen('screen-login');
+}
+
+scanInputRapida().addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const cnp = scanInputRapida().value.trim();
+    if (cnp) processarCNPRapida(cnp);
+    scanInputRapida().value = '';
+  }
+});
+
+async function processarCNPRapida(cnp) {
+  cnp = resolverCNP(cnp);
+  const produto = await buscarProduto(cnp);
+  rapidaProduto = { ...produto, cnp };
+  rapidaContador = 1;
+  document.getElementById('rapida-nome').textContent = produto.nome;
+  document.getElementById('rapida-cnp').textContent = 'CNP: ' + cnp;
+  document.getElementById('rapida-stock-sifarma').textContent = produto.stockSifarma;
+  atualizarDesvioRapida();
+  document.getElementById('rapida-produto').style.display = 'block';
+}
+
+function ajustarContadorRapida(delta) {
+  rapidaContador = Math.max(0, rapidaContador + delta);
+  atualizarDesvioRapida();
+}
+
+function atualizarDesvioRapida() {
+  document.getElementById('rapida-counter-display').textContent = rapidaContador;
+  document.getElementById('rapida-contado').textContent = rapidaContador;
+  if (!rapidaProduto) return;
+  const desvio = rapidaContador - rapidaProduto.stockSifarma;
+  const el = document.getElementById('rapida-desvio');
+  el.textContent = (desvio > 0 ? '+' : '') + desvio;
+  el.className = 'stock-box-value ' + (desvio === 0 ? 'desvio-ok' : desvio > 0 ? 'desvio-pos' : 'desvio-neg');
+}
+
+async function submeterRapida() {
+  if (!rapidaProduto) return;
+  const farmacia = document.getElementById('sel-farmacia').value;
+  let col = document.getElementById('sel-colaborador').value;
+  if (col === '__novo__') {
+    col = document.getElementById('input-novo-colaborador').value.trim();
+    if (col) adicionarColaboradorExtra(farmacia, col);
+  }
+  if (!col) { showToast('Seleciona o colaborador'); return; }
+
+  const cfg = FARMACIA_CONFIG[farmacia];
+  const scriptUrl = cfg ? cfg.appsScriptUrl : null;
+  const desvio = rapidaContador - rapidaProduto.stockSifarma;
+
+  const payload = [{
+    data: new Date().toLocaleDateString('pt-PT'),
+    hora: new Date().toLocaleTimeString('pt-PT'),
+    farmacia,
+    colaborador: col,
+    cnp: rapidaProduto.cnp,
+    nome: rapidaProduto.nome,
+    stock_sifarma: rapidaProduto.stockSifarma,
+    contado: rapidaContador,
+    desvio,
+    validade: '',
+    locais: 'Balcão — ajuste pontual',
+  }];
+
+  if (scriptUrl && scriptUrl !== 'APPS_SCRIPT_URL_AQUI') {
+    try {
+      await fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessao: col + ' — verificação rápida', linhas: payload }),
+      });
+    } catch(e) { console.error(e); }
+  }
+
+  showToast('Enviado para correção (' + (desvio > 0 ? '+' : '') + desvio + ')');
+  cancelarRapida();
+}
+
 let stockCache = {};
+let altCodeMap = {}; // código alternativo (COD_ALTERNATIVOS) -> cnp
+
+function construirAltCodeMap() {
+  altCodeMap = {};
+  for (const cnp in stockCache) {
+    const c = stockCache[cnp].c;
+    if (c && c !== cnp && !stockCache[c]) {
+      altCodeMap[c] = cnp;
+    }
+  }
+}
+
+// Resolve um código lido para o CNP correto:
+// 1) match direto no stock; 2) últimos 7 dígitos (QR/GS1); 3) código alternativo
+function resolverCNP(codigo) {
+  if (stockCache[codigo]) return codigo;
+  if (/^\d{8,}$/.test(codigo)) {
+    const ultimos7 = codigo.slice(-7);
+    if (stockCache[ultimos7]) return ultimos7;
+  }
+  if (altCodeMap[codigo]) return altCodeMap[codigo];
+  return codigo;
+}
 let stockTimestamp = null;
 
 async function verificarStatusStock() {
@@ -685,7 +891,12 @@ async function verificarStatusStock() {
     if (!resp.ok) throw new Error('sem stock');
     const data = await resp.json();
     actualizarUIStock(data);
-    if (data.produtos) { stockCache = data.produtos; stockTimestamp = data.timestamp; }
+    if (data.produtos) { stockCache = data.produtos; stockTimestamp = data.timestamp; construirAltCodeMap(); }
+    const farmacia = document.getElementById('sel-farmacia').value;
+    if (data.colaboradores && farmacia) {
+      colaboradoresServidor[farmacia] = data.colaboradores;
+      popularColaboradores(farmacia);
+    }
   } catch(e) {
     const el = document.getElementById('stock-status-info');
     if (el) el.textContent = 'Stock nao disponivel. Carrega em Actualizar.';
@@ -739,7 +950,7 @@ async function actualizarStock() {
       if (data && data.timestamp && data.timestamp !== tsAntes && data.total > 0) {
         clearInterval(intervalo);
         stockTimestamp = data.timestamp;
-        stockCache = data.produtos || {};
+        stockCache = data.produtos || {}; construirAltCodeMap();
         actualizarUIStock(data);
         showToast('Stock actualizado - ' + data.total + ' produtos');
         btn.disabled = false;
@@ -776,6 +987,7 @@ function iniciarSessao() {
   const local = document.getElementById('sel-local').value;
   if (col === '__novo__') {
     col = document.getElementById('input-novo-colaborador').value.trim();
+    if (col) adicionarColaboradorExtra(farmacia, col);
   }
   if (!farmacia || !col || !local) { showToast('Seleciona farmácia, colaborador e local'); return; }
 
@@ -851,6 +1063,9 @@ document.addEventListener('keydown', function(e) {
 async function processarCNP(cnp) {
   if (document.getElementById('screen-contagem').className.indexOf('active') === -1) return;
 
+  // Resolve códigos alternativos / QR (GS1) para o CNP correto
+  cnp = resolverCNP(cnp);
+
   // Se já está na lista final (registado), apenas soma directamente ao registo
   const existente = sessao.contagens.find(c => c.cnp === cnp);
   if (existente) {
@@ -877,7 +1092,6 @@ async function processarCNP(cnp) {
 }
 
 async function buscarProduto(cnp) {
-  // Primeiro tenta o cache local
   const cached = stockCache[cnp];
   if (cached) {
     return {
@@ -887,7 +1101,6 @@ async function buscarProduto(cnp) {
       validade: cached.v || '',
     };
   }
-  // Se não está em cache, avisa
   return { cnp, nome: 'Produto não encontrado no stock carregado', stockSifarma: 0, validade: '', erro: true };
 }
 
@@ -908,10 +1121,49 @@ function mostrarProduto(produto, cnp) {
   document.getElementById('produto-atual').style.display = 'block';
 }
 
+function finalizarGaveta() {
+  const cnps = Object.keys(contadores);
+  if (cnps.length === 0) { showToast('Nada para registar'); return; }
+
+  let registados = 0;
+  cnps.forEach(cnp => {
+    const cached = stockCache[cnp];
+    const stock = cached ? (parseFloat(cached.s) || 0) : 0;
+    const nome = cached ? (cached.n || 'Sem nome') : 'Produto não encontrado';
+    const contado = contadores[cnp];
+    const locais = locaisPorCnp[cnp] ? Array.from(locaisPorCnp[cnp]) : (localAtual ? [localAtual] : []);
+
+    sessao.contagens.push({
+      cnp,
+      nome,
+      stockSifarma: stock,
+      contado,
+      desvio: contado - stock,
+      validade: (produtoAtual && produtoAtual.cnp === cnp) ? document.getElementById('input-validade').value.trim() : '',
+      locais,
+      ts: new Date().toISOString(),
+    });
+    registados++;
+  });
+
+  contadores = {};
+  contadoresPorLocal = {};
+  locaisPorCnp = {};
+  produtoAtual = null;
+  contadorAtual = 0;
+  document.getElementById('produto-atual').style.display = 'none';
+
+  atualizarLista();
+  atualizarPendentes();
+  showToast(registados + ' produto(s) registado(s)');
+}
+
 function atualizarPendentes() {
   const card = document.getElementById('pendentes-card');
   const cont = document.getElementById('lista-pendentes');
   const cnps = Object.keys(contadores);
+
+  document.getElementById('btn-finalizar-gaveta').style.display = cnps.length > 0 ? 'block' : 'none';
 
   const pendentes = cnps
     .map(cnp => ({ cnp, contado: contadores[cnp], cached: stockCache[cnp] }))
@@ -1127,6 +1379,7 @@ function novaContagem() {
   document.getElementById('lista-contagens').innerHTML = '';
   document.getElementById('lista-pendentes').innerHTML = '';
   document.getElementById('pendentes-card').style.display = 'none';
+  document.getElementById('btn-finalizar-gaveta').style.display = 'none';
   document.getElementById('stats-bar').style.display = 'none';
   document.getElementById('lista-card').style.display = 'none';
   document.getElementById('btn-submeter-wrapper').style.display = 'none';
