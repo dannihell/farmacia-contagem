@@ -730,12 +730,9 @@ async function buscarProduto(cnp) {
   if (cached) {
     return {
       cnp,
-      nome: cached.nome || 'Sem nome',
-      stockSifarma: parseFloat(cached.stock) || 0,
-      validade: cached.validade || '',
-      familia: cached.familia || '',
-      subfamilia: cached.subfamilia || '',
-      prateleira: cached.prateleira || '',
+      nome: cached.n || 'Sem nome',
+      stockSifarma: parseFloat(cached.s) || 0,
+      validade: cached.v || '',
     };
   }
   // Se não está em cache, avisa
