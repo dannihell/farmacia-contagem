@@ -448,7 +448,7 @@
   <div class="card" id="scan-card">
     <div class="card-title">Ler código de barras</div>
     <div class="scan-wrapper">
-      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric" readonly>
+      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
     </div>
     <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e pressiona Enter.</div>
   </div>
@@ -680,17 +680,6 @@ scanInput.addEventListener('keydown', function(e) {
     const cnp = scanInput.value.trim();
     if (cnp) processarCNP(cnp);
     scanInput.value = '';
-    return;
-  }
-  if (e.key === 'Backspace') {
-    e.preventDefault();
-    scanInput.value = scanInput.value.slice(0, -1);
-    return;
-  }
-  // Readonly bloqueia a escrita automática — construímos o valor manualmente
-  if (e.key.length === 1) {
-    e.preventDefault();
-    scanInput.value += e.key;
   }
 });
 
