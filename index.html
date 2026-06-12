@@ -952,6 +952,7 @@ function mudarLocal() {
   localAtual = v;
   document.getElementById('header-sub').textContent = localAtual;
   showToast('Local: ' + localAtual);
+  scanInput.focus();
 }
 
 function setMode(m) {
