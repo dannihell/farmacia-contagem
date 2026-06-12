@@ -264,6 +264,17 @@
   }
   .validade-row input:focus { outline: none; border-color: var(--green); }
 
+  .text-input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--gray-border);
+    background: var(--bg);
+    font-size: 15px;
+    color: var(--text);
+  }
+  .text-input:focus { outline: none; border-color: var(--green); }
+
   /* LISTA CONTAGENS */
   .contagem-item {
     display: flex;
@@ -422,151 +433,30 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Colaborador</div>
-      <select id="sel-colaborador">
-        <option value="">Selecionar colaborador...</option>
-        <option>Duarte</option>
-        <option>Alina</option>
-        <option>Jéssica</option>
-        <option>Tatiana</option>
-        <option>Matilde</option>
+      <div class="card-title">Farmácia</div>
+      <select id="sel-farmacia" onchange="onFarmaciaChange()">
+        <option value="">Selecionar farmácia...</option>
+        <option>Farmácia Aroeira</option>
+        <option>Farmácia Dias e Brito</option>
+        <option>Farmácia Cidade Universitária</option>
+        <option>Farmácia Alto dos Moinhos</option>
+        <option>Farmácia Porfírio</option>
+        <option>Farmácia Alto da Castelhana</option>
+        <option>Farmácia das Túlipas</option>
       </select>
+    </div>
+    <div class="card">
+      <div class="card-title">Colaborador</div>
+      <select id="sel-colaborador" onchange="onColaboradorChange()">
+        <option value="">Selecionar colaborador...</option>
+        <option value="__novo__">+ Novo colaborador</option>
+      </select>
+      <input type="text" id="input-novo-colaborador" class="text-input" placeholder="Nome do novo colaborador" style="display:none; margin-top:8px;">
     </div>
     <div class="card">
       <div class="card-title">Local (gaveta)</div>
       <select id="sel-local">
         <option value="">Selecionar local...</option>
-        <option>G1</option>
-        <option>G2</option>
-        <option>G3</option>
-        <option>G4</option>
-        <option>G5</option>
-        <option>G6</option>
-        <option>G7</option>
-        <option>G8</option>
-        <option>G9</option>
-        <option>G10</option>
-        <option>G11</option>
-        <option>G12</option>
-        <option>G13</option>
-        <option>G14</option>
-        <option>G15</option>
-        <option>G16</option>
-        <option>G17</option>
-        <option>G18</option>
-        <option>G19</option>
-        <option>G20</option>
-        <option>G21</option>
-        <option>G22</option>
-        <option>G23</option>
-        <option>G24</option>
-        <option>G25</option>
-        <option>G26</option>
-        <option>G27</option>
-        <option>G28</option>
-        <option>G29</option>
-        <option>G30</option>
-        <option>G31</option>
-        <option>G32</option>
-        <option>G33</option>
-        <option>G34</option>
-        <option>G35</option>
-        <option>G36</option>
-        <option>G37</option>
-        <option>G38</option>
-        <option>G39</option>
-        <option>G40</option>
-        <option>G41</option>
-        <option>G42</option>
-        <option>G43</option>
-        <option>G44</option>
-        <option>G45</option>
-        <option>G46</option>
-        <option>G47</option>
-        <option>G48</option>
-        <option>G49</option>
-        <option>G50</option>
-        <option>G51</option>
-        <option>G52</option>
-        <option>G53</option>
-        <option>G54</option>
-        <option>G55</option>
-        <option>G56</option>
-        <option>G57</option>
-        <option>G58</option>
-        <option>G59</option>
-        <option>G60</option>
-        <option>G61</option>
-        <option>G62</option>
-        <option>G63</option>
-        <option>G64</option>
-        <option>G65</option>
-        <option>G66</option>
-        <option>G67</option>
-        <option>G68</option>
-        <option>G69</option>
-        <option>G70</option>
-        <option>G71</option>
-        <option>G72</option>
-        <option>G73</option>
-        <option>G74</option>
-        <option>G75</option>
-        <option>G76</option>
-        <option>G77</option>
-        <option>G78</option>
-        <option>G79</option>
-        <option>G80</option>
-        <option>G81</option>
-        <option>G82</option>
-        <option>G83</option>
-        <option>G84</option>
-        <option>G85</option>
-        <option>G86</option>
-        <option>G87</option>
-        <option>G88</option>
-        <option>G89</option>
-        <option>G90</option>
-        <option>G91</option>
-        <option>G92</option>
-        <option>G93</option>
-        <option>G94</option>
-        <option>G95</option>
-        <option>G96</option>
-        <option>G97</option>
-        <option>G98</option>
-        <option>G99</option>
-        <option>G100</option>
-        <option>L1</option>
-        <option>L2</option>
-        <option>L3</option>
-        <option>L4</option>
-        <option>L5</option>
-        <option>L6</option>
-        <option>L7</option>
-        <option>L8</option>
-        <option>L9</option>
-        <option>L10</option>
-        <option>L11</option>
-        <option>L12</option>
-        <option>L13</option>
-        <option>L14</option>
-        <option>L15</option>
-        <option>L16</option>
-        <option>L17</option>
-        <option>L18</option>
-        <option>L19</option>
-        <option>L20</option>
-        <option>L21</option>
-        <option>L22</option>
-        <option>L23</option>
-        <option>L24</option>
-        <option>L25</option>
-        <option>L26</option>
-        <option>L27</option>
-        <option>L28</option>
-        <option>L29</option>
-        <option>L30</option>
-        <option>Armazém</option>
       </select>
     </div>
     <button class="btn btn-primary" onclick="iniciarSessao()">Iniciar contagem</button>
@@ -586,137 +476,6 @@
     <div class="card-title" style="margin-bottom:6px;">Local atual</div>
     <select id="sel-local-atual" onchange="mudarLocal()">
       <option value="">Selecionar local...</option>
-      <option>G1</option>
-      <option>G2</option>
-      <option>G3</option>
-      <option>G4</option>
-      <option>G5</option>
-      <option>G6</option>
-      <option>G7</option>
-      <option>G8</option>
-      <option>G9</option>
-      <option>G10</option>
-      <option>G11</option>
-      <option>G12</option>
-      <option>G13</option>
-      <option>G14</option>
-      <option>G15</option>
-      <option>G16</option>
-      <option>G17</option>
-      <option>G18</option>
-      <option>G19</option>
-      <option>G20</option>
-      <option>G21</option>
-      <option>G22</option>
-      <option>G23</option>
-      <option>G24</option>
-      <option>G25</option>
-      <option>G26</option>
-      <option>G27</option>
-      <option>G28</option>
-      <option>G29</option>
-      <option>G30</option>
-      <option>G31</option>
-      <option>G32</option>
-      <option>G33</option>
-      <option>G34</option>
-      <option>G35</option>
-      <option>G36</option>
-      <option>G37</option>
-      <option>G38</option>
-      <option>G39</option>
-      <option>G40</option>
-      <option>G41</option>
-      <option>G42</option>
-      <option>G43</option>
-      <option>G44</option>
-      <option>G45</option>
-      <option>G46</option>
-      <option>G47</option>
-      <option>G48</option>
-      <option>G49</option>
-      <option>G50</option>
-      <option>G51</option>
-      <option>G52</option>
-      <option>G53</option>
-      <option>G54</option>
-      <option>G55</option>
-      <option>G56</option>
-      <option>G57</option>
-      <option>G58</option>
-      <option>G59</option>
-      <option>G60</option>
-      <option>G61</option>
-      <option>G62</option>
-      <option>G63</option>
-      <option>G64</option>
-      <option>G65</option>
-      <option>G66</option>
-      <option>G67</option>
-      <option>G68</option>
-      <option>G69</option>
-      <option>G70</option>
-      <option>G71</option>
-      <option>G72</option>
-      <option>G73</option>
-      <option>G74</option>
-      <option>G75</option>
-      <option>G76</option>
-      <option>G77</option>
-      <option>G78</option>
-      <option>G79</option>
-      <option>G80</option>
-      <option>G81</option>
-      <option>G82</option>
-      <option>G83</option>
-      <option>G84</option>
-      <option>G85</option>
-      <option>G86</option>
-      <option>G87</option>
-      <option>G88</option>
-      <option>G89</option>
-      <option>G90</option>
-      <option>G91</option>
-      <option>G92</option>
-      <option>G93</option>
-      <option>G94</option>
-      <option>G95</option>
-      <option>G96</option>
-      <option>G97</option>
-      <option>G98</option>
-      <option>G99</option>
-      <option>G100</option>
-      <option>L1</option>
-      <option>L2</option>
-      <option>L3</option>
-      <option>L4</option>
-      <option>L5</option>
-      <option>L6</option>
-      <option>L7</option>
-      <option>L8</option>
-      <option>L9</option>
-      <option>L10</option>
-      <option>L11</option>
-      <option>L12</option>
-      <option>L13</option>
-      <option>L14</option>
-      <option>L15</option>
-      <option>L16</option>
-      <option>L17</option>
-      <option>L18</option>
-      <option>L19</option>
-      <option>L20</option>
-      <option>L21</option>
-      <option>L22</option>
-      <option>L23</option>
-      <option>L24</option>
-      <option>L25</option>
-      <option>L26</option>
-      <option>L27</option>
-      <option>L28</option>
-      <option>L29</option>
-      <option>L30</option>
-      <option>Armazém</option>
     </select>
   </div>
 
@@ -841,15 +600,88 @@ const ZOHO_CONFIG = {
 // CONFIGURAÇÃO GOOGLE SHEETS
 // Substitui com o URL do teu Google Apps Script (ver instruções)
 // ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgl_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec';
 const GITHUB_RAW = 'https://raw.githubusercontent.com/dannihell/farmacia-contagem/main';
+
+// URL do stock.json por farmácia — cada farmácia tem o seu próprio ficheiro/servidor
+const FARMACIA_STOCK_URL = {
+  'Farmácia Aroeira': GITHUB_RAW + '/data/stock.json',
+  'Farmácia Dias e Brito': GITHUB_RAW + '/data/stock_diasbrito.json',
+  'Farmácia Cidade Universitária': GITHUB_RAW + '/data/stock_cidadeuniversitaria.json',
+  'Farmácia Alto dos Moinhos': GITHUB_RAW + '/data/stock_altodosmoinhos.json',
+  'Farmácia Porfírio': GITHUB_RAW + '/data/stock_porfirio.json',
+  'Farmácia Alto da Castelhana': GITHUB_RAW + '/data/stock_altodacastelhana.json',
+  'Farmácia das Túlipas': GITHUB_RAW + '/data/stock_tulipas.json',
+};
+
+function getStockUrl() {
+  const farmacia = document.getElementById('sel-farmacia').value;
+  return FARMACIA_STOCK_URL[farmacia] || null;
+}
+
+// ============================================================
+// CONFIGURAÇÃO POR FARMÁCIA
+// colaboradores, locais e folha de registo próprios de cada farmácia
+// ============================================================
+const G_LOCAIS = Array.from({length: 100}, (_, i) => 'G' + (i + 1));
+const L_LOCAIS = Array.from({length: 30}, (_, i) => 'L' + (i + 1));
+const LOCAIS_PADRAO = [...G_LOCAIS, ...L_LOCAIS, 'Armazém'];
+
+const FARMACIA_CONFIG = {
+  'Farmácia Aroeira': {
+    colaboradores: ['Duarte', 'Alina', 'Jéssica', 'Tatiana', 'Matilde'],
+    locais: LOCAIS_PADRAO,
+    appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgl_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec',
+  },
+  'Farmácia Dias e Brito': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Cidade Universitária': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Alto dos Moinhos': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Porfírio': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Alto da Castelhana': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia das Túlipas': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+};
+
+function popularSelect(sel, valores, placeholder, extraOptionsHtml) {
+  sel.innerHTML = '<option value="">' + placeholder + '</option>'
+    + valores.map(v => '<option>' + v + '</option>').join('')
+    + (extraOptionsHtml || '');
+  sel.value = '';
+}
+
+function onFarmaciaChange() {
+  const farmacia = document.getElementById('sel-farmacia').value;
+  const cfg = FARMACIA_CONFIG[farmacia];
+  const selCol = document.getElementById('sel-colaborador');
+  const selLocal = document.getElementById('sel-local');
+  document.getElementById('input-novo-colaborador').style.display = 'none';
+  document.getElementById('input-novo-colaborador').value = '';
+
+  if (!cfg) {
+    popularSelect(selCol, [], 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
+    popularSelect(selLocal, [], 'Selecionar local...');
+    return;
+  }
+  popularSelect(selCol, cfg.colaboradores, 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
+  popularSelect(selLocal, cfg.locais, 'Selecionar local...');
+  verificarStatusStock();
+}
+
+function onColaboradorChange() {
+  const v = document.getElementById('sel-colaborador').value;
+  document.getElementById('input-novo-colaborador').style.display = (v === '__novo__') ? 'block' : 'none';
+}
 
 let stockCache = {};
 let stockTimestamp = null;
 
 async function verificarStatusStock() {
+  const url = getStockUrl();
+  if (!url) {
+    const el = document.getElementById('stock-status-info');
+    if (el) el.textContent = 'Seleciona a farmácia para ver o stock.';
+    return;
+  }
   try {
-    const resp = await fetch(GITHUB_RAW + '/data/stock.json?t=' + Date.now());
+    const resp = await fetch(url + '?t=' + Date.now());
     if (!resp.ok) throw new Error('sem stock');
     const data = await resp.json();
     actualizarUIStock(data);
@@ -877,6 +709,8 @@ function actualizarUIStock(data) {
 }
 
 async function actualizarStock() {
+  const url = getStockUrl();
+  if (!url) { showToast('Seleciona a farmácia primeiro'); return; }
   const btn = document.getElementById('btn-actualizar');
   const el = document.getElementById('stock-status-info');
   btn.disabled = true;
@@ -899,7 +733,7 @@ async function actualizarStock() {
     tentativas++;
     if (el) el.textContent = 'A aguardar exportacao... (' + (tentativas * 15) + 's)';
     try {
-      const resp = await fetch(GITHUB_RAW + '/data/stock.json?t=' + Date.now());
+      const resp = await fetch(url + '?t=' + Date.now());
       if (!resp.ok) return;
       const data = await resp.json();
       if (data && data.timestamp && data.timestamp !== tsAntes && data.total > 0) {
@@ -920,11 +754,14 @@ async function actualizarStock() {
   }, 15000);
 }
 
-window.addEventListener('load', () => { verificarStatusStock(); });
+window.addEventListener('load', () => {
+  const el = document.getElementById('stock-status-info');
+  if (el) el.textContent = 'Seleciona a farmácia para ver o stock.';
+});
 
 // ============================================================
 
-let sessao = { colaborador: '', zona: '', inicio: null, contagens: [] };
+let sessao = { farmacia: '', colaborador: '', zona: '', inicio: null, contagens: [] };
 let produtoAtual = null;
 let contadorAtual = 0;
 let modo = 'livre';
@@ -934,14 +771,24 @@ let locaisPorCnp = {}; // cnp -> Set de locais onde foi pickado
 let localAtual = '';
 
 function iniciarSessao() {
-  const col = document.getElementById('sel-colaborador').value;
+  const farmacia = document.getElementById('sel-farmacia').value;
+  let col = document.getElementById('sel-colaborador').value;
   const local = document.getElementById('sel-local').value;
-  if (!col || !local) { showToast('Seleciona colaborador e local'); return; }
-  sessao = { colaborador: col, zona: '', inicio: new Date(), contagens: [] };
+  if (col === '__novo__') {
+    col = document.getElementById('input-novo-colaborador').value.trim();
+  }
+  if (!farmacia || !col || !local) { showToast('Seleciona farmácia, colaborador e local'); return; }
+
+  sessao = { farmacia, colaborador: col, zona: '', inicio: new Date(), contagens: [] };
   localAtual = local;
-  document.getElementById('sel-local-atual').value = local;
+
+  const cfg = FARMACIA_CONFIG[farmacia];
+  const selLocalAtual = document.getElementById('sel-local-atual');
+  popularSelect(selLocalAtual, cfg ? cfg.locais : [], 'Selecionar local...');
+  selLocalAtual.value = local;
+
   document.getElementById('header-badge').textContent = col;
-  document.getElementById('header-sub').textContent = local;
+  document.getElementById('header-sub').textContent = farmacia + ' — ' + local;
   showScreen('screen-contagem');
   document.getElementById('scan-input').focus();
 }
@@ -950,7 +797,7 @@ function mudarLocal() {
   const v = document.getElementById('sel-local-atual').value;
   if (!v) return;
   localAtual = v;
-  document.getElementById('header-sub').textContent = localAtual;
+  document.getElementById('header-sub').textContent = sessao.farmacia + ' — ' + localAtual;
   showToast('Local: ' + localAtual);
   scanInput.focus();
 }
@@ -1215,22 +1062,26 @@ function validadeProxima(val) {
 async function submeterContagem() {
   if (sessao.contagens.length === 0) { showToast('Nenhum produto contado'); return; }
 
+  const cfg = FARMACIA_CONFIG[sessao.farmacia];
+  const scriptUrl = cfg ? cfg.appsScriptUrl : 'APPS_SCRIPT_URL_AQUI';
+
   const btn = document.querySelector('#btn-submeter-wrapper .btn-primary');
   btn.innerHTML = '<span class="loading-spinner"></span>A submeter...';
   btn.disabled = true;
 
   try {
-    if (APPS_SCRIPT_URL === 'APPS_SCRIPT_URL_AQUI') {
+    if (!scriptUrl || scriptUrl === 'APPS_SCRIPT_URL_AQUI') {
       await new Promise(r => setTimeout(r, 1000));
       showScreen('screen-sucesso');
       document.getElementById('sucesso-msg').textContent =
-        sessao.contagens.length + ' produtos registados. Configura o Apps Script para guardar na Google Sheet.';
+        sessao.contagens.length + ' produtos registados. Configura o Apps Script desta farmácia para guardar na Google Sheet.';
       return;
     }
 
     const payload = sessao.contagens.map(c => ({
       data: new Date().toLocaleDateString('pt-PT'),
       hora: new Date().toLocaleTimeString('pt-PT'),
+      farmacia: sessao.farmacia,
       colaborador: sessao.colaborador,
       cnp: c.cnp,
       nome: c.nome,
@@ -1241,7 +1092,7 @@ async function submeterContagem() {
       locais: (c.locais || []).join(', '),
     }));
 
-    await fetch(APPS_SCRIPT_URL, {
+    await fetch(scriptUrl, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
@@ -1259,7 +1110,7 @@ async function submeterContagem() {
 }
 
 function novaContagem() {
-  sessao = { colaborador: '', zona: '', inicio: null, contagens: [] };
+  sessao = { farmacia: '', colaborador: '', zona: '', inicio: null, contagens: [] };
   produtoAtual = null;
   contadorAtual = 0;
   contadores = {};
@@ -1268,8 +1119,11 @@ function novaContagem() {
   localAtual = '';
   document.getElementById('header-badge').textContent = '—';
   document.getElementById('header-sub').textContent = 'Farmácia Aroeira';
-  document.getElementById('sel-colaborador').value = '';
-  document.getElementById('sel-local').value = '';
+  document.getElementById('sel-farmacia').value = '';
+  popularSelect(document.getElementById('sel-colaborador'), [], 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
+  popularSelect(document.getElementById('sel-local'), [], 'Selecionar local...');
+  document.getElementById('input-novo-colaborador').style.display = 'none';
+  document.getElementById('input-novo-colaborador').value = '';
   document.getElementById('lista-contagens').innerHTML = '';
   document.getElementById('lista-pendentes').innerHTML = '';
   document.getElementById('pendentes-card').style.display = 'none';
