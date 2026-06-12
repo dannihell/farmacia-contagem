@@ -646,6 +646,7 @@ let sessao = { colaborador: '', zona: '', inicio: null, contagens: [] };
 let produtoAtual = null;
 let contadorAtual = 0;
 let modo = 'livre';
+let contadores = {}; // cnp -> contagem corrente (ainda não registado)
 
 function iniciarSessao() {
   const col = document.getElementById('sel-colaborador').value;
@@ -706,26 +707,18 @@ document.addEventListener('keydown', function(e) {
 async function processarCNP(cnp) {
   if (document.getElementById('screen-contagem').className.indexOf('active') === -1) return;
 
-  // Verifica se produto já foi contado
+  // Se já está na lista final (registado), apenas soma directamente ao registo
   const existente = sessao.contagens.find(c => c.cnp === cnp);
-  if (existente && produtoAtual && produtoAtual.cnp === cnp) {
-    ajustarContador(1);
-    showToast('+1 ' + existente.nome.substring(0, 20));
-    return;
-  }
   if (existente) {
     existente.contado++;
+    existente.desvio = existente.contado - existente.stockSifarma;
     atualizarLista();
     showToast('+1 → ' + existente.nome.substring(0, 20));
     return;
   }
 
-  // Se for o mesmo produto já em exibição (ainda não registado), só incrementa
-  if (produtoAtual && produtoAtual.cnp === cnp) {
-    ajustarContador(1);
-    showToast('+1 ' + produtoAtual.nome.substring(0, 20));
-    return;
-  }
+  // Soma ao contador corrente deste produto (independente do que está em ecrã)
+  contadores[cnp] = (contadores[cnp] || 0) + 1;
 
   const produto = await buscarProduto(cnp);
   mostrarProduto(produto, cnp);
@@ -748,14 +741,14 @@ async function buscarProduto(cnp) {
 
 function mostrarProduto(produto, cnp) {
   produtoAtual = { ...produto, cnp };
-  contadorAtual = 1;
+  contadorAtual = contadores[cnp] || 1;
 
   document.getElementById('prod-nome').textContent = produto.nome;
   document.getElementById('prod-cnp').textContent = 'CNP: ' + cnp;
   document.getElementById('prod-stock-sifarma').textContent = produto.stockSifarma;
-  document.getElementById('counter-display').textContent = 1;
-  document.getElementById('prod-contado').textContent = 1;
-  const desvio = 1 - produto.stockSifarma;
+  document.getElementById('counter-display').textContent = contadorAtual;
+  document.getElementById('prod-contado').textContent = contadorAtual;
+  const desvio = contadorAtual - produto.stockSifarma;
   const elD = document.getElementById('prod-desvio');
   elD.textContent = (desvio > 0 ? '+' : '') + desvio;
   elD.className = 'stock-box-value ' + (desvio === 0 ? 'desvio-ok' : desvio > 0 ? 'desvio-pos' : 'desvio-neg');
@@ -765,6 +758,7 @@ function mostrarProduto(produto, cnp) {
 
 function ajustarContador(delta) {
   contadorAtual = Math.max(0, contadorAtual + delta);
+  if (produtoAtual) contadores[produtoAtual.cnp] = contadorAtual;
   document.getElementById('counter-display').textContent = contadorAtual;
   document.getElementById('prod-contado').textContent = contadorAtual;
 
@@ -791,6 +785,7 @@ function registarProduto() {
     ts: new Date().toISOString(),
   });
 
+  delete contadores[produtoAtual.cnp];
   produtoAtual = null;
   contadorAtual = 0;
   document.getElementById('produto-atual').style.display = 'none';
