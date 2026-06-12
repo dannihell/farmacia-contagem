@@ -432,32 +432,6 @@
         <option>Matilde</option>
       </select>
     </div>
-    <div class="card">
-      <div class="card-title">Zona a contar</div>
-      <select id="sel-zona">
-        <option value="">Selecionar zona...</option>
-        <option>Armário MSRM — A a D</option>
-        <option>Armário MSRM — E a K</option>
-        <option>Armário MSRM — L a R</option>
-        <option>Armário MSRM — S a Z</option>
-        <option>L01 — Suplementos</option>
-        <option>L02 — Suplementos</option>
-        <option>L03 — Dietética</option>
-        <option>L04 — Avène</option>
-        <option>L05 — A-Derma</option>
-        <option>L19/L20/L21 — Higiene Oral</option>
-        <option>Gondola 1</option>
-        <option>Gondola 2</option>
-        <option>Gondola 3</option>
-        <option>Gondola 4</option>
-        <option>Gondola 5</option>
-        <option>Gondola 6</option>
-        <option>Beauty Point</option>
-        <option>OTC Balcão</option>
-        <option>Frigorífico</option>
-        <option>Outra zona</option>
-      </select>
-    </div>
     <button class="btn btn-primary" onclick="iniciarSessao()">Iniciar contagem</button>
   </div>
 </div>
@@ -474,7 +448,7 @@
   <div class="card" id="scan-card">
     <div class="card-title">Ler código de barras</div>
     <div class="scan-wrapper">
-      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="none">
     </div>
     <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e pressiona Enter.</div>
   </div>
@@ -675,11 +649,10 @@ let modo = 'livre';
 
 function iniciarSessao() {
   const col = document.getElementById('sel-colaborador').value;
-  const zona = document.getElementById('sel-zona').value;
-  if (!col || !zona) { showToast('Seleciona colaborador e zona'); return; }
-  sessao = { colaborador: col, zona, inicio: new Date(), contagens: [] };
+  if (!col) { showToast('Seleciona colaborador'); return; }
+  sessao = { colaborador: col, zona: '', inicio: new Date(), contagens: [] };
   document.getElementById('header-badge').textContent = col;
-  document.getElementById('header-sub').textContent = zona;
+  document.getElementById('header-sub').textContent = 'Farmácia Aroeira';
   showScreen('screen-contagem');
   document.getElementById('scan-input').focus();
 }
@@ -892,7 +865,6 @@ async function submeterContagem() {
       data: new Date().toLocaleDateString('pt-PT'),
       hora: new Date().toLocaleTimeString('pt-PT'),
       colaborador: sessao.colaborador,
-      zona: sessao.zona,
       cnp: c.cnp,
       nome: c.nome,
       stock_sifarma: c.stockSifarma,
@@ -905,7 +877,7 @@ async function submeterContagem() {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessao: sessao.colaborador + ' — ' + sessao.zona, linhas: payload }),
+      body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }),
     });
 
     showScreen('screen-sucesso');
@@ -925,7 +897,6 @@ function novaContagem() {
   document.getElementById('header-badge').textContent = '—';
   document.getElementById('header-sub').textContent = 'Farmácia Aroeira';
   document.getElementById('sel-colaborador').value = '';
-  document.getElementById('sel-zona').value = '';
   document.getElementById('lista-contagens').innerHTML = '';
   document.getElementById('stats-bar').style.display = 'none';
   document.getElementById('lista-card').style.display = 'none';
