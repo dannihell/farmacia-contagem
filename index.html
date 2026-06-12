@@ -432,6 +432,112 @@
         <option>Matilde</option>
       </select>
     </div>
+    <div class="card">
+      <div class="card-title">Local (gaveta)</div>
+      <select id="sel-local">
+        <option value="">Selecionar local...</option>
+        <option>G1</option>
+        <option>G2</option>
+        <option>G3</option>
+        <option>G4</option>
+        <option>G5</option>
+        <option>G6</option>
+        <option>G7</option>
+        <option>G8</option>
+        <option>G9</option>
+        <option>G10</option>
+        <option>G11</option>
+        <option>G12</option>
+        <option>G13</option>
+        <option>G14</option>
+        <option>G15</option>
+        <option>G16</option>
+        <option>G17</option>
+        <option>G18</option>
+        <option>G19</option>
+        <option>G20</option>
+        <option>G21</option>
+        <option>G22</option>
+        <option>G23</option>
+        <option>G24</option>
+        <option>G25</option>
+        <option>G26</option>
+        <option>G27</option>
+        <option>G28</option>
+        <option>G29</option>
+        <option>G30</option>
+        <option>G31</option>
+        <option>G32</option>
+        <option>G33</option>
+        <option>G34</option>
+        <option>G35</option>
+        <option>G36</option>
+        <option>G37</option>
+        <option>G38</option>
+        <option>G39</option>
+        <option>G40</option>
+        <option>G41</option>
+        <option>G42</option>
+        <option>G43</option>
+        <option>G44</option>
+        <option>G45</option>
+        <option>G46</option>
+        <option>G47</option>
+        <option>G48</option>
+        <option>G49</option>
+        <option>G50</option>
+        <option>G51</option>
+        <option>G52</option>
+        <option>G53</option>
+        <option>G54</option>
+        <option>G55</option>
+        <option>G56</option>
+        <option>G57</option>
+        <option>G58</option>
+        <option>G59</option>
+        <option>G60</option>
+        <option>G61</option>
+        <option>G62</option>
+        <option>G63</option>
+        <option>G64</option>
+        <option>G65</option>
+        <option>G66</option>
+        <option>G67</option>
+        <option>G68</option>
+        <option>G69</option>
+        <option>G70</option>
+        <option>G71</option>
+        <option>G72</option>
+        <option>G73</option>
+        <option>G74</option>
+        <option>G75</option>
+        <option>G76</option>
+        <option>G77</option>
+        <option>G78</option>
+        <option>G79</option>
+        <option>G80</option>
+        <option>G81</option>
+        <option>G82</option>
+        <option>G83</option>
+        <option>G84</option>
+        <option>G85</option>
+        <option>G86</option>
+        <option>G87</option>
+        <option>G88</option>
+        <option>G89</option>
+        <option>G90</option>
+        <option>G91</option>
+        <option>G92</option>
+        <option>G93</option>
+        <option>G94</option>
+        <option>G95</option>
+        <option>G96</option>
+        <option>G97</option>
+        <option>G98</option>
+        <option>G99</option>
+        <option>G100</option>
+      </select>
+    </div>
     <button class="btn btn-primary" onclick="iniciarSessao()">Iniciar contagem</button>
   </div>
 </div>
@@ -442,6 +548,115 @@
   <div class="mode-toggle">
     <div class="mode-btn active" id="mode-livre" onclick="setMode('livre')">Picking livre</div>
     <div class="mode-btn" id="mode-lista" onclick="setMode('lista')">Lista guiada</div>
+  </div>
+
+  <!-- LOCAL ATUAL -->
+  <div class="card" style="padding:10px 12px;">
+    <div class="card-title" style="margin-bottom:6px;">Local atual</div>
+    <select id="sel-local-atual" onchange="mudarLocal()">
+      <option value="">Selecionar local...</option>
+      <option>G1</option>
+        <option>G2</option>
+        <option>G3</option>
+        <option>G4</option>
+        <option>G5</option>
+        <option>G6</option>
+        <option>G7</option>
+        <option>G8</option>
+        <option>G9</option>
+        <option>G10</option>
+        <option>G11</option>
+        <option>G12</option>
+        <option>G13</option>
+        <option>G14</option>
+        <option>G15</option>
+        <option>G16</option>
+        <option>G17</option>
+        <option>G18</option>
+        <option>G19</option>
+        <option>G20</option>
+        <option>G21</option>
+        <option>G22</option>
+        <option>G23</option>
+        <option>G24</option>
+        <option>G25</option>
+        <option>G26</option>
+        <option>G27</option>
+        <option>G28</option>
+        <option>G29</option>
+        <option>G30</option>
+        <option>G31</option>
+        <option>G32</option>
+        <option>G33</option>
+        <option>G34</option>
+        <option>G35</option>
+        <option>G36</option>
+        <option>G37</option>
+        <option>G38</option>
+        <option>G39</option>
+        <option>G40</option>
+        <option>G41</option>
+        <option>G42</option>
+        <option>G43</option>
+        <option>G44</option>
+        <option>G45</option>
+        <option>G46</option>
+        <option>G47</option>
+        <option>G48</option>
+        <option>G49</option>
+        <option>G50</option>
+        <option>G51</option>
+        <option>G52</option>
+        <option>G53</option>
+        <option>G54</option>
+        <option>G55</option>
+        <option>G56</option>
+        <option>G57</option>
+        <option>G58</option>
+        <option>G59</option>
+        <option>G60</option>
+        <option>G61</option>
+        <option>G62</option>
+        <option>G63</option>
+        <option>G64</option>
+        <option>G65</option>
+        <option>G66</option>
+        <option>G67</option>
+        <option>G68</option>
+        <option>G69</option>
+        <option>G70</option>
+        <option>G71</option>
+        <option>G72</option>
+        <option>G73</option>
+        <option>G74</option>
+        <option>G75</option>
+        <option>G76</option>
+        <option>G77</option>
+        <option>G78</option>
+        <option>G79</option>
+        <option>G80</option>
+        <option>G81</option>
+        <option>G82</option>
+        <option>G83</option>
+        <option>G84</option>
+        <option>G85</option>
+        <option>G86</option>
+        <option>G87</option>
+        <option>G88</option>
+        <option>G89</option>
+        <option>G90</option>
+        <option>G91</option>
+        <option>G92</option>
+        <option>G93</option>
+        <option>G94</option>
+        <option>G95</option>
+        <option>G96</option>
+        <option>G97</option>
+        <option>G98</option>
+        <option>G99</option>
+        <option>G100</option>
+      <option>Armazém</option>
+    </select>
   </div>
 
   <!-- SCAN -->
@@ -490,6 +705,12 @@
         <button class="btn btn-sm" onclick="cancelarProduto()">Cancelar</button>
       </div>
     </div>
+  </div>
+
+  <!-- PENDENTES -->
+  <div class="card" id="pendentes-card" style="display:none;">
+    <div class="card-title">Pendentes — contado abaixo do stock Sifarma</div>
+    <div id="lista-pendentes"></div>
   </div>
 
   <!-- STATS -->
@@ -647,15 +868,28 @@ let produtoAtual = null;
 let contadorAtual = 0;
 let modo = 'livre';
 let contadores = {}; // cnp -> contagem corrente (ainda não registado)
+let locaisPorCnp = {}; // cnp -> Set de locais onde foi pickado
+let localAtual = '';
 
 function iniciarSessao() {
   const col = document.getElementById('sel-colaborador').value;
-  if (!col) { showToast('Seleciona colaborador'); return; }
+  const local = document.getElementById('sel-local').value;
+  if (!col || !local) { showToast('Seleciona colaborador e local'); return; }
   sessao = { colaborador: col, zona: '', inicio: new Date(), contagens: [] };
+  localAtual = local;
+  document.getElementById('sel-local-atual').value = local;
   document.getElementById('header-badge').textContent = col;
-  document.getElementById('header-sub').textContent = 'Farmácia Aroeira';
+  document.getElementById('header-sub').textContent = local;
   showScreen('screen-contagem');
   document.getElementById('scan-input').focus();
+}
+
+function mudarLocal() {
+  const v = document.getElementById('sel-local-atual').value;
+  if (!v) return;
+  localAtual = v;
+  document.getElementById('header-sub').textContent = localAtual;
+  showToast('Local: ' + localAtual);
 }
 
 function setMode(m) {
@@ -712,6 +946,7 @@ async function processarCNP(cnp) {
   if (existente) {
     existente.contado++;
     existente.desvio = existente.contado - existente.stockSifarma;
+    if (localAtual) (existente.locais = existente.locais || []).indexOf(localAtual) === -1 && existente.locais.push(localAtual);
     atualizarLista();
     showToast('+1 → ' + existente.nome.substring(0, 20));
     return;
@@ -719,9 +954,14 @@ async function processarCNP(cnp) {
 
   // Soma ao contador corrente deste produto (independente do que está em ecrã)
   contadores[cnp] = (contadores[cnp] || 0) + 1;
+  if (localAtual) {
+    if (!locaisPorCnp[cnp]) locaisPorCnp[cnp] = new Set();
+    locaisPorCnp[cnp].add(localAtual);
+  }
 
   const produto = await buscarProduto(cnp);
   mostrarProduto(produto, cnp);
+  atualizarPendentes();
 }
 
 async function buscarProduto(cnp) {
@@ -756,7 +996,46 @@ function mostrarProduto(produto, cnp) {
   document.getElementById('produto-atual').style.display = 'block';
 }
 
-function ajustarContador(delta) {
+function atualizarPendentes() {
+  const card = document.getElementById('pendentes-card');
+  const cont = document.getElementById('lista-pendentes');
+  const cnps = Object.keys(contadores);
+
+  const pendentes = cnps
+    .map(cnp => ({ cnp, contado: contadores[cnp], cached: stockCache[cnp] }))
+    .filter(p => p.cached && p.contado < (parseFloat(p.cached.s) || 0));
+
+  if (pendentes.length === 0) {
+    card.style.display = 'none';
+    return;
+  }
+
+  card.style.display = 'block';
+  cont.innerHTML = pendentes.map(p => {
+    const stock = parseFloat(p.cached.s) || 0;
+    const nome = p.cached.n || 'Sem nome';
+    return `<div class="contagem-item" onclick="abrirPendente('${p.cnp}')" style="cursor:pointer;">
+      <div class="contagem-dot dot-warn"></div>
+      <div class="contagem-info">
+        <div class="contagem-nome">${nome}</div>
+        <div class="contagem-cnp">${p.cnp}</div>
+      </div>
+      <div class="contagem-nums">
+        <div class="stocks">${p.contado} / ${stock}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function abrirPendente(cnp) {
+  if (produtoAtual && produtoAtual.cnp !== cnp) {
+    showToast('Termina ou cancela o produto atual primeiro');
+    return;
+  }
+  const produto = await buscarProduto(cnp);
+  mostrarProduto(produto, cnp);
+  scanInput.focus();
+}
   contadorAtual = Math.max(0, contadorAtual + delta);
   if (produtoAtual) contadores[produtoAtual.cnp] = contadorAtual;
   document.getElementById('counter-display').textContent = contadorAtual;
@@ -768,12 +1047,14 @@ function ajustarContador(delta) {
     el.textContent = (desvio > 0 ? '+' : '') + desvio;
     el.className = 'stock-box-value ' + (desvio === 0 ? 'desvio-ok' : desvio > 0 ? 'desvio-pos' : 'desvio-neg');
   }
+  atualizarPendentes();
 }
 
 function registarProduto() {
   if (!produtoAtual) return;
   const validade = document.getElementById('input-validade').value.trim();
   const desvio = contadorAtual - produtoAtual.stockSifarma;
+  const locais = locaisPorCnp[produtoAtual.cnp] ? Array.from(locaisPorCnp[produtoAtual.cnp]) : (localAtual ? [localAtual] : []);
 
   sessao.contagens.push({
     cnp: produtoAtual.cnp,
@@ -782,14 +1063,17 @@ function registarProduto() {
     contado: contadorAtual,
     desvio,
     validade,
+    locais,
     ts: new Date().toISOString(),
   });
 
   delete contadores[produtoAtual.cnp];
+  delete locaisPorCnp[produtoAtual.cnp];
   produtoAtual = null;
   contadorAtual = 0;
   document.getElementById('produto-atual').style.display = 'none';
   atualizarLista();
+  atualizarPendentes();
   showToast('Registado');
   scanInput.focus();
 }
@@ -872,6 +1156,7 @@ async function submeterContagem() {
       contado: c.contado,
       desvio: c.desvio,
       validade: c.validade,
+      locais: (c.locais || []).join(', '),
     }));
 
     await fetch(APPS_SCRIPT_URL, {
@@ -895,10 +1180,16 @@ function novaContagem() {
   sessao = { colaborador: '', zona: '', inicio: null, contagens: [] };
   produtoAtual = null;
   contadorAtual = 0;
+  contadores = {};
+  locaisPorCnp = {};
+  localAtual = '';
   document.getElementById('header-badge').textContent = '—';
   document.getElementById('header-sub').textContent = 'Farmácia Aroeira';
   document.getElementById('sel-colaborador').value = '';
+  document.getElementById('sel-local').value = '';
   document.getElementById('lista-contagens').innerHTML = '';
+  document.getElementById('lista-pendentes').innerHTML = '';
+  document.getElementById('pendentes-card').style.display = 'none';
   document.getElementById('stats-bar').style.display = 'none';
   document.getElementById('lista-card').style.display = 'none';
   document.getElementById('btn-submeter-wrapper').style.display = 'none';
