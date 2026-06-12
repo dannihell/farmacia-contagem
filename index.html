@@ -1036,6 +1036,8 @@ async function abrirPendente(cnp) {
   mostrarProduto(produto, cnp);
   scanInput.focus();
 }
+
+function ajustarContador(delta) {
   contadorAtual = Math.max(0, contadorAtual + delta);
   if (produtoAtual) contadores[produtoAtual.cnp] = contadorAtual;
   document.getElementById('counter-display').textContent = contadorAtual;
