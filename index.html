@@ -142,6 +142,19 @@
   .scan-wrapper {
     position: relative;
     margin-bottom: 16px;
+    display: flex;
+    gap: 8px;
+  }
+  #scan-input { flex: 1; }
+  #btn-confirmar-scan {
+    flex-shrink: 0;
+    padding: 0 18px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--green-light);
+    background: var(--green);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
   }
   #scan-input {
     width: 100%;
@@ -533,8 +546,9 @@
     <div class="card-title">Ler código de barras</div>
     <div class="scan-wrapper">
       <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+      <button id="btn-confirmar-scan" onclick="confirmarScanManual()">OK</button>
     </div>
-    <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e pressiona Enter.</div>
+    <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e toca em "OK".</div>
   </div>
 
   <!-- PRODUTO ATUAL -->
@@ -684,7 +698,7 @@ const FARMACIA_CONFIG = {
   'Farmácia Aroeira': {
     colaboradores: ['Duarte', 'Alina', 'Jéssica', 'Tatiana', 'Matilde'],
     locais: LOCAIS_PADRAO,
-    appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgl_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec',
+    appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgI_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec',
   },
   'Farmácia Dias e Brito': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Cidade Universitária': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
@@ -1039,6 +1053,13 @@ scanInput.addEventListener('keydown', function(e) {
     scanInput.value = '';
   }
 });
+
+function confirmarScanManual() {
+  const cnp = scanInput.value.trim();
+  if (cnp) processarCNP(cnp);
+  scanInput.value = '';
+  scanInput.focus();
+}
 
 // Scanner HID envia string + Enter em <100ms
 let scanBuffer = '';
