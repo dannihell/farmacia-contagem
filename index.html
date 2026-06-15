@@ -1307,8 +1307,7 @@ let html5QrScanner = null;
 
 function processarQRKiosk(codigo) {
   showToast('Lido: ' + codigo.substring(0, 40));
-  const BASE = 'dannihell.github.io/farmacia-contagem/';
-  if (!codigo.includes(BASE)) {
+  if (!codigo.includes('dannihell.github.io') || !codigo.includes('farmacia-contagem')) {
     document.getElementById('kiosk-status').textContent = 'QR inválido — usa o QR code da gaveta';
     return;
   }
