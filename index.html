@@ -1738,31 +1738,31 @@ function showScreen(id, forcar) {
 // ============================================================
 // SCAN INPUT
 // ============================================================
-let scanInput;
+function getScanInput() {
+  return document.getElementById('scan-input');
+}
 
-window.addEventListener('load', () => {
-  scanInput = document.getElementById('scan-input');
-  if (!scanInput) return;
-
-  scanInput.addEventListener('keydown', function(e) {
+// Listener no próprio elemento (adicionado depois do DOM)
+document.addEventListener('DOMContentLoaded', function() {
+  var si = document.getElementById('scan-input');
+  if (!si) return;
+  si.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      const cnp = scanInput.value.trim();
+      var cnp = si.value.trim();
       if (cnp) processarCNP(cnp);
-      scanInput.value = '';
+      si.value = '';
     }
   });
 });
 
-function getScanInput() {
-  return scanInput || document.getElementById('scan-input');
-}
-
 function confirmarScanManual() {
-  const cnp = getScanInput().value.trim();
+  var si = document.getElementById('scan-input');
+  if (!si) return;
+  var cnp = si.value.trim();
   if (cnp) processarCNP(cnp);
-  getScanInput().value = '';
-  getScanInput().focus();
+  si.value = '';
+  si.focus();
 }
 
 // Scanner HID envia string + Enter em <100ms
@@ -2148,6 +2148,6 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
-<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.12</div>
+<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.13</div>
 </body>
 </html>
