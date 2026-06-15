@@ -722,7 +722,6 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 const SHEET_ID = '10P4wcbr55d0a_11tIObehmdf6IM91IkSwxCfmvyeWdU';
 
@@ -1379,6 +1378,17 @@ async function abrirCamaraKiosk() {
   const status = document.getElementById('camera-status');
   overlay.style.display = 'flex';
   status.textContent = 'Aponta para o QR code da gaveta...';
+
+  // Carrega html5-qrcode só agora (não no arranque — evita conflito com HID)
+  if (!window.Html5Qrcode) {
+    status.textContent = 'A carregar leitor...';
+    try {
+      await carregarScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
+    } catch(e) {
+      status.textContent = 'Erro a carregar leitor de câmara.';
+      return;
+    }
+  }
 
   // Tenta html5-qrcode (mais compatível iOS/Android)
   if (window.Html5Qrcode) {
