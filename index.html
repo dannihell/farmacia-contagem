@@ -434,6 +434,19 @@
 </div>
 
 <!-- ECRÃ 1: IDENTIFICAÇÃO -->
+<!-- ECRÃ KIOSK (modo equipa — só QR) -->
+<div class="screen" id="screen-kiosk">
+  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:24px; text-align:center;">
+    <div style="font-size:64px; margin-bottom:16px;">📦</div>
+    <div style="font-size:22px; font-weight:700; color:var(--green); margin-bottom:8px;">Contagem de Stock</div>
+    <div style="font-size:15px; color:var(--text-muted); margin-bottom:32px;">Aponta para o QR code da gaveta para começar</div>
+    <button class="btn btn-primary" style="font-size:18px; padding:16px 32px;" onclick="abrirCamaraKiosk()">
+      📷 Ler QR code da gaveta
+    </button>
+    <div id="kiosk-status" style="margin-top:16px; font-size:13px; color:var(--text-muted);"></div>
+  </div>
+</div>
+
 <div class="screen active" id="screen-login">
   <div style="padding-top: 8px;">
 
@@ -1262,9 +1275,14 @@ function onCodigoDetectado(codigo, status) {
 
 function fecharCamara() {
   camaraAtivo = false;
+  camaraKioskAtivo = false;
   if (camaraStream) {
     camaraStream.getTracks().forEach(t => t.stop());
     camaraStream = null;
+  }
+  if (camaraKioskStream) {
+    camaraKioskStream.getTracks().forEach(t => t.stop());
+    camaraKioskStream = null;
   }
   if (camaraZxingReader) {
     try { camaraZxingReader.reset(); } catch(e) {}
@@ -1281,6 +1299,66 @@ function carregarScript(src) {
     s.onerror = reject;
     document.head.appendChild(s);
   });
+}
+
+// ============================================================
+// MODO KIOSK — câmara abre e lê QR code da gaveta → navega para URL
+// ============================================================
+let camaraKioskAtivo = false;
+let camaraKioskStream = null;
+let camaraKioskDetector = null;
+
+async function abrirCamaraKiosk() {
+  const status = document.getElementById('kiosk-status');
+  status.textContent = 'A iniciar câmara...';
+  camaraKioskAtivo = true;
+
+  const overlay = document.getElementById('camera-overlay');
+  const video = document.getElementById('camera-video');
+  document.getElementById('camera-status').textContent = 'Aponta para o QR code da gaveta...';
+  overlay.style.display = 'flex';
+
+  try {
+    camaraKioskStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    video.srcObject = camaraKioskStream;
+  } catch(e) {
+    status.textContent = 'Sem acesso à câmara: ' + e.message;
+    overlay.style.display = 'none';
+    return;
+  }
+
+  const BASE = 'dannihell.github.io/farmacia-contagem/';
+
+  const processarQRKiosk = (codigo) => {
+    if (!camaraKioskAtivo) return;
+    if (!codigo.includes(BASE)) return; // ignora códigos que não são da app
+    camaraKioskAtivo = false;
+    if (camaraKioskStream) camaraKioskStream.getTracks().forEach(t => t.stop());
+    overlay.style.display = 'none';
+    // Navega para o URL do QR — carrega farmácia e local automaticamente
+    window.location.href = codigo;
+  };
+
+  if ('BarcodeDetector' in window) {
+    const det = new BarcodeDetector({ formats: ['qr_code'] });
+    const loop = () => {
+      if (!camaraKioskAtivo) return;
+      det.detect(video).then(codes => {
+        if (codes.length > 0) processarQRKiosk(codes[0].rawValue);
+      }).catch(() => {}).finally(() => {
+        if (camaraKioskAtivo) requestAnimationFrame(loop);
+      });
+    };
+    loop();
+  } else {
+    if (!window.ZXing) {
+      await carregarScript('https://unpkg.com/@zxing/library@latest/umd/index.min.js');
+    }
+    const reader = new ZXing.BrowserQRCodeReader();
+    reader.decodeFromVideoElement(video, (result) => {
+      if (result) processarQRKiosk(result.getText());
+    });
+  }
 }
 
 let stockCache = {};
@@ -1395,17 +1473,24 @@ async function actualizarStock() {
   }, 15000);
 }
 
+let modoAdmin = false;
+
 window.addEventListener('load', () => {
   const el = document.getElementById('stock-status-info');
   if (el) el.textContent = 'Seleciona a farmácia para ver o stock.';
 
-  // Leitura de parâmetros URL (?f=aroeira&l=G5) — vem do QR code da gaveta
   const params = new URLSearchParams(window.location.search);
   const fParam = params.get('f');
   const lParam = params.get('l');
+  modoAdmin = params.get('admin') === '1';
+
+  if (!modoAdmin && !fParam) {
+    // Modo kiosk: sem admin, sem QR params → mostra ecrã kiosk
+    showScreen('screen-kiosk');
+    return;
+  }
 
   if (fParam) {
-    // Mapeia slug para nome completo
     const FARMACIA_SLUG = {
       'aroeira': 'Farmácia Aroeira',
       'diasbrito': 'Farmácia Dias e Brito',
@@ -1418,14 +1503,14 @@ window.addEventListener('load', () => {
     const farmaciaNome = FARMACIA_SLUG[fParam] || fParam;
     const selFarmacia = document.getElementById('sel-farmacia');
     selFarmacia.value = farmaciaNome;
-    selFarmacia.disabled = true; // bloqueia — não pode mudar
+    if (!modoAdmin) selFarmacia.disabled = true;
     onFarmaciaChange();
 
     if (lParam) {
-      const local = decodeURIComponent(lParam);
+      const local = decodeURIComponent(lParam).replace(/\+/g, ' ');
       const selLocal = document.getElementById('sel-local');
       selLocal.value = local;
-      selLocal.disabled = true; // bloqueia — não pode mudar
+      if (!modoAdmin) selLocal.disabled = true;
     }
   }
 });
