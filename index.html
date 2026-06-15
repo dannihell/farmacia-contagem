@@ -1309,7 +1309,6 @@ let camaraKioskStream = null;
 let html5QrScanner = null;
 
 function processarQRKiosk(codigo) {
-  showToast('Lido: ' + codigo.substring(0, 40));
   if (!codigo.includes('dannihell.github.io') || !codigo.includes('farmacia-contagem')) {
     document.getElementById('kiosk-status').textContent = 'QR inválido — usa o QR code da gaveta';
     return;
@@ -1813,6 +1812,7 @@ function finalizarGaveta() {
       desvio: contado - stock,
       validade: (produtoAtual && produtoAtual.cnp === cnp) ? document.getElementById('input-validade').value.trim() : '',
       locais,
+      porLocal: contadoresPorLocal[cnp] ? {...contadoresPorLocal[cnp]} : {},
       ts: new Date().toISOString(),
     });
     registados++;
@@ -1916,6 +1916,7 @@ function registarProduto() {
     desvio,
     validade,
     locais,
+    porLocal: contadoresPorLocal[produtoAtual.cnp] ? {...contadoresPorLocal[produtoAtual.cnp]} : {},
     ts: new Date().toISOString(),
   });
 
@@ -1961,7 +1962,11 @@ function atualizarLista() {
       <div class="contagem-dot ${dotClass}"></div>
       <div class="contagem-info">
         <div class="contagem-nome">${c.nome}</div>
-        <div class="contagem-cnp">${c.cnp}${c.validade ? ' · ' + c.validade : ''}</div>
+        <div class="contagem-cnp">${c.cnp}${c.validade ? ' · ' + c.validade : ''}${
+          c.porLocal && Object.keys(c.porLocal).length > 1
+            ? ' · ' + Object.entries(c.porLocal).map(([l,q]) => l + ': ' + q).join(', ')
+            : c.locais && c.locais.length > 0 ? ' · ' + c.locais.join(', ') : ''
+        }</div>
       </div>
       <div class="contagem-nums">
         <div class="desvio" style="color:${desvioColor}">${desvioStr}</div>
@@ -2084,6 +2089,6 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
-<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.3</div>
+<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.5</div>
 </body>
 </html>
