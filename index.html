@@ -1344,7 +1344,7 @@ function processarQRKiosk(codigo) {
       }, 300);
     }
   }
-  showScreen('screen-login');
+  showScreen('screen-login', true);
 }
 
 // HID scanner no ecrã kiosk (PDA)
@@ -1658,11 +1658,11 @@ function setMode(m) {
   if (m === 'lista') showToast('Lista guiada em breve — requer ligação Zoho');
 }
 
-function showScreen(id) {
+function showScreen(id, forcar) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   // Em modo kiosk, "login" significa voltar ao kiosk (não ao ecrã admin)
-  if (id === 'screen-login' && !modoAdmin) {
-    // Repor selects bloqueados
+  // excepto quando forcar=true (vem de um QR scan)
+  if (id === 'screen-login' && !modoAdmin && !forcar) {
     const selFarmacia = document.getElementById('sel-farmacia');
     const selLocal = document.getElementById('sel-local');
     selFarmacia.disabled = false;
