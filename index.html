@@ -1327,14 +1327,15 @@ function iniciarHIDKiosk() {
       const v = input.value.trim();
       if (v) processarQRKiosk(v);
       input.value = '';
+      input.focus();
     }
   });
-  // Manter foco no campo HID enquanto estiver no ecrã kiosk
+  // Repor foco após qualquer clique no ecrã kiosk (exceto no botão câmara)
   document.addEventListener('click', function(e) {
     const screen = document.getElementById('screen-kiosk');
-    if (screen && screen.classList.contains('active')) {
-      if (e.target.id !== 'kiosk-hid-input') input.focus();
-    }
+    if (!screen || !screen.classList.contains('active')) return;
+    if (e.target.closest('#camera-overlay')) return;
+    setTimeout(() => input.focus(), 100);
   });
 }
 
@@ -1534,6 +1535,8 @@ window.addEventListener('load', () => {
   if (!modoAdmin && !fParam) {
     showScreen('screen-kiosk');
     iniciarHIDKiosk();
+    // Truque para esconder barra de endereço no Android (scroll para baixo e volta)
+    setTimeout(() => { window.scrollTo(0, 1); }, 500);
     return;
   }
 
