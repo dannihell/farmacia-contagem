@@ -437,7 +437,7 @@
   <!-- Input transparente a cobrir o ecrã todo — captura HID scanner sem perder foco -->
   <input type="text" id="kiosk-hid-input"
     style="position:absolute;inset:0;width:100%;height:100%;opacity:0;z-index:10;"
-    autocomplete="off" inputmode="none">
+    autocomplete="off" inputmode="numeric">
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:24px; text-align:center; position:relative; z-index:5; pointer-events:none;">
     <div style="font-size:64px; margin-bottom:16px;">📦</div>
     <div style="font-size:22px; font-weight:700; color:var(--green); margin-bottom:12px;">Contagem de Stock</div>
@@ -1352,31 +1352,35 @@ function processarQRKiosk(codigo) {
 
 // HID scanner no ecrã kiosk (PDA)
 function iniciarHIDKiosk() {
-  let buffer = '';
-  let timer = null;
+  const input = document.getElementById('kiosk-hid-input');
+  if (!input) return;
 
-  document.addEventListener('keydown', function(e) {
-    // Só activo no ecrã kiosk
-    const screen = document.getElementById('screen-kiosk');
-    if (!screen || !screen.classList.contains('active')) return;
+  // Usa evento 'input' (mais fiável em Android HID) em vez de keydown
+  input.addEventListener('input', function() {
+    const dbg = document.getElementById('kiosk-debug');
+    if (dbg) dbg.textContent = 'buffer: ' + input.value;
+  });
 
+  input.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      clearTimeout(timer);
-      const v = buffer.trim();
-      buffer = '';
-      if (v) processarQRKiosk(v);
-      return;
-    }
-
-    if (e.key.length === 1) {
-      buffer += e.key;
+      const v = input.value.trim();
+      input.value = '';
       const dbg = document.getElementById('kiosk-debug');
-      if (dbg) dbg.textContent = 'buffer: ' + buffer;
-      clearTimeout(timer);
-      timer = setTimeout(() => { buffer = ''; }, 500);
+      if (dbg) dbg.textContent = 'Enter: ' + v.substring(0, 40);
+      if (v) processarQRKiosk(v);
     }
   });
+
+  // Foco no input sempre que o ecrã kiosk estiver activo
+  function manterFoco() {
+    const screen = document.getElementById('screen-kiosk');
+    if (screen && screen.classList.contains('active') && document.activeElement !== input) {
+      input.focus();
+    }
+  }
+  setInterval(manterFoco, 300);
+  input.focus();
 }
 
 async function abrirCamaraKiosk() {
