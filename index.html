@@ -1351,16 +1351,28 @@ function processarQRKiosk(codigo) {
 
 // HID scanner no ecrã kiosk (PDA)
 function iniciarHIDKiosk() {
-  const input = document.getElementById('kiosk-hid-input');
-  if (!input) return;
-  input.focus();
-  input.addEventListener('keydown', function(e) {
+  let buffer = '';
+  let timer = null;
+
+  document.addEventListener('keydown', function(e) {
+    // Só activo no ecrã kiosk
+    const screen = document.getElementById('screen-kiosk');
+    if (!screen || !screen.classList.contains('active')) return;
+
     if (e.key === 'Enter') {
       e.preventDefault();
-      const v = input.value.trim();
-      input.value = '';
+      clearTimeout(timer);
+      const v = buffer.trim();
+      buffer = '';
       if (v) processarQRKiosk(v);
-      // Foco volta automaticamente (input cobre o ecrã)
+      return;
+    }
+
+    if (e.key.length === 1) {
+      buffer += e.key;
+      clearTimeout(timer);
+      // Scanner HID envia muito rápido — se parar >200ms sem Enter, limpa
+      timer = setTimeout(() => { buffer = ''; }, 500);
     }
   });
 }
