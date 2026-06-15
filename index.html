@@ -880,10 +880,8 @@ document.addEventListener('click', function(e) {
   }
 });
 
-document.addEventListener('touchmove', function(e) {
-  if (window.scrollY === 0 && e.touches[0].clientY > 0) e.preventDefault();
-}, { passive: false });
+// Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.20</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.21</div>
 </body>
 </html>
