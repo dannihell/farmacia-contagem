@@ -224,22 +224,15 @@
 <!-- ECRÃ 2: CONTAGEM -->
 <div class="screen" id="screen-contagem">
 
-  <!-- LOCAL ATUAL -->
-  <div class="card" style="padding:10px 12px;">
-    <div class="card-title" style="margin-bottom:6px;">Local atual</div>
-    <select id="sel-local-atual" onchange="mudarLocal()">
-      <option value="">Selecionar local...</option>
+  <!-- LOCAL + SCAN compactos numa só linha -->
+  <div style="display:flex; gap:6px; margin:8px 0; align-items:stretch;">
+    <select id="sel-local-atual" onchange="mudarLocal()" style="flex:0 0 90px; padding:8px 6px; font-size:13px; margin-bottom:0; border-radius:var(--radius-sm); border:0.5px solid var(--gray-border); background:var(--bg); color:var(--text); appearance:none;">
+      <option value="">Local...</option>
     </select>
-  </div>
-
-  <!-- SCAN -->
-  <div class="card" id="scan-card">
-    <div class="card-title">Ler código de barras</div>
-    <div class="scan-wrapper">
-      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
-      <button id="btn-confirmar-scan" onclick="confirmarScanManual()">OK</button>
-    </div>
-    <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e toca em "OK".</div>
+    <input type="text" id="scan-input" placeholder="CNP..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric"
+      style="flex:1; padding:8px 10px; font-size:16px; font-family:monospace; border-radius:var(--radius-sm); border:2px solid var(--green-light); background:var(--green-bg); color:var(--text); min-width:0;">
+    <button id="btn-confirmar-scan" onclick="confirmarScanManual()"
+      style="flex:0 0 auto; padding:8px 14px; font-size:16px; font-weight:700; border-radius:var(--radius-sm); border:2px solid var(--green-light); background:var(--green); color:#fff; cursor:pointer;">OK</button>
   </div>
 
   <!-- PRODUTO ATUAL -->
@@ -891,6 +884,6 @@ document.addEventListener('touchmove', function(e) {
   if (window.scrollY === 0) e.preventDefault();
 }, { passive: false });
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.18</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.19</div>
 </body>
 </html>
