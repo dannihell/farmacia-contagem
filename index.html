@@ -146,7 +146,7 @@
     gap: 8px;
   }
   #scan-input { flex: 1; }
-  #btn-confirmar-scan {
+  #btn-confirmar-scan, .scan-wrapper button {
     flex-shrink: 0;
     padding: 0 18px;
     border-radius: var(--radius-sm);
@@ -307,6 +307,7 @@
   .dot-ok { background: var(--green-light); }
   .dot-warn { background: var(--amber); }
   .dot-err { background: var(--red); }
+  .dot-pos { background: #4a90d9; }
   .contagem-info { flex: 1; min-width: 0; }
   .contagem-nome {
     font-size: 13px;
@@ -421,6 +422,8 @@
 </style>
 </head>
 <body>
+<div style="position:fixed; top:0; left:0; right:0; background:#ff3333; color:#fff; font-size:11px; padding:4px; z-index:99999; word-break:break-all;" id="debug-url"></div>
+<script>document.getElementById('debug-url').textContent = location.href;</script>
 
 <div class="header">
   <div class="header-top">
@@ -474,6 +477,53 @@
     </div>
     <button class="btn btn-primary" onclick="iniciarSessao()">Iniciar contagem</button>
     <button class="btn" onclick="abrirVerificacaoRapida()">Verificação rápida (1 produto)</button>
+    <button class="btn" onclick="abrirConferenciaValidades()">Conferência de Validades</button>
+  </div>
+</div>
+
+<!-- ECRÃ CONFERÊNCIA DE VALIDADES -->
+<div class="screen" id="screen-validades">
+  <div style="padding-top: 8px;">
+    <div class="card">
+      <div class="card-title">Ler código de barras</div>
+      <div class="scan-wrapper">
+        <input type="text" id="scan-input-validades" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+        <button onclick="confirmarScanValidades()">OK</button>
+        <button onclick="abrirCamara('scan-input-validades')">📷</button>
+      </div>
+      <div class="scan-hint" id="validades-hint">A carregar lista...</div>
+    </div>
+
+    <div class="card" id="validades-card" style="display:none;">
+      <div class="card-title">Produtos a confirmar (validade ≤ 3 meses), por ordem alfabética</div>
+      <div id="lista-validades"></div>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-top:12px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="submeterConferenciaValidades()">✓ Submeter resultados</button>
+      <button class="btn" onclick="showScreen('screen-login')">← Voltar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ECRÃ CONFIRMAÇÃO SIFARMA (DT) -->
+<div class="screen" id="screen-confirmacao-dt">
+  <div style="padding-top: 8px;">
+    <div class="card">
+      <div class="card-title">Confirmação Sifarma — itens a corrigir</div>
+      <div class="scan-hint">Toca em cada item depois de corrigires a validade no Sifarma, para marcar como "corrigido". Depois confirma com o teu nome (DT/superior).</div>
+    </div>
+    <div class="card">
+      <div id="dt-lista"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Quem confirma (DT/superior)</div>
+      <input type="text" id="input-dt-nome" class="text-input" placeholder="Nome">
+    </div>
+    <div style="display:flex; gap:8px; margin-top:12px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="submeterConfirmacaoDT()">✓ Confirmar correções</button>
+      <button class="btn" onclick="showScreen('screen-login')">← Sair sem confirmar</button>
+    </div>
   </div>
 </div>
 
@@ -484,6 +534,7 @@
       <div class="card-title">Ler código de barras</div>
       <div class="scan-wrapper">
         <input type="text" id="scan-input-rapida" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+        <button onclick="abrirCamara('scan-input-rapida')">📷</button>
       </div>
       <div class="scan-hint">Verificação pontual ao balcão — não cria sessão de contagem.</div>
     </div>
@@ -547,6 +598,7 @@
     <div class="scan-wrapper">
       <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
       <button id="btn-confirmar-scan" onclick="confirmarScanManual()">OK</button>
+      <button onclick="abrirCamara('scan-input')">📷</button>
     </div>
     <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e toca em "OK".</div>
   </div>
@@ -645,6 +697,18 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- OVERLAY CÂMARA (modo telemóvel) -->
+<div id="camera-overlay" style="display:none; position:fixed; inset:0; background:#000; z-index:9998; flex-direction:column;">
+  <video id="camera-video" autoplay playsinline muted style="flex:1; width:100%; object-fit:cover;"></video>
+  <div style="position:absolute; top:0; left:0; right:0; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="color:#fff; background:rgba(0,0,0,0.5); padding:6px 12px; border-radius:8px; font-size:13px;" id="camera-status">A iniciar câmara...</div>
+    <button onclick="fecharCamara()" style="background:rgba(255,255,255,0.9); border:none; border-radius:8px; padding:8px 14px; font-size:16px; font-weight:600;">Fechar ✕</button>
+  </div>
+  <div style="position:absolute; bottom:30px; left:0; right:0; text-align:center; color:#fff; font-size:13px; text-shadow:0 1px 2px #000;">
+    Aponta a câmara ao código de barras / QR / DataMatrix
+  </div>
+</div>
+
 <script>
 const SHEET_ID = '10P4wcbr55d0a_11tIObehmdf6IM91IkSwxCfmvyeWdU';
 
@@ -692,7 +756,25 @@ function getStockUrl() {
 // ============================================================
 const G_LOCAIS = Array.from({length: 100}, (_, i) => 'G' + (i + 1));
 const L_LOCAIS = Array.from({length: 30}, (_, i) => 'L' + (i + 1));
-const LOCAIS_PADRAO = [...G_LOCAIS, ...L_LOCAIS, 'Armazém'];
+const GONDOLAS = Array.from({length: 6}, (_, i) => 'Gôndola ' + (i + 1));
+const GAVETAS_BALCAO = Array.from({length: 27}, (_, i) => i + 1)
+  .filter(n => n !== 22)
+  .map(n => 'Gaveta Balcão ' + n);
+
+const OUTROS_LOCAIS = [
+  'Frigorífico Público',
+  'Frigorífico Medicamentos 1',
+  'Frigorífico Medicamentos 2',
+  'Beauty Point — Frente',
+  'Beauty Point — Trás',
+  'Linear OTC 1',
+  'Linear OTC 2',
+  'Linear OTC 3',
+  'Linear OTC 4',
+  ...GAVETAS_BALCAO,
+  'Móveis de Xaropes',
+];
+const LOCAIS_PADRAO = [...G_LOCAIS, ...L_LOCAIS, ...GONDOLAS, ...OUTROS_LOCAIS, 'Armazém'];
 
 const FARMACIA_CONFIG = {
   'Farmácia Aroeira': {
@@ -867,6 +949,340 @@ async function submeterRapida() {
   cancelarRapida();
 }
 
+// ============================================================
+// CONFERÊNCIA DE VALIDADES
+// ============================================================
+let listaValidades = []; // [{cnp, nome, validade, confirmado}]
+
+function parseValidadeMMYYYY(v) {
+  if (!v || !/^\d{2}\/\d{4}$/.test(v)) return null;
+  const [mm, yyyy] = v.split('/').map(Number);
+  return new Date(yyyy, mm - 1, 1);
+}
+
+function abrirConferenciaValidades() {
+  const farmacia = document.getElementById('sel-farmacia').value;
+  if (!farmacia) { showToast('Seleciona a farmácia primeiro'); return; }
+
+  const limite = new Date();
+  limite.setMonth(limite.getMonth() + 3);
+
+  listaValidades = Object.keys(stockCache)
+    .map(cnp => ({ cnp, ...stockCache[cnp] }))
+    .filter(p => (parseFloat(p.s) || 0) > 0)
+    .map(p => ({ cnp: p.cnp, nome: p.n || 'Sem nome', validade: p.v, dataVal: parseValidadeMMYYYY(p.v) }))
+    .filter(p => p.dataVal && p.dataVal <= limite)
+    .sort((a, b) => a.nome.localeCompare(b.nome))
+    .map(p => ({ ...p, estado: 'por_confirmar', validadeNova: '' }));
+
+  document.getElementById('validades-hint').textContent =
+    listaValidades.length + ' produto(s) com validade ≤ 3 meses. Faz scan ao encontrares cada um na farmácia.';
+  document.getElementById('validades-card').style.display = listaValidades.length ? 'block' : 'none';
+  renderListaValidades();
+  showScreen('screen-validades');
+  document.getElementById('scan-input-validades').focus();
+}
+
+function renderListaValidades() {
+  document.getElementById('lista-validades').innerHTML = listaValidades.map((p, i) => {
+    const cor = p.estado === 'confirmado' ? 'dot-ok' : p.estado === 'validade_alterada' ? 'dot-pos' : 'dot-warn';
+    const statusTxt = p.estado === 'confirmado' ? '✓ confirmado'
+      : p.estado === 'validade_alterada' ? '✎ validade alterada: ' + p.validadeNova
+      : 'por confirmar';
+    return `
+    <div class="contagem-item" onclick="onItemValidadesClick(${i})" style="cursor:pointer;">
+      <div class="contagem-dot ${cor}"></div>
+      <div class="contagem-info">
+        <div class="contagem-nome">${p.nome}</div>
+        <div class="contagem-cnp">${p.cnp} · val. Sifarma ${p.validade}</div>
+      </div>
+      <div class="contagem-nums">
+        <div class="stocks">${statusTxt}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Toca num item já confirmado para corrigir a validade física (diferente da do Sifarma)
+function onItemValidadesClick(i) {
+  const p = listaValidades[i];
+  if (p.estado !== 'confirmado' && p.estado !== 'validade_alterada') return;
+  const atual = p.validadeNova || p.validade;
+  const nova = prompt('Validade física encontrada (MM/AAAA) para "' + p.nome.substring(0, 30) + '":', atual);
+  if (nova === null) return;
+  if (!/^\d{2}\/\d{4}$/.test(nova.trim())) { showToast('Formato inválido — usa MM/AAAA'); return; }
+  if (nova.trim() === p.validade) {
+    p.estado = 'confirmado';
+    p.validadeNova = '';
+  } else {
+    p.estado = 'validade_alterada';
+    p.validadeNova = nova.trim();
+  }
+  renderListaValidades();
+}
+
+function marcarConfirmadoValidades(cnp) {
+  const item = listaValidades.find(p => p.cnp === cnp);
+  if (!item) return false;
+  if (item.estado === 'por_confirmar') {
+    item.estado = 'confirmado';
+    renderListaValidades();
+    showToast('✓ ' + item.nome.substring(0, 25));
+  }
+  return true;
+}
+
+function confirmarScanValidades() {
+  const input = document.getElementById('scan-input-validades');
+  let cnp = input.value.trim();
+  if (!cnp) return;
+  cnp = resolverCNP(cnp);
+  if (!marcarConfirmadoValidades(cnp)) {
+    showToast('Não está na lista de validades a confirmar');
+  }
+  input.value = '';
+  input.focus();
+}
+
+document.getElementById('scan-input-validades').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    confirmarScanValidades();
+  }
+});
+
+let pendentesConfirmacaoDT = []; // itens com validade_alterada / nao_encontrado, à espera de correção no Sifarma
+
+async function submeterConferenciaValidades() {
+  if (listaValidades.length === 0) { showToast('Nada a submeter'); return; }
+  const farmacia = document.getElementById('sel-farmacia').value;
+  let col = document.getElementById('sel-colaborador').value;
+  if (col === '__novo__') {
+    col = document.getElementById('input-novo-colaborador').value.trim();
+    if (col) adicionarColaboradorExtra(farmacia, col);
+  }
+  if (!col) { showToast('Seleciona o colaborador'); return; }
+
+  // Itens não tocados ficam como "não encontrado"
+  listaValidades.forEach(p => { if (p.estado === 'por_confirmar') p.estado = 'nao_encontrado'; });
+
+  const cfg = FARMACIA_CONFIG[farmacia];
+  const scriptUrl = cfg ? cfg.appsScriptUrl : null;
+  const data = new Date().toLocaleDateString('pt-PT');
+  const hora = new Date().toLocaleTimeString('pt-PT');
+
+  const payload = listaValidades.map(p => ({
+    data, hora, farmacia, colaborador: col,
+    cnp: p.cnp, nome: p.nome,
+    stock_sifarma: '', contado: '', desvio: '',
+    validade: p.estado === 'validade_alterada' ? p.validadeNova : p.validade,
+    locais: p.estado === 'confirmado' ? 'Confirmado em stock'
+      : p.estado === 'validade_alterada' ? 'Validade alterada (Sifarma: ' + p.validade + ' → física: ' + p.validadeNova + ')'
+      : 'NÃO encontrado — corrigir validade no Sifarma',
+  }));
+
+  if (scriptUrl && scriptUrl !== 'APPS_SCRIPT_URL_AQUI') {
+    try {
+      await fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessao: col + ' — conferência de validades', linhas: payload }),
+      });
+    } catch(e) { console.error(e); }
+  }
+
+  pendentesConfirmacaoDT = listaValidades.filter(p => p.estado === 'validade_alterada' || p.estado === 'nao_encontrado');
+  listaValidades = [];
+
+  if (pendentesConfirmacaoDT.length === 0) {
+    showToast('Submetido — sem correções pendentes');
+    showScreen('screen-login');
+    return;
+  }
+
+  abrirConfirmacaoDT();
+}
+
+// ============================================================
+// CONFIRMAÇÃO SIFARMA (2ª hierarquia — DT/superior)
+// ============================================================
+function abrirConfirmacaoDT() {
+  document.getElementById('dt-lista').innerHTML = pendentesConfirmacaoDT.map((p, i) => {
+    const detalhe = p.estado === 'validade_alterada'
+      ? 'Sifarma: ' + p.validade + ' → física: ' + p.validadeNova
+      : 'NÃO encontrado fisicamente';
+    return `
+    <div class="contagem-item" onclick="toggleCorrigidoDT(${i})" style="cursor:pointer;">
+      <div class="contagem-dot ${p.corrigido ? 'dot-ok' : 'dot-warn'}"></div>
+      <div class="contagem-info">
+        <div class="contagem-nome">${p.nome}</div>
+        <div class="contagem-cnp">${p.cnp} · ${detalhe}</div>
+      </div>
+      <div class="contagem-nums">
+        <div class="stocks">${p.corrigido ? '✓ corrigido' : 'pendente'}</div>
+      </div>
+    </div>`;
+  }).join('');
+  showScreen('screen-confirmacao-dt');
+}
+
+function toggleCorrigidoDT(i) {
+  pendentesConfirmacaoDT[i].corrigido = !pendentesConfirmacaoDT[i].corrigido;
+  abrirConfirmacaoDT();
+}
+
+async function submeterConfirmacaoDT() {
+  const nome = document.getElementById('input-dt-nome').value.trim();
+  if (!nome) { showToast('Indica o nome de quem confirma (DT/superior)'); return; }
+
+  const farmacia = document.getElementById('sel-farmacia').value;
+  const cfg = FARMACIA_CONFIG[farmacia];
+  const scriptUrl = cfg ? cfg.appsScriptUrl : null;
+  const data = new Date().toLocaleDateString('pt-PT');
+  const hora = new Date().toLocaleTimeString('pt-PT');
+
+  const payload = pendentesConfirmacaoDT.map(p => ({
+    data, hora, farmacia, colaborador: nome,
+    cnp: p.cnp, nome: p.nome,
+    stock_sifarma: '', contado: '', desvio: '',
+    validade: p.estado === 'validade_alterada' ? p.validadeNova : p.validade,
+    locais: p.corrigido ? 'Corrigido no Sifarma (DT: ' + nome + ')' : 'Ainda pendente de correção no Sifarma',
+  }));
+
+  if (scriptUrl && scriptUrl !== 'APPS_SCRIPT_URL_AQUI') {
+    try {
+      await fetch(scriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessao: nome + ' — confirmação Sifarma', linhas: payload }),
+      });
+    } catch(e) { console.error(e); }
+  }
+
+  const corrigidos = pendentesConfirmacaoDT.filter(p => p.corrigido).length;
+  showToast(corrigidos + '/' + pendentesConfirmacaoDT.length + ' corrigidos no Sifarma');
+  pendentesConfirmacaoDT = [];
+  document.getElementById('input-dt-nome').value = '';
+  showScreen('screen-login');
+}
+
+// ============================================================
+// MODO TELEMÓVEL — scan via câmara (BarcodeDetector nativo, fallback ZXing)
+// ============================================================
+let camaraStream = null;
+let camaraDetector = null;
+let camaraZxingReader = null;
+let camaraAtivo = false;
+let camaraTargetInput = null;
+let camaraUltimoCodigo = null;
+let camaraUltimoTs = 0;
+
+const CAMERA_FORMATS = ['ean_13', 'ean_8', 'code_128', 'code_39', 'qr_code', 'data_matrix'];
+
+async function abrirCamara(targetInputId) {
+  camaraTargetInput = targetInputId;
+  const overlay = document.getElementById('camera-overlay');
+  const video = document.getElementById('camera-video');
+  const status = document.getElementById('camera-status');
+  overlay.style.display = 'flex';
+  status.textContent = 'A iniciar câmara...';
+
+  try {
+    camaraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }
+    });
+  } catch (e) {
+    status.textContent = 'Sem acesso à câmara: ' + e.message;
+    return;
+  }
+
+  video.srcObject = camaraStream;
+  camaraAtivo = true;
+  camaraUltimoCodigo = null;
+
+  if ('BarcodeDetector' in window) {
+    try {
+      camaraDetector = new BarcodeDetector({ formats: CAMERA_FORMATS });
+      status.textContent = 'A procurar código...';
+      loopBarcodeDetector(video, status);
+      return;
+    } catch (e) {
+      // formatos não suportados, cai para ZXing
+    }
+  }
+
+  // Fallback: ZXing (carregado de CDN)
+  status.textContent = 'A carregar leitor...';
+  try {
+    if (!window.ZXing) {
+      await carregarScript('https://unpkg.com/@zxing/library@latest/umd/index.min.js');
+    }
+    camaraZxingReader = new ZXing.BrowserMultiFormatReader();
+    status.textContent = 'A procurar código...';
+    camaraZxingReader.decodeFromVideoElement(video, (result, err) => {
+      if (result) onCodigoDetectado(result.getText(), status);
+    });
+  } catch (e) {
+    status.textContent = 'Leitor de câmara não disponível neste browser.';
+  }
+}
+
+function loopBarcodeDetector(video, status) {
+  if (!camaraAtivo) return;
+  camaraDetector.detect(video)
+    .then(codes => {
+      if (codes.length > 0) onCodigoDetectado(codes[0].rawValue, status);
+    })
+    .catch(() => {})
+    .finally(() => {
+      if (camaraAtivo) requestAnimationFrame(() => loopBarcodeDetector(video, status));
+    });
+}
+
+function onCodigoDetectado(codigo, status) {
+  const agora = Date.now();
+  // Evita registos repetidos do mesmo código em sucessão rápida
+  if (codigo === camaraUltimoCodigo && (agora - camaraUltimoTs) < 2000) return;
+  camaraUltimoCodigo = codigo;
+  camaraUltimoTs = agora;
+
+  if (status) status.textContent = '✓ Lido: ' + codigo;
+  if (navigator.vibrate) navigator.vibrate(100);
+
+  if (camaraTargetInput === 'scan-input') {
+    processarCNP(resolverCNP(codigo));
+  } else if (camaraTargetInput === 'scan-input-rapida') {
+    processarCNPRapida(codigo);
+  } else if (camaraTargetInput === 'scan-input-validades') {
+    marcarConfirmadoValidades(resolverCNP(codigo)) || showToast('Não está na lista de validades a confirmar');
+  }
+}
+
+function fecharCamara() {
+  camaraAtivo = false;
+  if (camaraStream) {
+    camaraStream.getTracks().forEach(t => t.stop());
+    camaraStream = null;
+  }
+  if (camaraZxingReader) {
+    try { camaraZxingReader.reset(); } catch(e) {}
+    camaraZxingReader = null;
+  }
+  document.getElementById('camera-overlay').style.display = 'none';
+}
+
+function carregarScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
 let stockCache = {};
 let altCodeMap = {}; // código alternativo (COD_ALTERNATIVOS) -> cnp
 
@@ -982,6 +1398,36 @@ async function actualizarStock() {
 window.addEventListener('load', () => {
   const el = document.getElementById('stock-status-info');
   if (el) el.textContent = 'Seleciona a farmácia para ver o stock.';
+
+  // Leitura de parâmetros URL (?f=aroeira&l=G5) — vem do QR code da gaveta
+  const params = new URLSearchParams(window.location.search);
+  const fParam = params.get('f');
+  const lParam = params.get('l');
+
+  if (fParam) {
+    // Mapeia slug para nome completo
+    const FARMACIA_SLUG = {
+      'aroeira': 'Farmácia Aroeira',
+      'diasbrito': 'Farmácia Dias e Brito',
+      'cidadeuniversitaria': 'Farmácia Cidade Universitária',
+      'altodosmoinhos': 'Farmácia Alto dos Moinhos',
+      'porfirio': 'Farmácia Porfírio',
+      'altodacastelhana': 'Farmácia Alto da Castelhana',
+      'tulipas': 'Farmácia das Túlipas',
+    };
+    const farmaciaNome = FARMACIA_SLUG[fParam] || fParam;
+    const selFarmacia = document.getElementById('sel-farmacia');
+    selFarmacia.value = farmaciaNome;
+    selFarmacia.disabled = true; // bloqueia — não pode mudar
+    onFarmaciaChange();
+
+    if (lParam) {
+      const local = decodeURIComponent(lParam);
+      const selLocal = document.getElementById('sel-local');
+      selLocal.value = local;
+      selLocal.disabled = true; // bloqueia — não pode mudar
+    }
+  }
 });
 
 // ============================================================
@@ -1351,19 +1797,28 @@ async function submeterContagem() {
       return;
     }
 
-    const payload = sessao.contagens.map(c => ({
-      data: new Date().toLocaleDateString('pt-PT'),
-      hora: new Date().toLocaleTimeString('pt-PT'),
-      farmacia: sessao.farmacia,
-      colaborador: sessao.colaborador,
-      cnp: c.cnp,
-      nome: c.nome,
-      stock_sifarma: c.stockSifarma,
-      contado: c.contado,
-      desvio: c.desvio,
-      validade: c.validade,
-      locais: (c.locais || []).join(', '),
-    }));
+    const payload = sessao.contagens.map(c => {
+      const cached = stockCache[c.cnp];
+      const validadeSifarma = cached ? (cached.v || '') : '';
+      const validadeDivergente = c.validade && /^\d{2}\/\d{4}$/.test(c.validade) && c.validade !== validadeSifarma;
+      let locaisTxt = (c.locais || []).join(', ');
+      if (validadeDivergente) {
+        locaisTxt += (locaisTxt ? ' | ' : '') + '⚠ Validade Sifarma ' + validadeSifarma + ' → física ' + c.validade + ' (corrigir)';
+      }
+      return {
+        data: new Date().toLocaleDateString('pt-PT'),
+        hora: new Date().toLocaleTimeString('pt-PT'),
+        farmacia: sessao.farmacia,
+        colaborador: sessao.colaborador,
+        cnp: c.cnp,
+        nome: c.nome,
+        stock_sifarma: c.stockSifarma,
+        contado: c.contado,
+        desvio: c.desvio,
+        validade: c.validade,
+        locais: locaisTxt,
+      };
+    });
 
     await fetch(scriptUrl, {
       method: 'POST',
