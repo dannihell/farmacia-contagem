@@ -1313,7 +1313,39 @@ function processarQRKiosk(codigo) {
     return;
   }
   fecharCamaraKiosk();
-  window.location.href = codigo;
+
+  // Extrai parâmetros do URL sem navegar (evita reload)
+  const url = new URL(codigo.startsWith('http') ? codigo : 'https://' + codigo);
+  const fParam = url.searchParams.get('f');
+  const lParam = url.searchParams.get('l');
+
+  const FARMACIA_SLUG = {
+    'aroeira': 'Farmácia Aroeira',
+    'diasbrito': 'Farmácia Dias e Brito',
+    'cidadeuniversitaria': 'Farmácia Cidade Universitária',
+    'altodosmoinhos': 'Farmácia Alto dos Moinhos',
+    'porfirio': 'Farmácia Porfírio',
+    'altodacastelhana': 'Farmácia Alto da Castelhana',
+    'tulipas': 'Farmácia das Túlipas',
+  };
+
+  if (fParam) {
+    const farmaciaNome = FARMACIA_SLUG[fParam] || fParam;
+    const selFarmacia = document.getElementById('sel-farmacia');
+    selFarmacia.value = farmaciaNome;
+    selFarmacia.disabled = true;
+    onFarmaciaChange();
+
+    if (lParam) {
+      const local = decodeURIComponent(lParam).replace(/\+/g, ' ');
+      setTimeout(() => {
+        const selLocal = document.getElementById('sel-local');
+        selLocal.value = local;
+        selLocal.disabled = true;
+      }, 300);
+    }
+  }
+  showScreen('screen-login');
 }
 
 // HID scanner no ecrã kiosk (PDA)
@@ -1618,6 +1650,21 @@ function setMode(m) {
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  // Em modo kiosk, "login" significa voltar ao kiosk (não ao ecrã admin)
+  if (id === 'screen-login' && !modoAdmin) {
+    // Repor selects bloqueados
+    const selFarmacia = document.getElementById('sel-farmacia');
+    const selLocal = document.getElementById('sel-local');
+    selFarmacia.disabled = false;
+    selFarmacia.value = '';
+    selLocal.disabled = false;
+    document.getElementById('screen-kiosk').classList.add('active');
+    setTimeout(() => {
+      const input = document.getElementById('kiosk-hid-input');
+      if (input) input.focus();
+    }, 100);
+    return;
+  }
   document.getElementById(id).classList.add('active');
 }
 
