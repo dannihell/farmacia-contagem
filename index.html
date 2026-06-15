@@ -422,8 +422,6 @@
 </style>
 </head>
 <body>
-<div style="position:fixed; top:0; left:0; right:0; background:#ff3333; color:#fff; font-size:11px; padding:4px; z-index:99999; word-break:break-all;" id="debug-url"></div>
-<script>document.getElementById('debug-url').textContent = location.href;</script>
 
 <div class="header">
   <div class="header-top">
@@ -436,14 +434,16 @@
 <!-- ECRÃ 1: IDENTIFICAÇÃO -->
 <!-- ECRÃ KIOSK (modo equipa — só QR) -->
 <div class="screen" id="screen-kiosk">
+  <!-- Input invisível para scanner HID no PDA -->
+  <input type="text" id="kiosk-hid-input" style="position:absolute;opacity:0;width:1px;height:1px;top:0;left:0;" autocomplete="off" inputmode="none">
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:24px; text-align:center;">
     <div style="font-size:64px; margin-bottom:16px;">📦</div>
     <div style="font-size:22px; font-weight:700; color:var(--green); margin-bottom:8px;">Contagem de Stock</div>
-    <div style="font-size:15px; color:var(--text-muted); margin-bottom:32px;">Aponta para o QR code da gaveta para começar</div>
+    <div style="font-size:15px; color:var(--text-muted); margin-bottom:32px;">Aponta o scanner ou câmara para o QR code da gaveta</div>
     <button class="btn btn-primary" style="font-size:18px; padding:16px 32px;" onclick="abrirCamaraKiosk()">
-      📷 Ler QR code da gaveta
+      📷 Ler QR code com câmara
     </button>
-    <div id="kiosk-status" style="margin-top:16px; font-size:13px; color:var(--text-muted);"></div>
+    <div id="kiosk-status" style="margin-top:16px; font-size:13px; color:var(--text-muted);">Scanner HID pronto — dispara o leitor</div>
   </div>
 </div>
 
@@ -722,6 +722,7 @@
   </div>
 </div>
 
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 const SHEET_ID = '10P4wcbr55d0a_11tIObehmdf6IM91IkSwxCfmvyeWdU';
 
@@ -1276,13 +1277,10 @@ function onCodigoDetectado(codigo, status) {
 function fecharCamara() {
   camaraAtivo = false;
   camaraKioskAtivo = false;
-  if (camaraStream) {
-    camaraStream.getTracks().forEach(t => t.stop());
-    camaraStream = null;
-  }
-  if (camaraKioskStream) {
-    camaraKioskStream.getTracks().forEach(t => t.stop());
-    camaraKioskStream = null;
+  fecharCamaraBase();
+  if (html5QrScanner) {
+    html5QrScanner.stop().catch(() => {});
+    html5QrScanner = null;
   }
   if (camaraZxingReader) {
     try { camaraZxingReader.reset(); } catch(e) {}
@@ -1302,44 +1300,82 @@ function carregarScript(src) {
 }
 
 // ============================================================
-// MODO KIOSK — câmara abre e lê QR code da gaveta → navega para URL
+// MODO KIOSK — HID scanner + câmara QR → navega para URL da gaveta
 // ============================================================
 let camaraKioskAtivo = false;
 let camaraKioskStream = null;
-let camaraKioskDetector = null;
+let html5QrScanner = null;
+
+function processarQRKiosk(codigo) {
+  const BASE = 'dannihell.github.io/farmacia-contagem/';
+  if (!codigo.includes(BASE)) {
+    document.getElementById('kiosk-status').textContent = 'QR inválido — usa o QR code da gaveta';
+    return;
+  }
+  fecharCamaraKiosk();
+  window.location.href = codigo;
+}
+
+// HID scanner no ecrã kiosk (PDA)
+function iniciarHIDKiosk() {
+  const input = document.getElementById('kiosk-hid-input');
+  if (!input) return;
+  input.focus();
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const v = input.value.trim();
+      if (v) processarQRKiosk(v);
+      input.value = '';
+    }
+  });
+  // Manter foco no campo HID enquanto estiver no ecrã kiosk
+  document.addEventListener('click', function(e) {
+    const screen = document.getElementById('screen-kiosk');
+    if (screen && screen.classList.contains('active')) {
+      if (e.target.id !== 'kiosk-hid-input') input.focus();
+    }
+  });
+}
 
 async function abrirCamaraKiosk() {
-  const status = document.getElementById('kiosk-status');
-  status.textContent = 'A iniciar câmara...';
   camaraKioskAtivo = true;
-
   const overlay = document.getElementById('camera-overlay');
   const video = document.getElementById('camera-video');
-  document.getElementById('camera-status').textContent = 'Aponta para o QR code da gaveta...';
+  const status = document.getElementById('camera-status');
   overlay.style.display = 'flex';
+  status.textContent = 'Aponta para o QR code da gaveta...';
 
-  try {
-    camaraKioskStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-    video.srcObject = camaraKioskStream;
-  } catch(e) {
-    status.textContent = 'Sem acesso à câmara: ' + e.message;
-    overlay.style.display = 'none';
+  // Tenta html5-qrcode (mais compatível iOS/Android)
+  if (window.Html5Qrcode) {
+    fecharCamaraBase();
+    // Usa div dedicado dentro do overlay
+    let div = document.getElementById('html5qr-region');
+    if (!div) {
+      div = document.createElement('div');
+      div.id = 'html5qr-region';
+      div.style.cssText = 'position:absolute;inset:0;';
+      overlay.appendChild(div);
+    }
+    try {
+      html5QrScanner = new Html5Qrcode('html5qr-region');
+      await html5QrScanner.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 250, height: 250 } },
+        (decoded) => { if (camaraKioskAtivo) processarQRKiosk(decoded); },
+        () => {}
+      );
+      return;
+    } catch(e) {
+      status.textContent = 'Sem acesso à câmara: ' + e.message;
+    }
     return;
   }
 
-  const BASE = 'dannihell.github.io/farmacia-contagem/';
-
-  const processarQRKiosk = (codigo) => {
-    if (!camaraKioskAtivo) return;
-    if (!codigo.includes(BASE)) return; // ignora códigos que não são da app
-    camaraKioskAtivo = false;
-    if (camaraKioskStream) camaraKioskStream.getTracks().forEach(t => t.stop());
-    overlay.style.display = 'none';
-    // Navega para o URL do QR — carrega farmácia e local automaticamente
-    window.location.href = codigo;
-  };
-
-  if ('BarcodeDetector' in window) {
+  // Fallback: BarcodeDetector
+  try {
+    camaraKioskStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+    video.srcObject = camaraKioskStream;
     const det = new BarcodeDetector({ formats: ['qr_code'] });
     const loop = () => {
       if (!camaraKioskAtivo) return;
@@ -1350,15 +1386,26 @@ async function abrirCamaraKiosk() {
       });
     };
     loop();
-  } else {
-    if (!window.ZXing) {
-      await carregarScript('https://unpkg.com/@zxing/library@latest/umd/index.min.js');
-    }
-    const reader = new ZXing.BrowserQRCodeReader();
-    reader.decodeFromVideoElement(video, (result) => {
-      if (result) processarQRKiosk(result.getText());
-    });
+  } catch(e) {
+    status.textContent = 'Câmara não disponível: ' + e.message;
   }
+}
+
+function fecharCamaraBase() {
+  if (camaraKioskStream) {
+    camaraKioskStream.getTracks().forEach(t => t.stop());
+    camaraKioskStream = null;
+  }
+}
+
+function fecharCamaraKiosk() {
+  camaraKioskAtivo = false;
+  fecharCamaraBase();
+  if (html5QrScanner) {
+    html5QrScanner.stop().catch(() => {});
+    html5QrScanner = null;
+  }
+  document.getElementById('camera-overlay').style.display = 'none';
 }
 
 let stockCache = {};
@@ -1485,8 +1532,8 @@ window.addEventListener('load', () => {
   modoAdmin = params.get('admin') === '1';
 
   if (!modoAdmin && !fParam) {
-    // Modo kiosk: sem admin, sem QR params → mostra ecrã kiosk
     showScreen('screen-kiosk');
+    iniciarHIDKiosk();
     return;
   }
 
