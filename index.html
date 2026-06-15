@@ -438,12 +438,12 @@
   <input type="text" id="kiosk-hid-input" style="position:absolute;opacity:0;width:1px;height:1px;top:0;left:0;" autocomplete="off" inputmode="none">
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:24px; text-align:center;">
     <div style="font-size:64px; margin-bottom:16px;">📦</div>
-    <div style="font-size:22px; font-weight:700; color:var(--green); margin-bottom:8px;">Contagem de Stock</div>
-    <div style="font-size:15px; color:var(--text-muted); margin-bottom:32px;">Aponta o scanner ou câmara para o QR code da gaveta</div>
-    <button class="btn btn-primary" style="font-size:18px; padding:16px 32px;" onclick="abrirCamaraKiosk()">
-      📷 Ler QR code com câmara
+    <div style="font-size:22px; font-weight:700; color:var(--green); margin-bottom:12px;">Contagem de Stock</div>
+    <div style="font-size:17px; color:var(--text); font-weight:600; margin-bottom:32px;">Dispara o leitor para o QR code da gaveta</div>
+    <div id="kiosk-status" style="margin-top:0; font-size:13px; color:var(--text-muted);"></div>
+    <button class="btn" style="margin-top:40px; font-size:13px; color:var(--text-muted); opacity:0.5;" onclick="abrirCamaraKiosk()">
+      usar câmara (recurso)
     </button>
-    <div id="kiosk-status" style="margin-top:16px; font-size:13px; color:var(--text-muted);">Scanner HID pronto — dispara o leitor</div>
   </div>
 </div>
 
