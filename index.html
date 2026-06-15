@@ -1758,8 +1758,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function confirmarScanManual() {
   var si = document.getElementById('scan-input');
-  if (!si) return;
+  if (!si) { showToast('scan-input não encontrado'); return; }
   var cnp = si.value.trim();
+  showToast('CNP: ' + cnp + ' | ecrã: ' + document.getElementById('screen-contagem').className);
   if (cnp) processarCNP(cnp);
   si.value = '';
   si.focus();
@@ -1786,7 +1787,11 @@ document.addEventListener('keydown', function(e) {
 });
 
 async function processarCNP(cnp) {
-  if (document.getElementById('screen-contagem').className.indexOf('active') === -1) return;
+  const sc = document.getElementById('screen-contagem');
+  if (!sc || !sc.classList.contains('active')) {
+    showToast('Ecrã não activo: ' + (sc ? sc.className : 'null'));
+    return;
+  }
 
   // Resolve códigos alternativos / QR (GS1) para o CNP correto
   cnp = resolverCNP(cnp);
@@ -2148,6 +2153,6 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
-<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.13</div>
+<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.14</div>
 </body>
 </html>
