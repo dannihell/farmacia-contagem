@@ -40,8 +40,6 @@
     overscroll-behavior: none;
     overscroll-behavior-y: contain;
   }
-
-  /* HEADER */
   .header {
     background: var(--green);
     color: white;
@@ -50,400 +48,68 @@
     top: 0;
     z-index: 100;
   }
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 4px;
-  }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
   .header h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
   .header-sub { font-size: 12px; opacity: 0.75; }
-  .session-badge {
-    background: rgba(255,255,255,0.2);
-    border-radius: 20px;
-    padding: 4px 10px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-
-  /* SCREENS */
+  .session-badge { background: rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 10px; font-size: 12px; font-weight: 500; }
   .screen { display: none; padding: 16px; }
   .screen.active { display: block; }
-
-  /* CARDS */
-  .card {
-    background: var(--bg);
-    border-radius: var(--radius);
-    border: 0.5px solid var(--gray-border);
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-  .card-title {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 500;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* BUTTONS */
-  .btn {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--gray-border);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: center;
-    margin-bottom: 8px;
-    transition: background 0.15s;
-  }
+  .card { background: var(--bg); border-radius: var(--radius); border: 0.5px solid var(--gray-border); padding: 16px; margin-bottom: 12px; }
+  .card-title { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .btn { display: block; width: 100%; padding: 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--gray-border); background: var(--bg); color: var(--text); font-size: 15px; font-weight: 500; cursor: pointer; text-align: center; margin-bottom: 8px; transition: background 0.15s; }
   .btn:active { background: var(--bg-secondary); }
-  .btn-primary {
-    background: var(--green);
-    color: white;
-    border-color: var(--green-dark);
-  }
+  .btn-primary { background: var(--green); color: white; border-color: var(--green-dark); }
   .btn-primary:active { background: var(--green-dark); }
-  .btn-danger {
-    background: var(--red-bg);
-    color: var(--red);
-    border-color: #f7c1c1;
-  }
-  .btn-sm {
-    width: auto;
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 14px;
-    margin-bottom: 0;
-  }
-
-  /* SELECT */
-  select {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--gray-border);
-    background: var(--bg);
-    color: var(--text);
-    font-size: 15px;
-    margin-bottom: 10px;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888780' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-  }
-
-  /* SCAN INPUT */
-  .scan-wrapper {
-    position: relative;
-    margin-bottom: 16px;
-    display: flex;
-    gap: 8px;
-  }
-  .scan-hint {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-align: center;
-    margin-top: 6px;
-  }
-
-  /* PRODUCT CARD */
-  .product-card {
-    background: var(--bg);
-    border-radius: var(--radius);
-    border: 0.5px solid var(--gray-border);
-    padding: 14px;
-    margin-bottom: 12px;
-  }
-  .product-name {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 4px;
-    line-height: 1.3;
-  }
-  .product-cnp {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-family: monospace;
-    margin-bottom: 12px;
-  }
-  .stock-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .stock-box {
-    flex: 1;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-sm);
-    padding: 10px;
-    text-align: center;
-  }
-  .stock-box-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-    font-weight: 500;
-  }
-  .stock-box-value {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text);
-  }
+  .btn-sm { width: auto; display: inline-block; padding: 8px 16px; font-size: 14px; margin-bottom: 0; }
+  select { width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--gray-border); background: var(--bg); color: var(--text); font-size: 15px; margin-bottom: 10px; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888780' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+  .scan-wrapper { position: relative; margin-bottom: 16px; display: flex; gap: 8px; }
+  #scan-input { flex: 1; }
+  #btn-confirmar-scan { flex-shrink: 0; padding: 0 18px; border-radius: var(--radius-sm); border: 2px solid var(--green-light); background: var(--green); color: #fff; font-size: 18px; font-weight: 600; }
+  #scan-input { width: 100%; padding: 16px 14px; border-radius: var(--radius-sm); border: 2px solid var(--green-light); background: var(--green-bg); color: var(--text); font-size: 18px; font-family: monospace; letter-spacing: 2px; }
+  #scan-input:focus { outline: none; border-color: var(--green); }
+  .scan-hint { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 6px; }
+  .product-card { background: var(--bg); border-radius: var(--radius); border: 0.5px solid var(--gray-border); padding: 14px; margin-bottom: 12px; }
+  .product-name { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+  .product-cnp { font-size: 12px; color: var(--text-muted); font-family: monospace; margin-bottom: 12px; }
+  .stock-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stock-box { flex: 1; background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 10px; text-align: center; }
+  .stock-box-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
+  .stock-box-value { font-size: 22px; font-weight: 600; color: var(--text); }
   .stock-box-value.desvio-pos { color: var(--red); }
   .stock-box-value.desvio-neg { color: var(--amber); }
   .stock-box-value.desvio-ok { color: var(--green); }
-
-  /* COUNTER */
-  .counter-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  .counter-btn {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: 0.5px solid var(--gray-border);
-    background: var(--bg);
-    font-size: 26px;
-    font-weight: 400;
-    color: var(--text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
+  .counter-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .counter-btn { width: 52px; height: 52px; border-radius: 50%; border: 0.5px solid var(--gray-border); background: var(--bg); font-size: 26px; font-weight: 400; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .counter-btn.minus { color: var(--red); border-color: #f7c1c1; background: var(--red-bg); }
   .counter-btn.plus { color: var(--green); border-color: #9fe1cb; background: var(--green-bg); }
-  .counter-display {
-    flex: 1;
-    text-align: center;
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--text);
-    background: var(--bg-secondary);
-    border-radius: var(--radius-sm);
-    padding: 8px;
-  }
-
-  /* VALIDADE */
-  .validade-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 12px;
-  }
+  .counter-display { flex: 1; text-align: center; font-size: 36px; font-weight: 700; color: var(--text); background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 8px; }
+  .validade-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
   .validade-row label { font-size: 13px; color: var(--text-muted); white-space: nowrap; }
-  .validade-row input {
-    flex: 1;
-    padding: 10px 12px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--gray-border);
-    background: var(--bg);
-    font-size: 15px;
-    color: var(--text);
-  }
+  .validade-row input { flex: 1; padding: 10px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--gray-border); background: var(--bg); font-size: 15px; color: var(--text); }
   .validade-row input:focus { outline: none; border-color: var(--green); }
-
-  .text-input {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--gray-border);
-    background: var(--bg);
-    font-size: 15px;
-    color: var(--text);
-  }
+  .text-input { width: 100%; padding: 12px 14px; border-radius: var(--radius-sm); border: 0.5px solid var(--gray-border); background: var(--bg); font-size: 15px; color: var(--text); }
   .text-input:focus { outline: none; border-color: var(--green); }
-
-  /* LISTA CONTAGENS */
-  .contagem-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 0;
-    border-bottom: 0.5px solid var(--gray-border);
-  }
+  .contagem-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--gray-border); }
   .contagem-item:last-child { border-bottom: none; }
-  .contagem-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    margin-top: 6px;
-    flex-shrink: 0;
-  }
+  .contagem-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
   .dot-ok { background: var(--green-light); }
   .dot-warn { background: var(--amber); }
   .dot-err { background: var(--red); }
   .dot-pos { background: #4a90d9; }
   .contagem-info { flex: 1; min-width: 0; }
-  .contagem-nome {
-    font-size: 13px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .contagem-nome { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .contagem-cnp { font-size: 11px; color: var(--text-muted); font-family: monospace; }
-  .contagem-nums {
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .contagem-nums .desvio {
-    font-size: 14px;
-    font-weight: 700;
-  }
-  .contagem-nums .stocks {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  /* TOAST */
-  .toast {
-    position: fixed;
-    top: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--text);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 14px;
-    z-index: 9999;
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
-    white-space: nowrap;
-  }
+  .contagem-nums { text-align: right; flex-shrink: 0; }
+  .contagem-nums .desvio { font-size: 14px; font-weight: 700; }
+  .contagem-nums .stocks { font-size: 11px; color: var(--text-muted); }
+  .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 10px 20px; border-radius: 20px; font-size: 14px; z-index: 9999; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
   .toast.show { opacity: 1; }
-
-  /* STATS BAR */
-  .stats-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-  .stat-pill {
-    flex: 1;
-    background: var(--bg);
-    border: 0.5px solid var(--gray-border);
-    border-radius: 20px;
-    padding: 6px 10px;
-    text-align: center;
-  }
+  .stats-bar { display: flex; gap: 8px; margin-bottom: 14px; }
+  .stat-pill { flex: 1; background: var(--bg); border: 0.5px solid var(--gray-border); border-radius: 20px; padding: 6px 10px; text-align: center; }
   .stat-pill-num { font-size: 18px; font-weight: 700; }
   .stat-pill-label { font-size: 10px; color: var(--text-muted); }
-
-  /* LOADING */
-  .loading-spinner {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 6px;
-  }
+  .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .empty-state {
-    text-align: center;
-    padding: 32px 16px;
-    color: var(--text-muted);
-    font-size: 14px;
-  }
-
-  .mode-toggle {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 14px;
-  }
-  .mode-btn {
-    flex: 1;
-    padding: 10px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--gray-border);
-    background: var(--bg);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    cursor: pointer;
-    text-align: center;
-  }
-  .mode-btn.active {
-    background: var(--green-bg);
-    border-color: var(--green-light);
-    color: var(--green-dark);
-  }
-
-  .alert {
-    background: var(--amber-bg);
-    border: 0.5px solid #fac775;
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    font-size: 13px;
-    color: var(--amber);
-    margin-bottom: 12px;
-  }
-
-  /* BARRA COMPACTA DE CONTAGEM */
-  .compact-bar {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 8px;
-    align-items: center;
-  }
-  .compact-select {
-    flex: 1;
-    padding: 8px 10px;
-    font-size: 13px;
-    margin-bottom: 0;
-    min-width: 0;
-  }
-  .compact-scan {
-    flex: 2;
-    padding: 10px 10px;
-    font-size: 15px;
-    font-family: monospace;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--green-light);
-    background: var(--green-bg);
-    color: var(--text);
-    min-width: 0;
-  }
-  .compact-scan:focus { outline: none; border-color: var(--green); }
-  .compact-btn-ok {
-    flex-shrink: 0;
-    padding: 8px 14px;
-    font-size: 15px;
-    font-weight: 700;
-    border-radius: var(--radius-sm);
-    border: 2px solid var(--green-light);
-    background: var(--green);
-    color: #fff;
-    cursor: pointer;
-  }
-  .compact-btn-cam {
-    flex-shrink: 0;
-    padding: 8px 10px;
-    font-size: 15px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--gray-border);
-    background: var(--bg);
-    cursor: pointer;
-  }
 </style>
 </head>
 <body>
@@ -456,47 +122,38 @@
   <div class="header-sub" id="header-sub">Farmácia Aroeira</div>
 </div>
 
-<!-- ECRÃ 1: IDENTIFICAÇÃO -->
 <!-- ECRÃ KIOSK (modo equipa — só QR) -->
 <div class="screen" id="screen-kiosk" style="position:relative;">
-  <!-- Input transparente a cobrir o ecrã todo — captura HID scanner sem perder foco -->
   <input type="text" id="kiosk-hid-input"
     style="position:absolute;inset:0;width:100%;height:100%;opacity:0;z-index:10;"
     autocomplete="off" inputmode="numeric">
-  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:80vh; padding:24px; text-align:center; position:relative; z-index:5; pointer-events:none;">
-    <div style="font-size:64px; margin-bottom:16px;">📦</div>
-    <div style="font-size:22px; font-weight:700; color:var(--green); margin-bottom:12px;">Contagem de Stock</div>
-    <div style="font-size:17px; color:var(--text); font-weight:600; margin-bottom:32px;">Dispara o leitor para o QR code da gaveta</div>
-    <div id="kiosk-status" style="font-size:13px; color:var(--text-muted);"></div>
-    <div id="kiosk-debug" style="font-size:10px; color:#aaa; margin-top:8px; word-break:break-all; max-width:280px;"></div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:24px;text-align:center;position:relative;z-index:5;pointer-events:none;">
+    <div style="font-size:64px;margin-bottom:16px;">📦</div>
+    <div style="font-size:22px;font-weight:700;color:var(--green);margin-bottom:12px;">Contagem de Stock</div>
+    <div style="font-size:17px;color:var(--text);font-weight:600;margin-bottom:32px;">Dispara o leitor para o QR code da gaveta</div>
+    <div id="kiosk-status" style="font-size:13px;color:var(--text-muted);"></div>
   </div>
-  <button class="btn" style="position:absolute;bottom:24px;right:16px;font-size:12px;color:var(--text-muted);opacity:0.4;z-index:20;" onclick="abrirCamaraKiosk()">
-    usar câmara
-  </button>
+  <button class="btn" style="position:absolute;bottom:24px;right:16px;font-size:12px;color:var(--text-muted);opacity:0.4;z-index:20;" onclick="abrirCamaraKiosk()">usar câmara</button>
 </div>
 
+<!-- ECRÃ 1: LOGIN -->
 <div class="screen active" id="screen-login">
   <div style="padding-top: 8px;">
 
     <!-- TIPO DE ACÇÃO -->
     <div class="card" style="padding:12px 16px;">
       <div class="card-title">O que vais fazer?</div>
-      <div style="display:flex; gap:8px;">
+      <div style="display:flex;gap:8px;">
         <button id="btn-tipo-contagem" class="btn btn-primary btn-sm" style="flex:1;" onclick="setTipoAccao('contagem')">📦 Contagem</button>
-        <button id="btn-tipo-rapida" class="btn btn-sm" style="flex:1;" onclick="setTipoAccao('rapida')">🔍 Verificação rápida</button>
+        <button id="btn-tipo-rapida" class="btn btn-sm" style="flex:1;" onclick="setTipoAccao('rapida')">🔍 Verificação</button>
         <button id="btn-tipo-validades" class="btn btn-sm" style="flex:1;" onclick="setTipoAccao('validades')">📅 Validades</button>
       </div>
     </div>
 
-    <!-- STOCK STATUS -->
     <div class="card" id="stock-status-card">
       <div class="card-title">Stock carregado</div>
-      <div id="stock-status-info" style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
-        A verificar...
-      </div>
-      <button class="btn btn-primary" id="btn-actualizar" onclick="actualizarStock()">
-        ↻ Actualizar stock
-      </button>
+      <div id="stock-status-info" style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">A verificar...</div>
+      <button class="btn btn-primary" id="btn-actualizar" onclick="actualizarStock()">↻ Actualizar stock</button>
     </div>
 
     <div class="card">
@@ -518,62 +175,15 @@
         <option value="">Selecionar colaborador...</option>
         <option value="__novo__">+ Novo colaborador</option>
       </select>
-      <input type="text" id="input-novo-colaborador" class="text-input" placeholder="Nome do novo colaborador" style="display:none; margin-top:8px;">
+      <input type="text" id="input-novo-colaborador" class="text-input" placeholder="Nome do novo colaborador" style="display:none;margin-top:8px;">
     </div>
-    <div id="local-card" class="card">
+    <div class="card" id="local-card">
       <div class="card-title">Local (gaveta)</div>
       <select id="sel-local">
         <option value="">Selecionar local...</option>
       </select>
     </div>
     <button class="btn btn-primary" id="btn-iniciar" onclick="iniciarAccao()">Iniciar contagem</button>
-    <button class="btn" onclick="abrirConferenciaValidades()" id="btn-validades-direto" style="display:none;">Conferência de Validades</button>
-  </div>
-</div>
-
-<!-- ECRÃ CONFERÊNCIA DE VALIDADES -->
-<div class="screen" id="screen-validades">
-  <div style="padding-top: 8px;">
-    <div class="card">
-      <div class="card-title">Ler código de barras</div>
-      <div class="scan-wrapper">
-        <input type="text" id="scan-input-validades" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
-        <button onclick="confirmarScanValidades()">OK</button>
-        <button onclick="abrirCamara('scan-input-validades')">📷</button>
-      </div>
-      <div class="scan-hint" id="validades-hint">A carregar lista...</div>
-    </div>
-
-    <div class="card" id="validades-card" style="display:none;">
-      <div class="card-title">Produtos a confirmar (validade ≤ 3 meses), por ordem alfabética</div>
-      <div id="lista-validades"></div>
-    </div>
-
-    <div style="display:flex; gap:8px; margin-top:12px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="submeterConferenciaValidades()">✓ Submeter resultados</button>
-      <button class="btn" onclick="showScreen('screen-login')">← Voltar</button>
-    </div>
-  </div>
-</div>
-
-<!-- ECRÃ CONFIRMAÇÃO SIFARMA (DT) -->
-<div class="screen" id="screen-confirmacao-dt">
-  <div style="padding-top: 8px;">
-    <div class="card">
-      <div class="card-title">Confirmação Sifarma — itens a corrigir</div>
-      <div class="scan-hint">Toca em cada item depois de corrigires a validade no Sifarma, para marcar como "corrigido". Depois confirma com o teu nome (DT/superior).</div>
-    </div>
-    <div class="card">
-      <div id="dt-lista"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Quem confirma (DT/superior)</div>
-      <input type="text" id="input-dt-nome" class="text-input" placeholder="Nome">
-    </div>
-    <div style="display:flex; gap:8px; margin-top:12px;">
-      <button class="btn btn-primary" style="flex:1;" onclick="submeterConfirmacaoDT()">✓ Confirmar correções</button>
-      <button class="btn" onclick="showScreen('screen-login')">← Sair sem confirmar</button>
-    </div>
   </div>
 </div>
 
@@ -584,44 +194,29 @@
       <div class="card-title">Ler código de barras</div>
       <div class="scan-wrapper">
         <input type="text" id="scan-input-rapida" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
-        <button onclick="abrirCamara('scan-input-rapida')">📷</button>
       </div>
       <div class="scan-hint">Verificação pontual ao balcão — não cria sessão de contagem.</div>
     </div>
-
     <div id="rapida-produto" style="display:none;">
       <div class="product-card">
         <div class="product-name" id="rapida-nome">—</div>
         <div class="product-cnp" id="rapida-cnp">—</div>
-
         <div class="stock-row">
-          <div class="stock-box">
-            <div class="stock-box-label">Sifarma</div>
-            <div class="stock-box-value" id="rapida-stock-sifarma">—</div>
-          </div>
-          <div class="stock-box">
-            <div class="stock-box-label">Contado</div>
-            <div class="stock-box-value" id="rapida-contado">0</div>
-          </div>
-          <div class="stock-box">
-            <div class="stock-box-label">Desvio</div>
-            <div class="stock-box-value" id="rapida-desvio">—</div>
-          </div>
+          <div class="stock-box"><div class="stock-box-label">Sifarma</div><div class="stock-box-value" id="rapida-stock-sifarma">—</div></div>
+          <div class="stock-box"><div class="stock-box-label">Contado</div><div class="stock-box-value" id="rapida-contado">0</div></div>
+          <div class="stock-box"><div class="stock-box-label">Desvio</div><div class="stock-box-value" id="rapida-desvio">—</div></div>
         </div>
-
         <div class="counter-row">
           <button class="counter-btn minus" onclick="ajustarContadorRapida(-1)">−</button>
           <div class="counter-display" id="rapida-counter-display">0</div>
           <button class="counter-btn plus" onclick="ajustarContadorRapida(1)">+</button>
         </div>
-
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex;gap:8px;">
           <button class="btn btn-primary btn-sm" style="flex:1;" onclick="submeterRapida()">✓ Enviar para correção</button>
           <button class="btn btn-sm" onclick="cancelarRapida()">Cancelar</button>
         </div>
       </div>
     </div>
-
     <button class="btn" onclick="cancelarRapida()" style="margin-top:8px;">← Voltar</button>
   </div>
 </div>
@@ -629,50 +224,44 @@
 <!-- ECRÃ 2: CONTAGEM -->
 <div class="screen" id="screen-contagem">
 
-  <!-- BARRA COMPACTA: LOCAL + SCAN -->
-  <div class="compact-bar" style="margin-top:8px;">
-    <select id="sel-local-atual" onchange="mudarLocal()" class="compact-select">
-      <option value="">Local...</option>
+  <!-- LOCAL ATUAL -->
+  <div class="card" style="padding:10px 12px;">
+    <div class="card-title" style="margin-bottom:6px;">Local atual</div>
+    <select id="sel-local-atual" onchange="mudarLocal()">
+      <option value="">Selecionar local...</option>
     </select>
-    <input type="text" id="scan-input" placeholder="CNP..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric" class="compact-scan">
-    <button id="btn-confirmar-scan" onclick="confirmarScanManual()" class="compact-btn-ok">OK</button>
-    <button onclick="abrirCamara('scan-input')" class="compact-btn-cam">📷</button>
   </div>
-  <button class="btn btn-primary" style="margin-bottom:8px;" onclick="showToast('TESTE OK — função chama')">TESTE</button>
+
+  <!-- SCAN -->
+  <div class="card" id="scan-card">
+    <div class="card-title">Ler código de barras</div>
+    <div class="scan-wrapper">
+      <input type="text" id="scan-input" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+      <button id="btn-confirmar-scan" onclick="confirmarScanManual()">OK</button>
+    </div>
+    <div class="scan-hint">O scanner envia automaticamente. Ou digita o CNP e toca em "OK".</div>
+  </div>
 
   <!-- PRODUTO ATUAL -->
   <div id="produto-atual" style="display:none;">
     <div class="product-card">
       <div class="product-name" id="prod-nome">—</div>
       <div class="product-cnp" id="prod-cnp">—</div>
-
       <div class="stock-row">
-        <div class="stock-box">
-          <div class="stock-box-label">Sifarma</div>
-          <div class="stock-box-value" id="prod-stock-sifarma">—</div>
-        </div>
-        <div class="stock-box">
-          <div class="stock-box-label">Contado</div>
-          <div class="stock-box-value" id="prod-contado">0</div>
-        </div>
-        <div class="stock-box">
-          <div class="stock-box-label">Desvio</div>
-          <div class="stock-box-value" id="prod-desvio">—</div>
-        </div>
+        <div class="stock-box"><div class="stock-box-label">Sifarma</div><div class="stock-box-value" id="prod-stock-sifarma">—</div></div>
+        <div class="stock-box"><div class="stock-box-label">Contado</div><div class="stock-box-value" id="prod-contado">0</div></div>
+        <div class="stock-box"><div class="stock-box-label">Desvio</div><div class="stock-box-value" id="prod-desvio">—</div></div>
       </div>
-
       <div class="counter-row">
         <button class="counter-btn minus" onclick="ajustarContador(-1)">−</button>
         <div class="counter-display" id="counter-display">0</div>
         <button class="counter-btn plus" onclick="ajustarContador(1)">+</button>
       </div>
-
       <div class="validade-row">
         <label>Validade</label>
         <input type="text" id="input-validade" placeholder="MM/AAAA" maxlength="7">
       </div>
-
-      <div style="display:flex; gap:8px;">
+      <div style="display:flex;gap:8px;">
         <button class="btn btn-primary btn-sm" style="flex:1;" onclick="registarProduto()">✓ Registar</button>
         <button class="btn btn-sm" onclick="cancelarProduto()">Cancelar</button>
       </div>
@@ -686,24 +275,15 @@
   </div>
 
   <!-- FINALIZAR GAVETA -->
-  <button class="btn btn-primary" id="btn-finalizar-gaveta" style="display:none; margin-bottom:12px;" onclick="finalizarGaveta()">
+  <button class="btn btn-primary" id="btn-finalizar-gaveta" style="display:none;margin-bottom:12px;" onclick="finalizarGaveta()">
     ✓ Finalizar gaveta — registar todos os pickados
   </button>
 
   <!-- STATS -->
   <div class="stats-bar" id="stats-bar" style="display:none;">
-    <div class="stat-pill">
-      <div class="stat-pill-num" id="stat-total">0</div>
-      <div class="stat-pill-label">Contados</div>
-    </div>
-    <div class="stat-pill">
-      <div class="stat-pill-num" style="color:var(--red);" id="stat-desvios">0</div>
-      <div class="stat-pill-label">Desvios</div>
-    </div>
-    <div class="stat-pill">
-      <div class="stat-pill-num" style="color:var(--amber);" id="stat-val">0</div>
-      <div class="stat-pill-label">Val. curtas</div>
-    </div>
+    <div class="stat-pill"><div class="stat-pill-num" id="stat-total">0</div><div class="stat-pill-label">Contados</div></div>
+    <div class="stat-pill"><div class="stat-pill-num" style="color:var(--red);" id="stat-desvios">0</div><div class="stat-pill-label">Desvios</div></div>
+    <div class="stat-pill"><div class="stat-pill-num" style="color:var(--amber);" id="stat-val">0</div><div class="stat-pill-label">Val. curtas</div></div>
   </div>
 
   <!-- LISTA DE CONTAGENS -->
@@ -713,65 +293,36 @@
   </div>
 
   <!-- SUBMETER -->
-  <div id="btn-submeter-wrapper" style="display:none; margin-top:4px;">
-    <button class="btn btn-primary" onclick="submeterContagem()">
-      Submeter sessão para registo
-    </button>
+  <div id="btn-submeter-wrapper" style="display:none;margin-top:4px;">
+    <button class="btn btn-primary" onclick="submeterContagem()">Submeter sessão para registo</button>
     <button class="btn" onclick="novaContagem()">Nova sessão</button>
   </div>
-
 </div>
 
 <!-- ECRÃ 3: SUCESSO -->
 <div class="screen" id="screen-sucesso">
-  <div style="text-align:center; padding: 40px 16px;">
-    <div style="font-size: 56px; margin-bottom: 16px;">✓</div>
-    <div style="font-size: 20px; font-weight: 600; margin-bottom: 8px; color: var(--green);">Sessão submetida</div>
-    <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 32px;" id="sucesso-msg">Os dados foram registados na folha partilhada.</div>
+  <div style="text-align:center;padding:40px 16px;">
+    <div style="font-size:56px;margin-bottom:16px;">✓</div>
+    <div style="font-size:20px;font-weight:600;margin-bottom:8px;color:var(--green);">Sessão submetida</div>
+    <div style="font-size:14px;color:var(--text-muted);margin-bottom:32px;" id="sucesso-msg">Os dados foram registados na folha partilhada.</div>
     <button class="btn btn-primary" onclick="novaContagem()">Nova sessão</button>
+  </div>
+</div>
+
+<!-- OVERLAY CÂMARA -->
+<div id="camera-overlay" style="display:none;position:fixed;inset:0;background:#000;z-index:9998;flex-direction:column;">
+  <video id="camera-video" autoplay playsinline muted style="flex:1;width:100%;object-fit:cover;"></video>
+  <div style="position:absolute;top:0;left:0;right:0;padding:14px;display:flex;justify-content:space-between;align-items:center;">
+    <div style="color:#fff;background:rgba(0,0,0,0.5);padding:6px 12px;border-radius:8px;font-size:13px;" id="camera-status">A iniciar câmara...</div>
+    <button onclick="fecharCamara()" style="background:rgba(255,255,255,0.9);border:none;border-radius:8px;padding:8px 14px;font-size:16px;font-weight:600;">Fechar ✕</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- OVERLAY CÂMARA (modo telemóvel) -->
-<div id="camera-overlay" style="display:none; position:fixed; inset:0; background:#000; z-index:9998; flex-direction:column;">
-  <video id="camera-video" autoplay playsinline muted style="flex:1; width:100%; object-fit:cover;"></video>
-  <div style="position:absolute; top:0; left:0; right:0; padding:14px; display:flex; justify-content:space-between; align-items:center;">
-    <div style="color:#fff; background:rgba(0,0,0,0.5); padding:6px 12px; border-radius:8px; font-size:13px;" id="camera-status">A iniciar câmara...</div>
-    <button onclick="fecharCamara()" style="background:rgba(255,255,255,0.9); border:none; border-radius:8px; padding:8px 14px; font-size:16px; font-weight:600;">Fechar ✕</button>
-  </div>
-  <div style="position:absolute; bottom:30px; left:0; right:0; text-align:center; color:#fff; font-size:13px; text-shadow:0 1px 2px #000;">
-    Aponta a câmara ao código de barras / QR / DataMatrix
-  </div>
-</div>
-
 <script>
-const SHEET_ID = '10P4wcbr55d0a_11tIObehmdf6IM91IkSwxCfmvyeWdU';
-
-// ============================================================
-// CONFIGURAÇÃO ZOHO ANALYTICS
-// Substitui estas constantes com os teus valores reais
-// ============================================================
-const ZOHO_CONFIG = {
-  // Obtém em: Zoho Analytics > Workspace > API > OAuth
-  CLIENT_ID: 'ZOHO_CLIENT_ID_AQUI',
-  CLIENT_SECRET: 'ZOHO_CLIENT_SECRET_AQUI',
-  REFRESH_TOKEN: 'ZOHO_REFRESH_TOKEN_AQUI',
-  WORKSPACE_ID: '1135564000002838003',
-  VIEW_NAME: 'AROEIRA_BRAND_ANALYSIS',
-  CNP_COLUMN: 'COD_PRD',
-  STOCK_COLUMN: 'STK_FARMACIA',
-  NAME_COLUMN: 'NOME',
-};
-
-// ============================================================
-// CONFIGURAÇÃO GOOGLE SHEETS
-// Substitui com o URL do teu Google Apps Script (ver instruções)
-// ============================================================
 const GITHUB_RAW = 'https://raw.githubusercontent.com/dannihell/farmacia-contagem/main';
 
-// URL do stock.json por farmácia — cada farmácia tem o seu próprio ficheiro/servidor
 const FARMACIA_STOCK_URL = {
   'Farmácia Aroeira': GITHUB_RAW + '/data/stock.json',
   'Farmácia Dias e Brito': GITHUB_RAW + '/data/stock_diasbrito.json',
@@ -783,33 +334,18 @@ const FARMACIA_STOCK_URL = {
 };
 
 function getStockUrl() {
-  const farmacia = document.getElementById('sel-farmacia').value;
-  return FARMACIA_STOCK_URL[farmacia] || null;
+  return FARMACIA_STOCK_URL[document.getElementById('sel-farmacia').value] || null;
 }
 
-// ============================================================
-// CONFIGURAÇÃO POR FARMÁCIA
-// colaboradores, locais e folha de registo próprios de cada farmácia
-// ============================================================
 const G_LOCAIS = Array.from({length: 100}, (_, i) => 'G' + (i + 1));
 const L_LOCAIS = Array.from({length: 30}, (_, i) => 'L' + (i + 1));
 const GONDOLAS = Array.from({length: 6}, (_, i) => 'Gôndola ' + (i + 1));
-const GAVETAS_BALCAO = Array.from({length: 27}, (_, i) => i + 1)
-  .filter(n => n !== 22)
-  .map(n => 'Gaveta Balcão ' + n);
-
+const GAVETAS_BALCAO = Array.from({length: 27}, (_, i) => i + 1).filter(n => n !== 22).map(n => 'Gaveta Balcão ' + n);
 const OUTROS_LOCAIS = [
-  'Frigorífico Público',
-  'Frigorífico Medicamentos 1',
-  'Frigorífico Medicamentos 2',
-  'Beauty Point — Frente',
-  'Beauty Point — Trás',
-  'Linear OTC 1',
-  'Linear OTC 2',
-  'Linear OTC 3',
-  'Linear OTC 4',
-  ...GAVETAS_BALCAO,
-  'Móveis de Xaropes',
+  'Frigorífico Público','Frigorífico Medicamentos 1','Frigorífico Medicamentos 2',
+  'Beauty Point — Frente','Beauty Point — Trás',
+  'Linear OTC 1','Linear OTC 2','Linear OTC 3','Linear OTC 4',
+  ...GAVETAS_BALCAO,'Móveis de Xaropes',
 ];
 const LOCAIS_PADRAO = [...G_LOCAIS, ...L_LOCAIS, ...GONDOLAS, ...OUTROS_LOCAIS, 'Armazém'];
 
@@ -827,6 +363,12 @@ const FARMACIA_CONFIG = {
   'Farmácia das Túlipas': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
 };
 
+const FARMACIA_SLUG = {
+  'aroeira':'Farmácia Aroeira','diasbrito':'Farmácia Dias e Brito',
+  'cidadeuniversitaria':'Farmácia Cidade Universitária','altodosmoinhos':'Farmácia Alto dos Moinhos',
+  'porfirio':'Farmácia Porfírio','altodacastelhana':'Farmácia Alto da Castelhana','tulipas':'Farmácia das Túlipas',
+};
+
 function popularSelect(sel, valores, placeholder, extraOptionsHtml) {
   sel.innerHTML = '<option value="">' + placeholder + '</option>'
     + valores.map(v => '<option>' + v + '</option>').join('')
@@ -834,105 +376,85 @@ function popularSelect(sel, valores, placeholder, extraOptionsHtml) {
   sel.value = '';
 }
 
-// Colaboradores: vêm principalmente de data.colaboradores no stock.json
-// (gerado a partir de SIFT_EMPREGADOS — ativos, por farmácia).
-// localStorage serve só de fallback temporário até ao próximo export noturno
-// (ex.: pessoa contratada hoje mesmo).
 function getColaboradoresExtra(farmacia) {
-  try {
-    const raw = localStorage.getItem('colaboradoresExtra_' + farmacia);
-    return raw ? JSON.parse(raw) : [];
-  } catch(e) { return []; }
+  try { const r = localStorage.getItem('colaboradoresExtra_' + farmacia); return r ? JSON.parse(r) : []; } catch(e) { return []; }
 }
-
 function adicionarColaboradorExtra(farmacia, nome) {
   const lista = getColaboradoresExtra(farmacia);
-  if (!lista.includes(nome)) {
-    lista.push(nome);
-    try { localStorage.setItem('colaboradoresExtra_' + farmacia, JSON.stringify(lista)); } catch(e) {}
-  }
+  if (!lista.includes(nome)) { lista.push(nome); try { localStorage.setItem('colaboradoresExtra_' + farmacia, JSON.stringify(lista)); } catch(e) {} }
 }
-
-let colaboradoresServidor = {}; // farmacia -> [nomes] vindos do stock.json
-
+let colaboradoresServidor = {};
 function popularColaboradores(farmacia) {
   const cfg = FARMACIA_CONFIG[farmacia];
   const base = cfg ? cfg.colaboradores : [];
-  const colaboradores = [...new Set([...base, ...(colaboradoresServidor[farmacia] || []), ...getColaboradoresExtra(farmacia)])];
-  popularSelect(document.getElementById('sel-colaborador'), colaboradores, 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
+  const cols = [...new Set([...base, ...(colaboradoresServidor[farmacia] || []), ...getColaboradoresExtra(farmacia)])];
+  popularSelect(document.getElementById('sel-colaborador'), cols, 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
 }
-
 function onFarmaciaChange() {
   const farmacia = document.getElementById('sel-farmacia').value;
   const cfg = FARMACIA_CONFIG[farmacia];
-  const selLocal = document.getElementById('sel-local');
   document.getElementById('input-novo-colaborador').style.display = 'none';
   document.getElementById('input-novo-colaborador').value = '';
-
   popularColaboradores(farmacia);
-  if (!cfg) {
-    popularSelect(selLocal, [], 'Selecionar local...');
-    return;
-  }
-  popularSelect(selLocal, cfg.locais, 'Selecionar local...');
+  if (!cfg) { popularSelect(document.getElementById('sel-local'), [], 'Selecionar local...'); return; }
+  popularSelect(document.getElementById('sel-local'), cfg.locais, 'Selecionar local...');
   verificarStatusStock();
 }
-
 function onColaboradorChange() {
-  const v = document.getElementById('sel-colaborador').value;
-  document.getElementById('input-novo-colaborador').style.display = (v === '__novo__') ? 'block' : 'none';
+  document.getElementById('input-novo-colaborador').style.display =
+    document.getElementById('sel-colaborador').value === '__novo__' ? 'block' : 'none';
 }
 
-// ============================================================
-// VERIFICAÇÃO RÁPIDA (1 produto, sem sessão)
-// ============================================================
-let rapidaProduto = null;
-let rapidaContador = 0;
-const scanInputRapida = () => document.getElementById('scan-input-rapida');
+// Tipo de acção
+let tipoAccao = 'contagem';
+function setTipoAccao(tipo) {
+  tipoAccao = tipo;
+  ['contagem','rapida','validades'].forEach(t => {
+    const btn = document.getElementById('btn-tipo-' + t);
+    btn.className = 'btn btn-sm' + (t === tipo ? ' btn-primary' : '');
+    btn.style.flex = '1';
+  });
+  document.getElementById('local-card').style.display = tipo === 'contagem' ? 'block' : 'none';
+  const labels = {contagem: 'Iniciar contagem', rapida: '🔍 Iniciar verificação', validades: '📅 Iniciar conferência'};
+  document.getElementById('btn-iniciar').textContent = labels[tipo];
+}
+function iniciarAccao() {
+  if (tipoAccao === 'contagem') iniciarSessao();
+  else if (tipoAccao === 'rapida') abrirVerificacaoRapida();
+  else abrirConferenciaValidades();
+}
 
+// Verificação rápida
+let rapidaProduto = null, rapidaContador = 0;
+const scanInputRapida = () => document.getElementById('scan-input-rapida');
 function abrirVerificacaoRapida() {
   const farmacia = document.getElementById('sel-farmacia').value;
   if (!farmacia) { showToast('Seleciona a farmácia primeiro'); return; }
-  rapidaProduto = null;
-  rapidaContador = 0;
+  rapidaProduto = null; rapidaContador = 0;
   document.getElementById('rapida-produto').style.display = 'none';
   document.getElementById('scan-input-rapida').value = '';
   showScreen('screen-rapida');
   scanInputRapida().focus();
 }
-
 function cancelarRapida() {
   rapidaProduto = null;
   document.getElementById('rapida-produto').style.display = 'none';
   showScreen('screen-login');
 }
-
 scanInputRapida().addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    const cnp = scanInputRapida().value.trim();
-    if (cnp) processarCNPRapida(cnp);
-    scanInputRapida().value = '';
-  }
+  if (e.key === 'Enter') { e.preventDefault(); const cnp = scanInputRapida().value.trim(); if (cnp) processarCNPRapida(cnp); scanInputRapida().value = ''; }
 });
-
 async function processarCNPRapida(cnp) {
   cnp = resolverCNP(cnp);
   const produto = await buscarProduto(cnp);
-  rapidaProduto = { ...produto, cnp };
-  rapidaContador = 1;
+  rapidaProduto = { ...produto, cnp }; rapidaContador = 1;
   document.getElementById('rapida-nome').textContent = produto.nome;
   document.getElementById('rapida-cnp').textContent = 'CNP: ' + cnp;
   document.getElementById('rapida-stock-sifarma').textContent = produto.stockSifarma;
   atualizarDesvioRapida();
   document.getElementById('rapida-produto').style.display = 'block';
 }
-
-function ajustarContadorRapida(delta) {
-  rapidaContador = Math.max(0, rapidaContador + delta);
-  atualizarDesvioRapida();
-}
-
+function ajustarContadorRapida(delta) { rapidaContador = Math.max(0, rapidaContador + delta); atualizarDesvioRapida(); }
 function atualizarDesvioRapida() {
   document.getElementById('rapida-counter-display').textContent = rapidaContador;
   document.getElementById('rapida-contado').textContent = rapidaContador;
@@ -942,581 +464,44 @@ function atualizarDesvioRapida() {
   el.textContent = (desvio > 0 ? '+' : '') + desvio;
   el.className = 'stock-box-value ' + (desvio === 0 ? 'desvio-ok' : desvio > 0 ? 'desvio-pos' : 'desvio-neg');
 }
-
 async function submeterRapida() {
   if (!rapidaProduto) return;
   const farmacia = document.getElementById('sel-farmacia').value;
   let col = document.getElementById('sel-colaborador').value;
-  if (col === '__novo__') {
-    col = document.getElementById('input-novo-colaborador').value.trim();
-    if (col) adicionarColaboradorExtra(farmacia, col);
-  }
+  if (col === '__novo__') { col = document.getElementById('input-novo-colaborador').value.trim(); if (col) adicionarColaboradorExtra(farmacia, col); }
   if (!col) { showToast('Seleciona o colaborador'); return; }
-
   const cfg = FARMACIA_CONFIG[farmacia];
   const scriptUrl = cfg ? cfg.appsScriptUrl : null;
   const desvio = rapidaContador - rapidaProduto.stockSifarma;
-
-  const payload = [{
-    data: new Date().toLocaleDateString('pt-PT'),
-    hora: new Date().toLocaleTimeString('pt-PT'),
-    farmacia,
-    colaborador: col,
-    cnp: rapidaProduto.cnp,
-    nome: rapidaProduto.nome,
-    stock_sifarma: rapidaProduto.stockSifarma,
-    contado: rapidaContador,
-    desvio,
-    validade: '',
-    locais: 'Balcão — ajuste pontual',
-  }];
-
   if (scriptUrl && scriptUrl !== 'APPS_SCRIPT_URL_AQUI') {
-    try {
-      await fetch(scriptUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessao: col + ' — verificação rápida', linhas: payload }),
-      });
-    } catch(e) { console.error(e); }
+    try { await fetch(scriptUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessao: col + ' — verificação rápida', linhas: [{ data: new Date().toLocaleDateString('pt-PT'), hora: new Date().toLocaleTimeString('pt-PT'), farmacia, colaborador: col, cnp: rapidaProduto.cnp, nome: rapidaProduto.nome, stock_sifarma: rapidaProduto.stockSifarma, contado: rapidaContador, desvio, validade: '', locais: 'Balcão — ajuste pontual' }] }) }); } catch(e) {}
   }
-
-  showToast('Enviado para correção (' + (desvio > 0 ? '+' : '') + desvio + ')');
+  showToast('Enviado (' + (desvio > 0 ? '+' : '') + desvio + ')');
   cancelarRapida();
 }
 
-// ============================================================
-// CONFERÊNCIA DE VALIDADES
-// ============================================================
-let listaValidades = []; // [{cnp, nome, validade, confirmado}]
-
-function parseValidadeMMYYYY(v) {
-  if (!v || !/^\d{2}\/\d{4}$/.test(v)) return null;
-  const [mm, yyyy] = v.split('/').map(Number);
-  return new Date(yyyy, mm - 1, 1);
-}
-
+// Conferência de validades (simplificada)
 function abrirConferenciaValidades() {
   const farmacia = document.getElementById('sel-farmacia').value;
   if (!farmacia) { showToast('Seleciona a farmácia primeiro'); return; }
-
-  const limite = new Date();
-  limite.setMonth(limite.getMonth() + 3);
-
-  listaValidades = Object.keys(stockCache)
-    .map(cnp => ({ cnp, ...stockCache[cnp] }))
-    .filter(p => (parseFloat(p.s) || 0) > 0)
-    .map(p => ({ cnp: p.cnp, nome: p.n || 'Sem nome', validade: p.v, dataVal: parseValidadeMMYYYY(p.v) }))
-    .filter(p => p.dataVal && p.dataVal <= limite)
-    .sort((a, b) => a.nome.localeCompare(b.nome))
-    .map(p => ({ ...p, estado: 'por_confirmar', validadeNova: '' }));
-
-  document.getElementById('validades-hint').textContent =
-    listaValidades.length + ' produto(s) com validade ≤ 3 meses. Faz scan ao encontrares cada um na farmácia.';
-  document.getElementById('validades-card').style.display = listaValidades.length ? 'block' : 'none';
-  renderListaValidades();
-  showScreen('screen-validades');
-  document.getElementById('scan-input-validades').focus();
+  showToast('Conferência de validades — em breve');
 }
 
-function renderListaValidades() {
-  document.getElementById('lista-validades').innerHTML = listaValidades.map((p, i) => {
-    const cor = p.estado === 'confirmado' ? 'dot-ok' : p.estado === 'validade_alterada' ? 'dot-pos' : 'dot-warn';
-    const statusTxt = p.estado === 'confirmado' ? '✓ confirmado'
-      : p.estado === 'validade_alterada' ? '✎ validade alterada: ' + p.validadeNova
-      : 'por confirmar';
-    return `
-    <div class="contagem-item" onclick="onItemValidadesClick(${i})" style="cursor:pointer;">
-      <div class="contagem-dot ${cor}"></div>
-      <div class="contagem-info">
-        <div class="contagem-nome">${p.nome}</div>
-        <div class="contagem-cnp">${p.cnp} · val. Sifarma ${p.validade}</div>
-      </div>
-      <div class="contagem-nums">
-        <div class="stocks">${statusTxt}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// Toca num item já confirmado para corrigir a validade física (diferente da do Sifarma)
-function onItemValidadesClick(i) {
-  const p = listaValidades[i];
-  if (p.estado !== 'confirmado' && p.estado !== 'validade_alterada') return;
-  const atual = p.validadeNova || p.validade;
-  const nova = prompt('Validade física encontrada (MM/AAAA) para "' + p.nome.substring(0, 30) + '":', atual);
-  if (nova === null) return;
-  if (!/^\d{2}\/\d{4}$/.test(nova.trim())) { showToast('Formato inválido — usa MM/AAAA'); return; }
-  if (nova.trim() === p.validade) {
-    p.estado = 'confirmado';
-    p.validadeNova = '';
-  } else {
-    p.estado = 'validade_alterada';
-    p.validadeNova = nova.trim();
-  }
-  renderListaValidades();
-}
-
-function marcarConfirmadoValidades(cnp) {
-  const item = listaValidades.find(p => p.cnp === cnp);
-  if (!item) return false;
-  if (item.estado === 'por_confirmar') {
-    item.estado = 'confirmado';
-    renderListaValidades();
-    showToast('✓ ' + item.nome.substring(0, 25));
-  }
-  return true;
-}
-
-function confirmarScanValidades() {
-  const input = document.getElementById('scan-input-validades');
-  let cnp = input.value.trim();
-  if (!cnp) return;
-  cnp = resolverCNP(cnp);
-  if (!marcarConfirmadoValidades(cnp)) {
-    showToast('Não está na lista de validades a confirmar');
-  }
-  input.value = '';
-  input.focus();
-}
-
-document.getElementById('scan-input-validades').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    confirmarScanValidades();
-  }
-});
-
-let pendentesConfirmacaoDT = []; // itens com validade_alterada / nao_encontrado, à espera de correção no Sifarma
-
-async function submeterConferenciaValidades() {
-  if (listaValidades.length === 0) { showToast('Nada a submeter'); return; }
-  const farmacia = document.getElementById('sel-farmacia').value;
-  let col = document.getElementById('sel-colaborador').value;
-  if (col === '__novo__') {
-    col = document.getElementById('input-novo-colaborador').value.trim();
-    if (col) adicionarColaboradorExtra(farmacia, col);
-  }
-  if (!col) { showToast('Seleciona o colaborador'); return; }
-
-  // Itens não tocados ficam como "não encontrado"
-  listaValidades.forEach(p => { if (p.estado === 'por_confirmar') p.estado = 'nao_encontrado'; });
-
-  const cfg = FARMACIA_CONFIG[farmacia];
-  const scriptUrl = cfg ? cfg.appsScriptUrl : null;
-  const data = new Date().toLocaleDateString('pt-PT');
-  const hora = new Date().toLocaleTimeString('pt-PT');
-
-  const payload = listaValidades.map(p => ({
-    data, hora, farmacia, colaborador: col,
-    cnp: p.cnp, nome: p.nome,
-    stock_sifarma: '', contado: '', desvio: '',
-    validade: p.estado === 'validade_alterada' ? p.validadeNova : p.validade,
-    locais: p.estado === 'confirmado' ? 'Confirmado em stock'
-      : p.estado === 'validade_alterada' ? 'Validade alterada (Sifarma: ' + p.validade + ' → física: ' + p.validadeNova + ')'
-      : 'NÃO encontrado — corrigir validade no Sifarma',
-  }));
-
-  if (scriptUrl && scriptUrl !== 'APPS_SCRIPT_URL_AQUI') {
-    try {
-      await fetch(scriptUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessao: col + ' — conferência de validades', linhas: payload }),
-      });
-    } catch(e) { console.error(e); }
-  }
-
-  pendentesConfirmacaoDT = listaValidades.filter(p => p.estado === 'validade_alterada' || p.estado === 'nao_encontrado');
-  listaValidades = [];
-
-  if (pendentesConfirmacaoDT.length === 0) {
-    showToast('Submetido — sem correções pendentes');
-    showScreen('screen-login');
-    return;
-  }
-
-  abrirConfirmacaoDT();
-}
-
-// ============================================================
-// CONFIRMAÇÃO SIFARMA (2ª hierarquia — DT/superior)
-// ============================================================
-function abrirConfirmacaoDT() {
-  document.getElementById('dt-lista').innerHTML = pendentesConfirmacaoDT.map((p, i) => {
-    const detalhe = p.estado === 'validade_alterada'
-      ? 'Sifarma: ' + p.validade + ' → física: ' + p.validadeNova
-      : 'NÃO encontrado fisicamente';
-    return `
-    <div class="contagem-item" onclick="toggleCorrigidoDT(${i})" style="cursor:pointer;">
-      <div class="contagem-dot ${p.corrigido ? 'dot-ok' : 'dot-warn'}"></div>
-      <div class="contagem-info">
-        <div class="contagem-nome">${p.nome}</div>
-        <div class="contagem-cnp">${p.cnp} · ${detalhe}</div>
-      </div>
-      <div class="contagem-nums">
-        <div class="stocks">${p.corrigido ? '✓ corrigido' : 'pendente'}</div>
-      </div>
-    </div>`;
-  }).join('');
-  showScreen('screen-confirmacao-dt');
-}
-
-function toggleCorrigidoDT(i) {
-  pendentesConfirmacaoDT[i].corrigido = !pendentesConfirmacaoDT[i].corrigido;
-  abrirConfirmacaoDT();
-}
-
-async function submeterConfirmacaoDT() {
-  const nome = document.getElementById('input-dt-nome').value.trim();
-  if (!nome) { showToast('Indica o nome de quem confirma (DT/superior)'); return; }
-
-  const farmacia = document.getElementById('sel-farmacia').value;
-  const cfg = FARMACIA_CONFIG[farmacia];
-  const scriptUrl = cfg ? cfg.appsScriptUrl : null;
-  const data = new Date().toLocaleDateString('pt-PT');
-  const hora = new Date().toLocaleTimeString('pt-PT');
-
-  const payload = pendentesConfirmacaoDT.map(p => ({
-    data, hora, farmacia, colaborador: nome,
-    cnp: p.cnp, nome: p.nome,
-    stock_sifarma: '', contado: '', desvio: '',
-    validade: p.estado === 'validade_alterada' ? p.validadeNova : p.validade,
-    locais: p.corrigido ? 'Corrigido no Sifarma (DT: ' + nome + ')' : 'Ainda pendente de correção no Sifarma',
-  }));
-
-  if (scriptUrl && scriptUrl !== 'APPS_SCRIPT_URL_AQUI') {
-    try {
-      await fetch(scriptUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessao: nome + ' — confirmação Sifarma', linhas: payload }),
-      });
-    } catch(e) { console.error(e); }
-  }
-
-  const corrigidos = pendentesConfirmacaoDT.filter(p => p.corrigido).length;
-  showToast(corrigidos + '/' + pendentesConfirmacaoDT.length + ' corrigidos no Sifarma');
-  pendentesConfirmacaoDT = [];
-  document.getElementById('input-dt-nome').value = '';
-  showScreen('screen-login');
-}
-
-// ============================================================
-// MODO TELEMÓVEL — scan via câmara (BarcodeDetector nativo, fallback ZXing)
-// ============================================================
-let camaraStream = null;
-let camaraDetector = null;
-let camaraZxingReader = null;
-let camaraAtivo = false;
-let camaraTargetInput = null;
-let camaraUltimoCodigo = null;
-let camaraUltimoTs = 0;
-
-const CAMERA_FORMATS = ['ean_13', 'ean_8', 'code_128', 'code_39', 'qr_code', 'data_matrix'];
-
-async function abrirCamara(targetInputId) {
-  camaraTargetInput = targetInputId;
-  const overlay = document.getElementById('camera-overlay');
-  const video = document.getElementById('camera-video');
-  const status = document.getElementById('camera-status');
-  overlay.style.display = 'flex';
-  status.textContent = 'A iniciar câmara...';
-
-  try {
-    camaraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' }
-    });
-  } catch (e) {
-    status.textContent = 'Sem acesso à câmara: ' + e.message;
-    return;
-  }
-
-  video.srcObject = camaraStream;
-  camaraAtivo = true;
-  camaraUltimoCodigo = null;
-
-  if ('BarcodeDetector' in window) {
-    try {
-      camaraDetector = new BarcodeDetector({ formats: CAMERA_FORMATS });
-      status.textContent = 'A procurar código...';
-      loopBarcodeDetector(video, status);
-      return;
-    } catch (e) {
-      // formatos não suportados, cai para ZXing
-    }
-  }
-
-  // Fallback: ZXing (carregado de CDN)
-  status.textContent = 'A carregar leitor...';
-  try {
-    if (!window.ZXing) {
-      await carregarScript('https://unpkg.com/@zxing/library@latest/umd/index.min.js');
-    }
-    camaraZxingReader = new ZXing.BrowserMultiFormatReader();
-    status.textContent = 'A procurar código...';
-    camaraZxingReader.decodeFromVideoElement(video, (result, err) => {
-      if (result) onCodigoDetectado(result.getText(), status);
-    });
-  } catch (e) {
-    status.textContent = 'Leitor de câmara não disponível neste browser.';
-  }
-}
-
-function loopBarcodeDetector(video, status) {
-  if (!camaraAtivo) return;
-  camaraDetector.detect(video)
-    .then(codes => {
-      if (codes.length > 0) onCodigoDetectado(codes[0].rawValue, status);
-    })
-    .catch(() => {})
-    .finally(() => {
-      if (camaraAtivo) requestAnimationFrame(() => loopBarcodeDetector(video, status));
-    });
-}
-
-function onCodigoDetectado(codigo, status) {
-  const agora = Date.now();
-  // Evita registos repetidos do mesmo código em sucessão rápida
-  if (codigo === camaraUltimoCodigo && (agora - camaraUltimoTs) < 2000) return;
-  camaraUltimoCodigo = codigo;
-  camaraUltimoTs = agora;
-
-  if (status) status.textContent = '✓ Lido: ' + codigo;
-  if (navigator.vibrate) navigator.vibrate(100);
-
-  if (camaraTargetInput === 'scan-input') {
-    processarCNP(resolverCNP(codigo));
-  } else if (camaraTargetInput === 'scan-input-rapida') {
-    processarCNPRapida(codigo);
-  } else if (camaraTargetInput === 'scan-input-validades') {
-    marcarConfirmadoValidades(resolverCNP(codigo)) || showToast('Não está na lista de validades a confirmar');
-  }
-}
-
-function fecharCamara() {
-  camaraAtivo = false;
-  camaraKioskAtivo = false;
-  fecharCamaraBase();
-  if (html5QrScanner) {
-    html5QrScanner.stop().catch(() => {});
-    html5QrScanner = null;
-  }
-  if (camaraZxingReader) {
-    try { camaraZxingReader.reset(); } catch(e) {}
-    camaraZxingReader = null;
-  }
-  document.getElementById('camera-overlay').style.display = 'none';
-}
-
-function carregarScript(src) {
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.src = src;
-    s.onload = resolve;
-    s.onerror = reject;
-    document.head.appendChild(s);
-  });
-}
-
-// ============================================================
-// MODO KIOSK — HID scanner + câmara QR → navega para URL da gaveta
-// ============================================================
-let camaraKioskAtivo = false;
-let camaraKioskStream = null;
-let html5QrScanner = null;
-
-function processarQRKiosk(codigo) {
-  if (!codigo.includes('dannihell.github.io') || !codigo.includes('farmacia-contagem')) {
-    document.getElementById('kiosk-status').textContent = 'QR inválido — usa o QR code da gaveta';
-    return;
-  }
-  fecharCamaraKiosk();
-
-  // Extrai parâmetros do URL sem navegar (evita reload)
-  const url = new URL(codigo.startsWith('http') ? codigo : 'https://' + codigo);
-  const fParam = url.searchParams.get('f');
-  const lParam = url.searchParams.get('l');
-
-  const FARMACIA_SLUG = {
-    'aroeira': 'Farmácia Aroeira',
-    'diasbrito': 'Farmácia Dias e Brito',
-    'cidadeuniversitaria': 'Farmácia Cidade Universitária',
-    'altodosmoinhos': 'Farmácia Alto dos Moinhos',
-    'porfirio': 'Farmácia Porfírio',
-    'altodacastelhana': 'Farmácia Alto da Castelhana',
-    'tulipas': 'Farmácia das Túlipas',
-  };
-
-  if (fParam) {
-    const farmaciaNome = FARMACIA_SLUG[fParam] || fParam;
-    const selFarmacia = document.getElementById('sel-farmacia');
-    selFarmacia.value = farmaciaNome;
-    selFarmacia.disabled = true;
-    onFarmaciaChange();
-
-    if (lParam) {
-      const local = decodeURIComponent(lParam).replace(/\+/g, ' ');
-      setTimeout(() => {
-        const selLocal = document.getElementById('sel-local');
-        selLocal.value = local;
-        selLocal.disabled = true;
-      }, 300);
-    }
-  }
-  showScreen('screen-login', true);
-}
-
-// HID scanner no ecrã kiosk (PDA)
-function iniciarHIDKiosk() {
-  const input = document.getElementById('kiosk-hid-input');
-  if (!input) return;
-
-  // Usa evento 'input' (mais fiável em Android HID) em vez de keydown
-  input.addEventListener('input', function() {
-    const dbg = document.getElementById('kiosk-debug');
-    if (dbg) dbg.textContent = 'buffer: ' + input.value;
-  });
-
-  input.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const v = input.value.trim();
-      input.value = '';
-      const dbg = document.getElementById('kiosk-debug');
-      if (dbg) dbg.textContent = 'Enter: ' + v.substring(0, 40);
-      if (v) processarQRKiosk(v);
-    }
-  });
-
-  // Foco no input sempre que o ecrã kiosk estiver activo
-  function manterFoco() {
-    const screen = document.getElementById('screen-kiosk');
-    if (screen && screen.classList.contains('active') && document.activeElement !== input) {
-      input.focus();
-    }
-  }
-  setInterval(manterFoco, 300);
-  input.focus();
-}
-
-async function abrirCamaraKiosk() {
-  camaraKioskAtivo = true;
-  const overlay = document.getElementById('camera-overlay');
-  const video = document.getElementById('camera-video');
-  const status = document.getElementById('camera-status');
-  overlay.style.display = 'flex';
-  status.textContent = 'Aponta para o QR code da gaveta...';
-
-  // Carrega html5-qrcode só agora (não no arranque — evita conflito com HID)
-  if (!window.Html5Qrcode) {
-    status.textContent = 'A carregar leitor...';
-    try {
-      await carregarScript('https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js');
-    } catch(e) {
-      status.textContent = 'Erro a carregar leitor de câmara.';
-      return;
-    }
-  }
-
-  // Tenta html5-qrcode (mais compatível iOS/Android)
-  if (window.Html5Qrcode) {
-    fecharCamaraBase();
-    // Usa div dedicado dentro do overlay
-    let div = document.getElementById('html5qr-region');
-    if (!div) {
-      div = document.createElement('div');
-      div.id = 'html5qr-region';
-      div.style.cssText = 'position:absolute;inset:0;';
-      overlay.appendChild(div);
-    }
-    try {
-      html5QrScanner = new Html5Qrcode('html5qr-region');
-      await html5QrScanner.start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 250, height: 250 } },
-        (decoded) => { if (camaraKioskAtivo) processarQRKiosk(decoded); },
-        () => {}
-      );
-      return;
-    } catch(e) {
-      status.textContent = 'Sem acesso à câmara: ' + e.message;
-    }
-    return;
-  }
-
-  // Fallback: BarcodeDetector
-  try {
-    camaraKioskStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-    video.srcObject = camaraKioskStream;
-    const det = new BarcodeDetector({ formats: ['qr_code'] });
-    const loop = () => {
-      if (!camaraKioskAtivo) return;
-      det.detect(video).then(codes => {
-        if (codes.length > 0) processarQRKiosk(codes[0].rawValue);
-      }).catch(() => {}).finally(() => {
-        if (camaraKioskAtivo) requestAnimationFrame(loop);
-      });
-    };
-    loop();
-  } catch(e) {
-    status.textContent = 'Câmara não disponível: ' + e.message;
-  }
-}
-
-function fecharCamaraBase() {
-  if (camaraKioskStream) {
-    camaraKioskStream.getTracks().forEach(t => t.stop());
-    camaraKioskStream = null;
-  }
-}
-
-function fecharCamaraKiosk() {
-  camaraKioskAtivo = false;
-  fecharCamaraBase();
-  if (html5QrScanner) {
-    html5QrScanner.stop().catch(() => {});
-    html5QrScanner = null;
-  }
-  document.getElementById('camera-overlay').style.display = 'none';
-}
-
-let stockCache = {};
-let altCodeMap = {}; // código alternativo (COD_ALTERNATIVOS) -> cnp
-
+// Stock cache
+let stockCache = {}, altCodeMap = {}, stockTimestamp = null;
 function construirAltCodeMap() {
   altCodeMap = {};
-  for (const cnp in stockCache) {
-    const c = stockCache[cnp].c;
-    if (c && c !== cnp && !stockCache[c]) {
-      altCodeMap[c] = cnp;
-    }
-  }
+  for (const cnp in stockCache) { const c = stockCache[cnp].c; if (c && c !== cnp && !stockCache[c]) altCodeMap[c] = cnp; }
 }
-
-// Resolve um código lido para o CNP correto:
-// 1) match direto no stock; 2) últimos 7 dígitos (QR/GS1); 3) código alternativo
 function resolverCNP(codigo) {
   if (stockCache[codigo]) return codigo;
-  if (codigo.length >= 8) {
-    const ultimos7 = codigo.slice(-7);
-    if (/^\d{7}$/.test(ultimos7) && stockCache[ultimos7]) return ultimos7;
-  }
+  if (codigo.length >= 8) { const u7 = codigo.slice(-7); if (/^\d{7}$/.test(u7) && stockCache[u7]) return u7; }
   if (altCodeMap[codigo]) return altCodeMap[codigo];
   return codigo;
 }
-let stockTimestamp = null;
-
 async function verificarStatusStock() {
   const url = getStockUrl();
-  if (!url) {
-    const el = document.getElementById('stock-status-info');
-    if (el) el.textContent = 'Seleciona a farmácia para ver o stock.';
-    return;
-  }
+  if (!url) { const el = document.getElementById('stock-status-info'); if (el) el.textContent = 'Seleciona a farmácia para ver o stock.'; return; }
   try {
     const resp = await fetch(url + '?t=' + Date.now());
     if (!resp.ok) throw new Error('sem stock');
@@ -1524,171 +509,124 @@ async function verificarStatusStock() {
     actualizarUIStock(data);
     if (data.produtos) { stockCache = data.produtos; stockTimestamp = data.timestamp; construirAltCodeMap(); }
     const farmacia = document.getElementById('sel-farmacia').value;
-    if (data.colaboradores && farmacia) {
-      colaboradoresServidor[farmacia] = data.colaboradores;
-      popularColaboradores(farmacia);
-    }
+    if (data.colaboradores && farmacia) { colaboradoresServidor[farmacia] = data.colaboradores; popularColaboradores(farmacia); }
   } catch(e) {
-    const el = document.getElementById('stock-status-info');
-    if (el) el.textContent = 'Stock nao disponivel. Carrega em Actualizar.';
-    const btn = document.getElementById('btn-actualizar');
-    if (btn) { btn.textContent = 'Actualizar stock'; btn.disabled = false; }
+    const el = document.getElementById('stock-status-info'); if (el) el.textContent = 'Stock nao disponivel.';
+    const btn = document.getElementById('btn-actualizar'); if (btn) { btn.textContent = 'Actualizar stock'; btn.disabled = false; }
   }
 }
-
 function actualizarUIStock(data) {
-  const el = document.getElementById('stock-status-info');
-  const btn = document.getElementById('btn-actualizar');
+  const el = document.getElementById('stock-status-info'), btn = document.getElementById('btn-actualizar');
   if (data && data.timestamp && data.total > 0) {
     const ts = new Date(data.timestamp);
-    const hora = ts.toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'});
-    const dia = ts.toLocaleDateString('pt-PT', {day: '2-digit', month: '2-digit'});
-    if (el) el.innerHTML = '<span style="color:var(--green);font-weight:600;">&#10003; ' + data.total + ' produtos</span> &mdash; actualizado as ' + hora + ' de ' + dia;
-  } else {
-    if (el) el.textContent = 'Stock nao disponivel. Carrega em Actualizar.';
-  }
+    if (el) el.innerHTML = '<span style="color:var(--green);font-weight:600;">✓ ' + data.total + ' produtos</span> — ' + ts.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}) + ' de ' + ts.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'});
+  } else { if (el) el.textContent = 'Stock nao disponivel.'; }
   if (btn) { btn.textContent = 'Actualizar stock'; btn.disabled = false; }
 }
-
 async function actualizarStock() {
   const url = getStockUrl();
   if (!url) { showToast('Seleciona a farmácia primeiro'); return; }
-  const btn = document.getElementById('btn-actualizar');
-  const el = document.getElementById('stock-status-info');
-  btn.disabled = true;
-  btn.innerHTML = 'A pedir exportacao...';
+  const btn = document.getElementById('btn-actualizar'), el = document.getElementById('stock-status-info');
+  btn.disabled = true; btn.innerHTML = 'A pedir exportacao...';
   if (el) el.textContent = 'A aguardar o servidor da farmacia...';
-
-  // Chamar Cloudflare Worker que escreve o pedido no GitHub (token guardado no Cloudflare)
-  try {
-    await fetch('https://stock-pedido.danielgds.workers.dev', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'pedirExportacao' })
-    });
-  } catch(e) { console.error('Erro ao enviar pedido:', e); }
-
-  // Polling - ler stock.json do GitHub Raw (publico, sem token)
-  const tsAntes = stockTimestamp;
-  let tentativas = 0;
+  try { await fetch('https://stock-pedido.danielgds.workers.dev', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'pedirExportacao'}) }); } catch(e) {}
+  const tsAntes = stockTimestamp; let tentativas = 0;
   const intervalo = setInterval(async () => {
     tentativas++;
-    if (el) el.textContent = 'A aguardar exportacao... (' + (tentativas * 15) + 's)';
+    if (el) el.textContent = 'A aguardar exportacao... (' + (tentativas*15) + 's)';
     try {
-      const resp = await fetch(url + '?t=' + Date.now());
-      if (!resp.ok) return;
+      const resp = await fetch(url + '?t=' + Date.now()); if (!resp.ok) return;
       const data = await resp.json();
       if (data && data.timestamp && data.timestamp !== tsAntes && data.total > 0) {
-        clearInterval(intervalo);
-        stockTimestamp = data.timestamp;
-        stockCache = data.produtos || {}; construirAltCodeMap();
-        actualizarUIStock(data);
-        showToast('Stock actualizado - ' + data.total + ' produtos');
-        btn.disabled = false;
+        clearInterval(intervalo); stockTimestamp = data.timestamp; stockCache = data.produtos || {}; construirAltCodeMap();
+        actualizarUIStock(data); showToast('Stock actualizado - ' + data.total + ' produtos'); btn.disabled = false;
       }
     } catch(e) {}
-    if (tentativas >= 16) {
-      clearInterval(intervalo);
-      if (el) el.textContent = 'Tempo esgotado. Verifica se o servidor esta activo.';
-      btn.textContent = 'Tentar de novo';
-      btn.disabled = false;
-    }
+    if (tentativas >= 16) { clearInterval(intervalo); if (el) el.textContent = 'Tempo esgotado.'; btn.textContent = 'Tentar de novo'; btn.disabled = false; }
   }, 15000);
 }
 
-let tipoAccao = 'contagem';
-
-function setTipoAccao(tipo) {
-  tipoAccao = tipo;
-  document.getElementById('btn-tipo-contagem').className = 'btn btn-sm' + (tipo === 'contagem' ? ' btn-primary' : '') + '';
-  document.getElementById('btn-tipo-rapida').className = 'btn btn-sm' + (tipo === 'rapida' ? ' btn-primary' : '');
-  document.getElementById('btn-tipo-validades').className = 'btn btn-sm' + (tipo === 'validades' ? ' btn-primary' : '');
-  // ajusta botões inline
-  document.getElementById('btn-tipo-contagem').style.flex = '1';
-  document.getElementById('btn-tipo-rapida').style.flex = '1';
-  document.getElementById('btn-tipo-validades').style.flex = '1';
-  document.getElementById('local-card').style.display = tipo === 'contagem' ? 'block' : 'none';
-  document.getElementById('btn-iniciar').textContent = tipo === 'contagem' ? 'Iniciar contagem' : tipo === 'rapida' ? '🔍 Iniciar verificação rápida' : '📅 Iniciar conferência de validades';
-}
-
-function iniciarAccao() {
-  if (tipoAccao === 'contagem') iniciarSessao();
-  else if (tipoAccao === 'rapida') abrirVerificacaoRapida();
-  else if (tipoAccao === 'validades') abrirConferenciaValidades();
-}
-
+// Modo admin / kiosk
 let modoAdmin = false;
-
 window.addEventListener('load', () => {
-  const el = document.getElementById('stock-status-info');
-  if (el) el.textContent = 'Seleciona a farmácia para ver o stock.';
-
+  document.getElementById('stock-status-info').textContent = 'Seleciona a farmácia para ver o stock.';
   const params = new URLSearchParams(window.location.search);
-  const fParam = params.get('f');
-  const lParam = params.get('l');
+  const fParam = params.get('f'), lParam = params.get('l');
   modoAdmin = params.get('admin') === '1';
-
   if (!modoAdmin && !fParam) {
     showScreen('screen-kiosk');
     iniciarHIDKiosk();
-    // Truque para esconder barra de endereço no Android (scroll para baixo e volta)
-    setTimeout(() => { window.scrollTo(0, 1); }, 500);
     return;
   }
-
   if (fParam) {
-    const FARMACIA_SLUG = {
-      'aroeira': 'Farmácia Aroeira',
-      'diasbrito': 'Farmácia Dias e Brito',
-      'cidadeuniversitaria': 'Farmácia Cidade Universitária',
-      'altodosmoinhos': 'Farmácia Alto dos Moinhos',
-      'porfirio': 'Farmácia Porfírio',
-      'altodacastelhana': 'Farmácia Alto da Castelhana',
-      'tulipas': 'Farmácia das Túlipas',
-    };
-    const farmaciaNome = FARMACIA_SLUG[fParam] || fParam;
-    const selFarmacia = document.getElementById('sel-farmacia');
-    selFarmacia.value = farmaciaNome;
-    if (!modoAdmin) selFarmacia.disabled = true;
+    const nome = FARMACIA_SLUG[fParam] || fParam;
+    const selF = document.getElementById('sel-farmacia');
+    selF.value = nome; if (!modoAdmin) selF.disabled = true;
     onFarmaciaChange();
-
     if (lParam) {
-      const local = decodeURIComponent(lParam).replace(/\+/g, ' ');
-      const selLocal = document.getElementById('sel-local');
-      selLocal.value = local;
-      if (!modoAdmin) selLocal.disabled = true;
+      const local = decodeURIComponent(lParam).replace(/\+/g,' ');
+      setTimeout(() => { const s = document.getElementById('sel-local'); s.value = local; if (!modoAdmin) s.disabled = true; }, 300);
     }
   }
 });
 
-// ============================================================
+// Kiosk HID
+function iniciarHIDKiosk() {
+  const input = document.getElementById('kiosk-hid-input');
+  if (!input) return;
+  input.addEventListener('input', function() {});
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const v = input.value.trim(); input.value = '';
+      if (v) processarQRKiosk(v);
+    }
+  });
+  function manterFoco() {
+    const screen = document.getElementById('screen-kiosk');
+    if (screen && screen.classList.contains('active') && document.activeElement !== input) input.focus();
+  }
+  setInterval(manterFoco, 300);
+  input.focus();
+}
+function processarQRKiosk(codigo) {
+  if (!codigo.includes('dannihell.github.io') || !codigo.includes('farmacia-contagem')) {
+    document.getElementById('kiosk-status').textContent = 'QR inválido';
+    return;
+  }
+  const url = new URL(codigo.startsWith('http') ? codigo : 'https://' + codigo);
+  const fParam = url.searchParams.get('f'), lParam = url.searchParams.get('l');
+  if (fParam) {
+    const nome = FARMACIA_SLUG[fParam] || fParam;
+    const selF = document.getElementById('sel-farmacia');
+    selF.value = nome; selF.disabled = true;
+    onFarmaciaChange();
+    if (lParam) {
+      setTimeout(() => { const s = document.getElementById('sel-local'); s.value = decodeURIComponent(lParam).replace(/\+/g,' '); s.disabled = true; }, 300);
+    }
+  }
+  showScreen('screen-login', true);
+}
+async function abrirCamaraKiosk() { showToast('Câmara kiosk — em breve'); }
+function fecharCamara() { document.getElementById('camera-overlay').style.display = 'none'; }
 
-let sessao = { farmacia: '', colaborador: '', zona: '', inicio: null, contagens: [] };
-let produtoAtual = null;
-let contadorAtual = 0;
-let modo = 'livre'; // cnp -> contagem corrente (ainda não registado)
-let contadoresPorLocal = {}; // cnp -> { local: qty }
-let locaisPorCnp = {}; // cnp -> Set de locais onde foi pickado
-let localAtual = '';
+// Sessão
+let sessao = { farmacia:'', colaborador:'', zona:'', inicio:null, contagens:[] };
+let produtoAtual = null, contadorAtual = 0;
+let contadores = {}, contadoresPorLocal = {}, locaisPorCnp = {}, localAtual = '';
 
 function iniciarSessao() {
   const farmacia = document.getElementById('sel-farmacia').value;
   let col = document.getElementById('sel-colaborador').value;
   const local = document.getElementById('sel-local').value;
-  if (col === '__novo__') {
-    col = document.getElementById('input-novo-colaborador').value.trim();
-    if (col) adicionarColaboradorExtra(farmacia, col);
-  }
+  if (col === '__novo__') { col = document.getElementById('input-novo-colaborador').value.trim(); if (col) adicionarColaboradorExtra(farmacia, col); }
   if (!farmacia || !col || !local) { showToast('Seleciona farmácia, colaborador e local'); return; }
-
-  sessao = { farmacia, colaborador: col, zona: '', inicio: new Date(), contagens: [] };
+  sessao = { farmacia, colaborador: col, zona:'', inicio: new Date(), contagens:[] };
   localAtual = local;
-
   const cfg = FARMACIA_CONFIG[farmacia];
-  const selLocalAtual = document.getElementById('sel-local-atual');
-  popularSelect(selLocalAtual, cfg ? cfg.locais : [], 'Selecionar local...');
-  selLocalAtual.value = local;
-
+  const selLA = document.getElementById('sel-local-atual');
+  popularSelect(selLA, cfg ? cfg.locais : [], 'Selecionar local...');
+  selLA.value = local;
   document.getElementById('header-badge').textContent = col;
   document.getElementById('header-sub').textContent = farmacia + ' — ' + local;
   showScreen('screen-contagem');
@@ -1701,104 +639,62 @@ function mudarLocal() {
   localAtual = v;
   document.getElementById('header-sub').textContent = sessao.farmacia + ' — ' + localAtual;
   showToast('Local: ' + localAtual);
-  getScanInput().focus();
+  scanInput.focus();
 }
-
-function setMode(m) { modo = m; }
 
 function showScreen(id, forcar) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  // Em modo kiosk, "login" significa voltar ao kiosk (não ao ecrã admin)
-  // excepto quando forcar=true (vem de um QR scan)
   if (id === 'screen-login' && !modoAdmin && !forcar) {
-    const selFarmacia = document.getElementById('sel-farmacia');
-    const selLocal = document.getElementById('sel-local');
-    selFarmacia.disabled = false;
-    selFarmacia.value = '';
-    selLocal.disabled = false;
+    document.getElementById('sel-farmacia').disabled = false;
+    document.getElementById('sel-farmacia').value = '';
+    document.getElementById('sel-local').disabled = false;
     document.getElementById('screen-kiosk').classList.add('active');
-    setTimeout(() => {
-      const input = document.getElementById('kiosk-hid-input');
-      if (input) { input.value = ''; input.focus(); }
-    }, 100);
+    setTimeout(() => { const inp = document.getElementById('kiosk-hid-input'); if (inp) { inp.value = ''; inp.focus(); } }, 100);
     return;
   }
   document.getElementById(id).classList.add('active');
 }
 
 // ============================================================
-// SCAN INPUT
+// SCAN INPUT — igual à versão que funciona (doc38)
 // ============================================================
-function getScanInput() {
-  return document.getElementById('scan-input');
-}
+const scanInput = document.getElementById('scan-input');
 
-// Listener no próprio elemento (adicionado depois do DOM)
-document.addEventListener('DOMContentLoaded', function() {
-  var si = document.getElementById('scan-input');
-  if (!si) return;
-  si.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      var cnp = si.value.trim();
-      if (cnp) processarCNP(cnp);
-      si.value = '';
-    }
-  });
+scanInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const cnp = scanInput.value.trim();
+    if (cnp) processarCNP(cnp);
+    scanInput.value = '';
+  }
 });
 
 function confirmarScanManual() {
-  var si = document.getElementById('scan-input');
-  if (!si) { showToast('scan-input não encontrado'); return; }
-  var cnp = si.value.trim();
-  showToast('CNP: ' + cnp + ' | ecrã: ' + document.getElementById('screen-contagem').className);
+  const cnp = scanInput.value.trim();
   if (cnp) processarCNP(cnp);
-  si.value = '';
-  si.focus();
+  scanInput.value = '';
+  scanInput.focus();
 }
 
-// Scanner HID envia string + Enter em <100ms
-let scanBuffer = '';
-let scanTimer = null;
+let scanBuffer = '', scanTimer = null;
 document.addEventListener('keydown', function(e) {
-  if (document.activeElement === getScanInput()) return;
+  if (document.activeElement === scanInput) return;
   if (e.key === 'Enter') {
-    if (scanBuffer.length > 4) {
-      processarCNP(scanBuffer);
-      scanBuffer = '';
-    }
-    clearTimeout(scanTimer);
-    return;
+    if (scanBuffer.length > 4) { processarCNP(scanBuffer); scanBuffer = ''; }
+    clearTimeout(scanTimer); return;
   }
-  if (e.key.length === 1) {
-    scanBuffer += e.key;
-    clearTimeout(scanTimer);
-    scanTimer = setTimeout(() => { scanBuffer = ''; }, 200);
-  }
+  if (e.key.length === 1) { scanBuffer += e.key; clearTimeout(scanTimer); scanTimer = setTimeout(() => { scanBuffer = ''; }, 200); }
 });
 
 async function processarCNP(cnp) {
-  const sc = document.getElementById('screen-contagem');
-  if (!sc || !sc.classList.contains('active')) {
-    showToast('Ecrã não activo: ' + (sc ? sc.className : 'null'));
-    return;
-  }
-
-  // Resolve códigos alternativos / QR (GS1) para o CNP correto
+  if (document.getElementById('screen-contagem').className.indexOf('active') === -1) return;
   cnp = resolverCNP(cnp);
-
-  // Se já está na lista final (registado), apenas soma directamente ao registo
   const existente = sessao.contagens.find(c => c.cnp === cnp);
   if (existente) {
-    existente.contado++;
-    existente.desvio = existente.contado - existente.stockSifarma;
+    existente.contado++; existente.desvio = existente.contado - existente.stockSifarma;
     if (localAtual) (existente.locais = existente.locais || []).indexOf(localAtual) === -1 && existente.locais.push(localAtual);
-    atualizarLista();
-    showToast('+1 → ' + existente.nome.substring(0, 20));
-    return;
+    atualizarLista(); showToast('+1 → ' + existente.nome.substring(0, 20)); return;
   }
-
-  // Soma ao contador corrente deste produto (independente do que está em ecrã)
   contadores[cnp] = (contadores[cnp] || 0) + 1;
   if (localAtual) {
     if (!locaisPorCnp[cnp]) locaisPorCnp[cnp] = new Set();
@@ -1806,7 +702,6 @@ async function processarCNP(cnp) {
     if (!contadoresPorLocal[cnp]) contadoresPorLocal[cnp] = {};
     contadoresPorLocal[cnp][localAtual] = (contadoresPorLocal[cnp][localAtual] || 0) + 1;
   }
-
   const produto = await buscarProduto(cnp);
   mostrarProduto(produto, cnp);
   atualizarPendentes();
@@ -1814,21 +709,13 @@ async function processarCNP(cnp) {
 
 async function buscarProduto(cnp) {
   const cached = stockCache[cnp];
-  if (cached) {
-    return {
-      cnp,
-      nome: cached.n || 'Sem nome',
-      stockSifarma: parseFloat(cached.s) || 0,
-      validade: cached.v || '',
-    };
-  }
+  if (cached) return { cnp, nome: cached.n || 'Sem nome', stockSifarma: parseFloat(cached.s) || 0, validade: cached.v || '' };
   return { cnp, nome: 'Produto não encontrado no stock carregado', stockSifarma: 0, validade: '', erro: true };
 }
 
 function mostrarProduto(produto, cnp) {
   produtoAtual = { ...produto, cnp };
   contadorAtual = contadores[cnp] || 1;
-
   document.getElementById('prod-nome').textContent = produto.nome;
   document.getElementById('prod-cnp').textContent = 'CNP: ' + cnp;
   document.getElementById('prod-stock-sifarma').textContent = produto.stockSifarma;
@@ -1845,87 +732,39 @@ function mostrarProduto(produto, cnp) {
 function finalizarGaveta() {
   const cnps = Object.keys(contadores);
   if (cnps.length === 0) { showToast('Nada para registar'); return; }
-
-  let registados = 0;
   cnps.forEach(cnp => {
     const cached = stockCache[cnp];
     const stock = cached ? (parseFloat(cached.s) || 0) : 0;
-    const nome = cached ? (cached.n || 'Sem nome') : 'Produto não encontrado';
     const contado = contadores[cnp];
     const locais = locaisPorCnp[cnp] ? Array.from(locaisPorCnp[cnp]) : (localAtual ? [localAtual] : []);
-
-    sessao.contagens.push({
-      cnp,
-      nome,
-      stockSifarma: stock,
-      contado,
-      desvio: contado - stock,
-      validade: (produtoAtual && produtoAtual.cnp === cnp) ? document.getElementById('input-validade').value.trim() : '',
-      locais,
-      porLocal: contadoresPorLocal[cnp] ? {...contadoresPorLocal[cnp]} : {},
-      ts: new Date().toISOString(),
-    });
-    registados++;
+    const porLocal = contadoresPorLocal[cnp] ? {...contadoresPorLocal[cnp]} : {};
+    sessao.contagens.push({ cnp, nome: cached ? (cached.n || 'Sem nome') : 'Produto não encontrado', stockSifarma: stock, contado, desvio: contado - stock, validade: (produtoAtual && produtoAtual.cnp === cnp) ? document.getElementById('input-validade').value.trim() : '', locais, porLocal, ts: new Date().toISOString() });
   });
-
-  contadores = {};
-  contadoresPorLocal = {};
-  locaisPorCnp = {};
-  produtoAtual = null;
-  contadorAtual = 0;
+  contadores = {}; contadoresPorLocal = {}; locaisPorCnp = {};
+  produtoAtual = null; contadorAtual = 0;
   document.getElementById('produto-atual').style.display = 'none';
-
-  atualizarLista();
-  atualizarPendentes();
-  showToast(registados + ' produto(s) registado(s)');
+  atualizarLista(); atualizarPendentes();
+  showToast(Object.keys(contadores).length + cnps.length + ' produto(s) registado(s)');
 }
 
 function atualizarPendentes() {
   const card = document.getElementById('pendentes-card');
-  const cont = document.getElementById('lista-pendentes');
   const cnps = Object.keys(contadores);
-
   document.getElementById('btn-finalizar-gaveta').style.display = cnps.length > 0 ? 'block' : 'none';
-
-  const pendentes = cnps
-    .map(cnp => ({ cnp, contado: contadores[cnp], cached: stockCache[cnp] }))
-    .filter(p => p.cached && p.contado < (parseFloat(p.cached.s) || 0));
-
-  if (pendentes.length === 0) {
-    card.style.display = 'none';
-    return;
-  }
-
+  const pendentes = cnps.map(cnp => ({ cnp, contado: contadores[cnp], cached: stockCache[cnp] })).filter(p => p.cached && p.contado < (parseFloat(p.cached.s) || 0));
+  if (pendentes.length === 0) { card.style.display = 'none'; return; }
   card.style.display = 'block';
-  cont.innerHTML = pendentes.map(p => {
-    const stock = parseFloat(p.cached.s) || 0;
-    const nome = p.cached.n || 'Sem nome';
+  document.getElementById('lista-pendentes').innerHTML = pendentes.map(p => {
     const porLocal = contadoresPorLocal[p.cnp] || {};
-    const breakdown = Object.keys(porLocal)
-      .filter(l => porLocal[l] > 0)
-      .map(l => l + ': ' + porLocal[l])
-      .join(' · ');
-    return `<div class="contagem-item" onclick="abrirPendente('${p.cnp}')" style="cursor:pointer;">
-      <div class="contagem-dot dot-warn"></div>
-      <div class="contagem-info">
-        <div class="contagem-nome">${nome}</div>
-        <div class="contagem-cnp">${p.cnp}${breakdown ? ' · ' + breakdown : ''}</div>
-      </div>
-      <div class="contagem-nums">
-        <div class="stocks">${p.contado} / ${stock}</div>
-      </div>
-    </div>`;
+    const breakdown = Object.keys(porLocal).filter(l => porLocal[l] > 0).map(l => l + ': ' + porLocal[l]).join(' · ');
+    return `<div class="contagem-item" onclick="abrirPendente('${p.cnp}')" style="cursor:pointer;"><div class="contagem-dot dot-warn"></div><div class="contagem-info"><div class="contagem-nome">${p.cached.n || 'Sem nome'}</div><div class="contagem-cnp">${p.cnp}${breakdown ? ' · ' + breakdown : ''}</div></div><div class="contagem-nums"><div class="stocks">${p.contado} / ${parseFloat(p.cached.s)||0}</div></div></div>`;
   }).join('');
 }
 
 async function abrirPendente(cnp) {
-  if (produtoAtual && produtoAtual.cnp !== cnp) {
-    showToast('Termina ou cancela o produto atual primeiro');
-    return;
-  }
-  const produto = await buscarProduto(cnp);
-  mostrarProduto(produto, cnp);
-  getScanInput().focus();
+  if (produtoAtual && produtoAtual.cnp !== cnp) { showToast('Termina ou cancela o produto atual primeiro'); return; }
+  mostrarProduto(await buscarProduto(cnp), cnp);
+  scanInput.focus();
 }
 
 function ajustarContador(delta) {
@@ -1934,15 +773,13 @@ function ajustarContador(delta) {
     contadores[produtoAtual.cnp] = contadorAtual;
     if (localAtual) {
       if (!contadoresPorLocal[produtoAtual.cnp]) contadoresPorLocal[produtoAtual.cnp] = {};
-      const atual = (contadoresPorLocal[produtoAtual.cnp][localAtual] || 0) + delta;
-      contadoresPorLocal[produtoAtual.cnp][localAtual] = Math.max(0, atual);
+      contadoresPorLocal[produtoAtual.cnp][localAtual] = Math.max(0, (contadoresPorLocal[produtoAtual.cnp][localAtual] || 0) + delta);
       if (!locaisPorCnp[produtoAtual.cnp]) locaisPorCnp[produtoAtual.cnp] = new Set();
       locaisPorCnp[produtoAtual.cnp].add(localAtual);
     }
   }
   document.getElementById('counter-display').textContent = contadorAtual;
   document.getElementById('prod-contado').textContent = contadorAtual;
-
   if (produtoAtual) {
     const desvio = contadorAtual - produtoAtual.stockSifarma;
     const el = document.getElementById('prod-desvio');
@@ -1955,74 +792,33 @@ function ajustarContador(delta) {
 function registarProduto() {
   if (!produtoAtual) return;
   const validade = document.getElementById('input-validade').value.trim();
-  const desvio = contadorAtual - produtoAtual.stockSifarma;
   const locais = locaisPorCnp[produtoAtual.cnp] ? Array.from(locaisPorCnp[produtoAtual.cnp]) : (localAtual ? [localAtual] : []);
-
-  sessao.contagens.push({
-    cnp: produtoAtual.cnp,
-    nome: produtoAtual.nome,
-    stockSifarma: produtoAtual.stockSifarma,
-    contado: contadorAtual,
-    desvio,
-    validade,
-    locais,
-    porLocal: contadoresPorLocal[produtoAtual.cnp] ? {...contadoresPorLocal[produtoAtual.cnp]} : {},
-    ts: new Date().toISOString(),
-  });
-
-  delete contadores[produtoAtual.cnp];
-  delete contadoresPorLocal[produtoAtual.cnp];
-  delete locaisPorCnp[produtoAtual.cnp];
-  produtoAtual = null;
-  contadorAtual = 0;
+  const porLocal = contadoresPorLocal[produtoAtual.cnp] ? {...contadoresPorLocal[produtoAtual.cnp]} : {};
+  sessao.contagens.push({ cnp: produtoAtual.cnp, nome: produtoAtual.nome, stockSifarma: produtoAtual.stockSifarma, contado: contadorAtual, desvio: contadorAtual - produtoAtual.stockSifarma, validade, locais, porLocal, ts: new Date().toISOString() });
+  delete contadores[produtoAtual.cnp]; delete contadoresPorLocal[produtoAtual.cnp]; delete locaisPorCnp[produtoAtual.cnp];
+  produtoAtual = null; contadorAtual = 0;
   document.getElementById('produto-atual').style.display = 'none';
-  atualizarLista();
-  atualizarPendentes();
-  showToast('Registado');
-  getScanInput().focus();
+  atualizarLista(); atualizarPendentes(); showToast('Registado'); scanInput.focus();
 }
 
-function cancelarProduto() {
-  produtoAtual = null;
-  document.getElementById('produto-atual').style.display = 'none';
-  getScanInput().focus();
-}
+function cancelarProduto() { produtoAtual = null; document.getElementById('produto-atual').style.display = 'none'; scanInput.focus(); }
 
 function atualizarLista() {
   const lista = sessao.contagens;
   if (lista.length === 0) return;
-
   document.getElementById('stats-bar').style.display = 'flex';
   document.getElementById('lista-card').style.display = 'block';
   document.getElementById('btn-submeter-wrapper').style.display = 'block';
-
-  const desvios = lista.filter(c => c.desvio !== 0).length;
-  const valCurtas = lista.filter(c => c.validade && validadeProxima(c.validade)).length;
-
   document.getElementById('stat-total').textContent = lista.length;
-  document.getElementById('stat-desvios').textContent = desvios;
-  document.getElementById('stat-val').textContent = valCurtas;
-
-  const container = document.getElementById('lista-contagens');
-  container.innerHTML = [...lista].reverse().map(c => {
+  document.getElementById('stat-desvios').textContent = lista.filter(c => c.desvio !== 0).length;
+  document.getElementById('stat-val').textContent = lista.filter(c => c.validade && validadeProxima(c.validade)).length;
+  document.getElementById('lista-contagens').innerHTML = [...lista].reverse().map(c => {
     const dotClass = c.desvio === 0 ? 'dot-ok' : Math.abs(c.desvio) > 3 ? 'dot-err' : 'dot-warn';
-    const desvioStr = (c.desvio > 0 ? '+' : '') + c.desvio;
     const desvioColor = c.desvio === 0 ? 'var(--green)' : Math.abs(c.desvio) > 3 ? 'var(--red)' : 'var(--amber)';
-    return `<div class="contagem-item">
-      <div class="contagem-dot ${dotClass}"></div>
-      <div class="contagem-info">
-        <div class="contagem-nome">${c.nome}</div>
-        <div class="contagem-cnp">${c.cnp}${c.validade ? ' · ' + c.validade : ''}${
-          c.porLocal && Object.keys(c.porLocal).length > 1
-            ? ' · ' + Object.entries(c.porLocal).map(([l,q]) => l + ': ' + q).join(', ')
-            : c.locais && c.locais.length > 0 ? ' · ' + c.locais.join(', ') : ''
-        }</div>
-      </div>
-      <div class="contagem-nums">
-        <div class="desvio" style="color:${desvioColor}">${desvioStr}</div>
-        <div class="stocks">${c.stockSifarma} → ${c.contado}</div>
-      </div>
-    </div>`;
+    const porLocalStr = c.porLocal && Object.keys(c.porLocal).length > 1
+      ? ' · ' + Object.entries(c.porLocal).map(([l,q]) => l+': '+q).join(', ')
+      : c.locais && c.locais.length ? ' · ' + c.locais.join(', ') : '';
+    return `<div class="contagem-item"><div class="contagem-dot ${dotClass}"></div><div class="contagem-info"><div class="contagem-nome">${c.nome}</div><div class="contagem-cnp">${c.cnp}${c.validade?' · '+c.validade:''}${porLocalStr}</div></div><div class="contagem-nums"><div class="desvio" style="color:${desvioColor}">${(c.desvio>0?'+':'')+c.desvio}</div><div class="stocks">${c.stockSifarma} → ${c.contado}</div></div></div>`;
   }).join('');
 }
 
@@ -2030,81 +826,44 @@ function validadeProxima(val) {
   if (!val || val.length < 7) return false;
   const parts = val.split('/');
   if (parts.length !== 2) return false;
-  const m = parseInt(parts[0]);
-  const y = parseInt(parts[1]);
-  if (isNaN(m) || isNaN(y)) return false;
-  const d = new Date(y, m - 1, 1);
-  const diff = (d - new Date()) / (1000 * 60 * 60 * 24 * 30);
-  return diff < 4;
+  const d = new Date(parseInt(parts[1]), parseInt(parts[0]) - 1, 1);
+  return (d - new Date()) / (1000*60*60*24*30) < 4;
 }
 
 async function submeterContagem() {
   if (sessao.contagens.length === 0) { showToast('Nenhum produto contado'); return; }
-
   const cfg = FARMACIA_CONFIG[sessao.farmacia];
   const scriptUrl = cfg ? cfg.appsScriptUrl : 'APPS_SCRIPT_URL_AQUI';
-
   const btn = document.querySelector('#btn-submeter-wrapper .btn-primary');
-  btn.innerHTML = '<span class="loading-spinner"></span>A submeter...';
+  btn.innerHTML = '<span class="loading-spinner" style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;"></span>A submeter...';
   btn.disabled = true;
-
   try {
     if (!scriptUrl || scriptUrl === 'APPS_SCRIPT_URL_AQUI') {
       await new Promise(r => setTimeout(r, 1000));
       showScreen('screen-sucesso');
-      document.getElementById('sucesso-msg').textContent =
-        sessao.contagens.length + ' produtos registados. Configura o Apps Script desta farmácia para guardar na Google Sheet.';
+      document.getElementById('sucesso-msg').textContent = sessao.contagens.length + ' produtos registados. Configura o Apps Script desta farmácia.';
       return;
     }
-
     const payload = sessao.contagens.map(c => {
       const cached = stockCache[c.cnp];
       const validadeSifarma = cached ? (cached.v || '') : '';
       const validadeDivergente = c.validade && /^\d{2}\/\d{4}$/.test(c.validade) && c.validade !== validadeSifarma;
       let locaisTxt = (c.locais || []).join(', ');
-      if (validadeDivergente) {
-        locaisTxt += (locaisTxt ? ' | ' : '') + '⚠ Validade Sifarma ' + validadeSifarma + ' → física ' + c.validade + ' (corrigir)';
-      }
-      return {
-        data: new Date().toLocaleDateString('pt-PT'),
-        hora: new Date().toLocaleTimeString('pt-PT'),
-        farmacia: sessao.farmacia,
-        colaborador: sessao.colaborador,
-        cnp: c.cnp,
-        nome: c.nome,
-        stock_sifarma: c.stockSifarma,
-        contado: c.contado,
-        desvio: c.desvio,
-        validade: c.validade,
-        locais: locaisTxt,
-      };
+      if (validadeDivergente) locaisTxt += (locaisTxt ? ' | ' : '') + '⚠ Validade Sifarma ' + validadeSifarma + ' → física ' + c.validade + ' (corrigir)';
+      return { data: new Date().toLocaleDateString('pt-PT'), hora: new Date().toLocaleTimeString('pt-PT'), farmacia: sessao.farmacia, colaborador: sessao.colaborador, cnp: c.cnp, nome: c.nome, stock_sifarma: c.stockSifarma, contado: c.contado, desvio: c.desvio, validade: c.validade, locais: locaisTxt };
     });
-
-    await fetch(scriptUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }),
-    });
-
+    await fetch(scriptUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }) });
     showScreen('screen-sucesso');
-    document.getElementById('sucesso-msg').textContent =
-      sessao.contagens.length + ' produtos registados por ' + sessao.colaborador + '.';
-  } catch (e) {
+    document.getElementById('sucesso-msg').textContent = sessao.contagens.length + ' produtos registados por ' + sessao.colaborador + '.';
+  } catch(e) {
     showToast('Erro ao submeter — tenta de novo');
-    btn.innerHTML = 'Submeter sessão para registo';
-    btn.disabled = false;
+    btn.innerHTML = 'Submeter sessão para registo'; btn.disabled = false;
   }
 }
 
 function novaContagem() {
-  sessao = { farmacia: '', colaborador: '', zona: '', inicio: null, contagens: [] };
-  produtoAtual = null;
-  contadorAtual = 0;
-  contadores = {};
-  contadoresPorLocal = {};
-  locaisPorCnp = {};
-  localAtual = '';
+  sessao = { farmacia:'', colaborador:'', zona:'', inicio:null, contagens:[] };
+  produtoAtual = null; contadorAtual = 0; contadores = {}; contadoresPorLocal = {}; locaisPorCnp = {}; localAtual = '';
   document.getElementById('header-badge').textContent = '—';
   document.getElementById('header-sub').textContent = 'Farmácia Aroeira';
   document.getElementById('sel-farmacia').value = '';
@@ -2112,38 +871,26 @@ function novaContagem() {
   popularSelect(document.getElementById('sel-local'), [], 'Selecionar local...');
   document.getElementById('input-novo-colaborador').style.display = 'none';
   document.getElementById('input-novo-colaborador').value = '';
-  document.getElementById('lista-contagens').innerHTML = '';
-  document.getElementById('lista-pendentes').innerHTML = '';
-  document.getElementById('pendentes-card').style.display = 'none';
-  document.getElementById('btn-finalizar-gaveta').style.display = 'none';
-  document.getElementById('stats-bar').style.display = 'none';
-  document.getElementById('lista-card').style.display = 'none';
-  document.getElementById('btn-submeter-wrapper').style.display = 'none';
-  document.getElementById('produto-atual').style.display = 'none';
+  ['lista-contagens','lista-pendentes'].forEach(id => document.getElementById(id).innerHTML = '');
+  ['pendentes-card','btn-finalizar-gaveta','stats-bar','lista-card','btn-submeter-wrapper','produto-atual'].forEach(id => document.getElementById(id).style.display = 'none');
   showScreen('screen-login');
 }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+  const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-// Bloquear pull-to-refresh (evita perda de sessão por scroll acidental)
+document.addEventListener('click', function(e) {
+  if (document.getElementById('screen-contagem').classList.contains('active')) {
+    if (!e.target.closest('input, button, select')) scanInput.focus();
+  }
+});
+
 document.addEventListener('touchmove', function(e) {
   if (window.scrollY === 0) e.preventDefault();
 }, { passive: false });
-
-// Manter scan input focado
-document.addEventListener('click', function(e) {
-  if (document.getElementById('screen-contagem').classList.contains('active')) {
-    if (!e.target.closest('input, button, select')) {
-      getScanInput().focus();
-    }
-  }
-});
 </script>
-<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.17</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.18</div>
 </body>
 </html>
