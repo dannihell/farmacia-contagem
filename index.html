@@ -407,6 +407,53 @@
     color: var(--amber);
     margin-bottom: 12px;
   }
+
+  /* BARRA COMPACTA DE CONTAGEM */
+  .compact-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .compact-select {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 13px;
+    margin-bottom: 0;
+    min-width: 0;
+  }
+  .compact-scan {
+    flex: 2;
+    padding: 10px 10px;
+    font-size: 15px;
+    font-family: monospace;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--green-light);
+    background: var(--green-bg);
+    color: var(--text);
+    min-width: 0;
+  }
+  .compact-scan:focus { outline: none; border-color: var(--green); }
+  .compact-btn-ok {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--green-light);
+    background: var(--green);
+    color: #fff;
+    cursor: pointer;
+  }
+  .compact-btn-cam {
+    flex-shrink: 0;
+    padding: 8px 10px;
+    font-size: 15px;
+    border-radius: var(--radius-sm);
+    border: 0.5px solid var(--gray-border);
+    background: var(--bg);
+    cursor: pointer;
+  }
 </style>
 </head>
 <body>
@@ -584,14 +631,13 @@
 <div class="screen" id="screen-contagem">
 
   <!-- BARRA COMPACTA: LOCAL + SCAN -->
-  <div style="display:flex; gap:6px; margin-bottom:8px; align-items:center;">
-    <select id="sel-local-atual" onchange="mudarLocal()" style="flex:1; padding:8px 10px; font-size:13px; margin-bottom:0;">
+  <div class="compact-bar">
+    <select id="sel-local-atual" onchange="mudarLocal()" class="compact-select">
       <option value="">Local...</option>
     </select>
-    <input type="text" id="scan-input" placeholder="CNP..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric"
-      style="flex:2; padding:8px 10px; font-size:15px; font-family:monospace; border-radius:var(--radius-sm); border:2px solid var(--green-light); background:var(--green-bg); color:var(--text);">
-    <button id="btn-confirmar-scan" onclick="confirmarScanManual()" style="padding:8px 12px; font-size:15px; font-weight:600; border-radius:var(--radius-sm); border:2px solid var(--green-light); background:var(--green); color:#fff; flex-shrink:0;">OK</button>
-    <button onclick="abrirCamara('scan-input')" style="padding:8px 10px; font-size:15px; border-radius:var(--radius-sm); border:0.5px solid var(--gray-border); background:var(--bg); flex-shrink:0;">📷</button>
+    <input type="text" id="scan-input" placeholder="CNP..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric" class="compact-scan">
+    <button id="btn-confirmar-scan" onclick="confirmarScanManual()" class="compact-btn-ok">OK</button>
+    <button onclick="abrirCamara('scan-input')" class="compact-btn-cam">📷</button>
   </div>
 
   <!-- PRODUTO ATUAL -->
@@ -1634,7 +1680,7 @@ function mudarLocal() {
   localAtual = v;
   document.getElementById('header-sub').textContent = sessao.farmacia + ' — ' + localAtual;
   showToast('Local: ' + localAtual);
-  scanInput.focus();
+  getScanInput().focus();
 }
 
 function setMode(m) { modo = m; }
@@ -1662,29 +1708,38 @@ function showScreen(id, forcar) {
 // ============================================================
 // SCAN INPUT
 // ============================================================
-const scanInput = document.getElementById('scan-input');
+let scanInput;
 
-scanInput.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    const cnp = scanInput.value.trim();
-    if (cnp) processarCNP(cnp);
-    scanInput.value = '';
-  }
+window.addEventListener('load', () => {
+  scanInput = document.getElementById('scan-input');
+  if (!scanInput) return;
+
+  scanInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const cnp = scanInput.value.trim();
+      if (cnp) processarCNP(cnp);
+      scanInput.value = '';
+    }
+  });
 });
 
+function getScanInput() {
+  return scanInput || document.getElementById('scan-input');
+}
+
 function confirmarScanManual() {
-  const cnp = scanInput.value.trim();
+  const cnp = getScanInput().value.trim();
   if (cnp) processarCNP(cnp);
-  scanInput.value = '';
-  scanInput.focus();
+  getScanInput().value = '';
+  getScanInput().focus();
 }
 
 // Scanner HID envia string + Enter em <100ms
 let scanBuffer = '';
 let scanTimer = null;
 document.addEventListener('keydown', function(e) {
-  if (document.activeElement === scanInput) return;
+  if (document.activeElement === getScanInput()) return;
   if (e.key === 'Enter') {
     if (scanBuffer.length > 4) {
       processarCNP(scanBuffer);
@@ -1844,7 +1899,7 @@ async function abrirPendente(cnp) {
   }
   const produto = await buscarProduto(cnp);
   mostrarProduto(produto, cnp);
-  scanInput.focus();
+  getScanInput().focus();
 }
 
 function ajustarContador(delta) {
@@ -1898,13 +1953,13 @@ function registarProduto() {
   atualizarLista();
   atualizarPendentes();
   showToast('Registado');
-  scanInput.focus();
+  getScanInput().focus();
 }
 
 function cancelarProduto() {
   produtoAtual = null;
   document.getElementById('produto-atual').style.display = 'none';
-  scanInput.focus();
+  getScanInput().focus();
 }
 
 function atualizarLista() {
@@ -2058,11 +2113,11 @@ document.addEventListener('touchmove', function(e) {
 document.addEventListener('click', function(e) {
   if (document.getElementById('screen-contagem').classList.contains('active')) {
     if (!e.target.closest('input, button, select')) {
-      scanInput.focus();
+      getScanInput().focus();
     }
   }
 });
 </script>
-<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.9</div>
+<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.11</div>
 </body>
 </html>
