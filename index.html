@@ -311,7 +311,7 @@
   /* TOAST */
   .toast {
     position: fixed;
-    bottom: 24px;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--text);
@@ -319,7 +319,7 @@
     padding: 10px 20px;
     border-radius: 20px;
     font-size: 14px;
-    z-index: 999;
+    z-index: 9999;
     opacity: 0;
     transition: opacity 0.2s;
     pointer-events: none;
@@ -2144,6 +2144,6 @@ document.addEventListener('click', function(e) {
   }
 });
 </script>
-<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.16</div>
+<div id="app-version" style="position:fixed; bottom:4px; left:6px; font-size:9px; color:rgba(0,0,0,0.2); z-index:99999; pointer-events:none; font-family:monospace;">v2026-06-15.17</div>
 </body>
 </html>
