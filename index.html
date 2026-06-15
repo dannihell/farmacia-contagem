@@ -122,20 +122,6 @@
   <div class="header-sub" id="header-sub">Farmácia Aroeira</div>
 </div>
 
-<!-- ECRÃ KIOSK (modo equipa — só QR) -->
-<div class="screen" id="screen-kiosk" style="position:relative;">
-  <input type="text" id="kiosk-hid-input"
-    style="position:absolute;inset:0;width:100%;height:100%;opacity:0;z-index:10;"
-    autocomplete="off" inputmode="numeric">
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:24px;text-align:center;position:relative;z-index:5;pointer-events:none;">
-    <div style="font-size:64px;margin-bottom:16px;">📦</div>
-    <div style="font-size:22px;font-weight:700;color:var(--green);margin-bottom:12px;">Contagem de Stock</div>
-    <div style="font-size:17px;color:var(--text);font-weight:600;margin-bottom:32px;">Dispara o leitor para o QR code da gaveta</div>
-    <div id="kiosk-status" style="font-size:13px;color:var(--text-muted);"></div>
-  </div>
-  <button class="btn" style="position:absolute;bottom:24px;right:16px;font-size:12px;color:var(--text-muted);opacity:0.4;z-index:20;" onclick="abrirCamaraKiosk()">usar câmara</button>
-</div>
-
 <!-- ECRÃ 1: LOGIN -->
 <div class="screen active" id="screen-login">
   <div style="padding-top: 8px;">
@@ -540,67 +526,28 @@ async function actualizarStock() {
 }
 
 // Modo admin / kiosk
-let modoAdmin = false;
 window.addEventListener('load', () => {
   document.getElementById('stock-status-info').textContent = 'Seleciona a farmácia para ver o stock.';
   const params = new URLSearchParams(window.location.search);
   const fParam = params.get('f'), lParam = params.get('l');
-  modoAdmin = params.get('admin') === '1';
-  if (!modoAdmin && !fParam) {
-    showScreen('screen-kiosk');
-    iniciarHIDKiosk();
-    return;
-  }
+  const modoAdmin = params.get('admin') === '1';
   if (fParam) {
     const nome = FARMACIA_SLUG[fParam] || fParam;
     const selF = document.getElementById('sel-farmacia');
-    selF.value = nome; if (!modoAdmin) selF.disabled = true;
+    selF.value = nome;
+    if (!modoAdmin) selF.disabled = true;
     onFarmaciaChange();
     if (lParam) {
-      const local = decodeURIComponent(lParam).replace(/\+/g,' ');
-      setTimeout(() => { const s = document.getElementById('sel-local'); s.value = local; if (!modoAdmin) s.disabled = true; }, 300);
+      setTimeout(() => {
+        const s = document.getElementById('sel-local');
+        s.value = decodeURIComponent(lParam).replace(/\+/g,' ');
+        if (!modoAdmin) s.disabled = true;
+        setTipoAccao('contagem');
+      }, 300);
     }
   }
 });
 
-// Kiosk HID
-function iniciarHIDKiosk() {
-  const input = document.getElementById('kiosk-hid-input');
-  if (!input) return;
-  input.addEventListener('input', function() {});
-  input.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const v = input.value.trim(); input.value = '';
-      if (v) processarQRKiosk(v);
-    }
-  });
-  function manterFoco() {
-    const screen = document.getElementById('screen-kiosk');
-    if (screen && screen.classList.contains('active') && document.activeElement !== input) input.focus();
-  }
-  setInterval(manterFoco, 300);
-  input.focus();
-}
-function processarQRKiosk(codigo) {
-  if (!codigo.includes('dannihell.github.io') || !codigo.includes('farmacia-contagem')) {
-    document.getElementById('kiosk-status').textContent = 'QR inválido';
-    return;
-  }
-  const url = new URL(codigo.startsWith('http') ? codigo : 'https://' + codigo);
-  const fParam = url.searchParams.get('f'), lParam = url.searchParams.get('l');
-  if (fParam) {
-    const nome = FARMACIA_SLUG[fParam] || fParam;
-    const selF = document.getElementById('sel-farmacia');
-    selF.value = nome; selF.disabled = true;
-    onFarmaciaChange();
-    if (lParam) {
-      setTimeout(() => { const s = document.getElementById('sel-local'); s.value = decodeURIComponent(lParam).replace(/\+/g,' '); s.disabled = true; }, 300);
-    }
-  }
-  showScreen('screen-login', true);
-}
-async function abrirCamaraKiosk() { showToast('Câmara kiosk — em breve'); }
 function fecharCamara() { document.getElementById('camera-overlay').style.display = 'none'; }
 
 // Sessão
@@ -635,16 +582,8 @@ function mudarLocal() {
   scanInput.focus();
 }
 
-function showScreen(id, forcar) {
+function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  if (id === 'screen-login' && !modoAdmin && !forcar) {
-    document.getElementById('sel-farmacia').disabled = false;
-    document.getElementById('sel-farmacia').value = '';
-    document.getElementById('sel-local').disabled = false;
-    document.getElementById('screen-kiosk').classList.add('active');
-    setTimeout(() => { const inp = document.getElementById('kiosk-hid-input'); if (inp) { inp.value = ''; inp.focus(); } }, 100);
-    return;
-  }
   document.getElementById(id).classList.add('active');
 }
 
@@ -882,6 +821,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.21</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.22</div>
 </body>
 </html>
