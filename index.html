@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0f6e56">
-<title>Contagem de Stock — Aroeira</title>
+<title>Inventário</title>
 <link rel="manifest" href="manifest.json">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -116,33 +116,18 @@
 
 <div class="header">
   <div class="header-top">
-    <h1>Contagem de Stock</h1>
+    <h1>Inventário</h1>
     <span class="session-badge" id="header-badge">—</span>
   </div>
-  <div class="header-sub" id="header-sub">Farmácia Aroeira</div>
+  <div class="header-sub" id="header-sub">Seleciona a farmácia</div>
 </div>
 
 <!-- ECRÃ 1: LOGIN -->
 <div class="screen active" id="screen-login">
   <div style="padding-top: 8px;">
 
-    <!-- TIPO DE ACÇÃO -->
-    <div class="card" style="padding:12px 16px;">
-      <div class="card-title">O que vais fazer?</div>
-      <div style="display:flex;gap:8px;">
-        <button id="btn-tipo-contagem" class="btn btn-primary btn-sm" style="flex:1;" onclick="setTipoAccao('contagem')">📦 Contagem</button>
-        <button id="btn-tipo-rapida" class="btn btn-sm" style="flex:1;" onclick="setTipoAccao('rapida')">🔍 Verificação</button>
-        <button id="btn-tipo-validades" class="btn btn-sm" style="flex:1;" onclick="setTipoAccao('validades')">📅 Validades</button>
-      </div>
-    </div>
-
-    <div class="card" id="stock-status-card">
-      <div class="card-title">Stock carregado</div>
-      <div id="stock-status-info" style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">A verificar...</div>
-      <button class="btn btn-primary" id="btn-actualizar" onclick="actualizarStock()">↻ Actualizar stock</button>
-    </div>
-
-    <div class="card">
+    <!-- FARMÁCIA -->
+    <div class="card" id="card-farmacia">
       <div class="card-title">Farmácia</div>
       <select id="sel-farmacia" onchange="onFarmaciaChange()">
         <option value="">Selecionar farmácia...</option>
@@ -155,19 +140,39 @@
         <option>Farmácia das Túlipas</option>
       </select>
     </div>
-    <div class="card">
-      <div class="card-title">Colaborador</div>
-      <select id="sel-colaborador" onchange="onColaboradorChange()">
-        <option value="">Selecionar colaborador...</option>
-        <option value="__novo__">+ Novo colaborador</option>
-      </select>
-      <input type="text" id="input-novo-colaborador" class="text-input" placeholder="Nome do novo colaborador" style="display:none;margin-top:8px;">
+
+    <!-- TIPO DE ACÇÃO -->
+    <div class="card" style="padding:12px 16px;">
+      <div class="card-title">O que vais fazer?</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <button id="btn-tipo-contagem" class="btn btn-primary btn-sm" onclick="setTipoAccao('contagem')">📦 Contagem</button>
+        <button id="btn-tipo-rapida" class="btn btn-sm" onclick="setTipoAccao('rapida')">🔍 Verificação</button>
+        <button id="btn-tipo-validades" class="btn btn-sm" onclick="setTipoAccao('validades')">📅 Validades</button>
+        <button id="btn-tipo-reposicao" class="btn btn-sm" onclick="setTipoAccao('reposicao')">🔄 Reposição</button>
+      </div>
     </div>
-    <div class="card" id="local-card">
-      <div class="card-title">Local (gaveta)</div>
-      <select id="sel-local">
-        <option value="">Selecionar local...</option>
-      </select>
+
+    <!-- CAMPOS -->
+    <div id="card-campos" style="display:block;">
+      <div class="card" id="stock-status-card">
+        <div class="card-title">Stock carregado</div>
+        <div id="stock-status-info" style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">A verificar...</div>
+        <button class="btn btn-primary" id="btn-actualizar" onclick="actualizarStock()">↻ Actualizar stock</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Colaborador</div>
+        <select id="sel-colaborador" onchange="onColaboradorChange()">
+          <option value="">Selecionar colaborador...</option>
+          <option value="__novo__">+ Novo colaborador</option>
+        </select>
+        <input type="text" id="input-novo-colaborador" class="text-input" placeholder="Nome do novo colaborador" style="display:none;margin-top:8px;">
+      </div>
+      <div class="card" id="local-card">
+        <div class="card-title">Local (gaveta)</div>
+        <select id="sel-local">
+          <option value="">Selecionar local...</option>
+        </select>
+      </div>
     </div>
     <button class="btn btn-primary" id="btn-iniciar" onclick="iniciarAccao()">Iniciar contagem</button>
   </div>
@@ -204,6 +209,50 @@
       </div>
     </div>
     <button class="btn" onclick="cancelarRapida()" style="margin-top:8px;">← Voltar</button>
+  </div>
+</div>
+
+<!-- ECRÃ REPOSIÇÃO DE STOCK -->
+<div class="screen" id="screen-reposicao">
+  <div style="padding-top: 8px;">
+    <div class="card">
+      <div class="card-title">Ler código de barras</div>
+      <div class="scan-wrapper">
+        <input type="text" id="scan-input-reposicao" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
+      </div>
+      <div class="scan-hint">Scan do produto na gaveta a repor.</div>
+    </div>
+
+    <div id="reposicao-produto" style="display:none;">
+      <div class="product-card">
+        <div class="product-name" id="reposicao-nome">—</div>
+        <div class="product-cnp" id="reposicao-cnp">—</div>
+        <div class="stock-row">
+          <div class="stock-box" style="flex:1;">
+            <div class="stock-box-label">Stock total (Sifarma)</div>
+            <div class="stock-box-value" id="reposicao-stock-sifarma" style="font-size:28px;">—</div>
+          </div>
+        </div>
+        <div class="validade-row">
+          <label>Quantidade a pedir</label>
+          <input type="number" id="reposicao-qty" min="1" value="1" inputmode="numeric" style="text-align:center; font-size:18px; font-weight:700;">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary btn-sm" style="flex:1;" onclick="adicionarPedidoReposicao()">✓ Adicionar ao pedido</button>
+          <button class="btn btn-sm" onclick="cancelarReposicaoProduto()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" id="reposicao-lista-card" style="display:none;">
+      <div class="card-title">Pedido em curso</div>
+      <div id="reposicao-lista"></div>
+    </div>
+
+    <div style="display:flex; gap:8px; margin-top:8px;">
+      <button class="btn btn-primary" id="btn-enviar-reposicao" style="flex:1; display:none;" onclick="submeterReposicao()">🖨️ Imprimir pedido</button>
+      <button class="btn" onclick="cancelarReposicao()">← Voltar</button>
+    </div>
   </div>
 </div>
 
@@ -334,12 +383,13 @@ const FARMACIA_CONFIG = {
     locais: LOCAIS_PADRAO,
     appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgI_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec',
   },
-  'Farmácia Dias e Brito': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
-  'Farmácia Cidade Universitária': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
-  'Farmácia Alto dos Moinhos': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
-  'Farmácia Porfírio': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
-  'Farmácia Alto da Castelhana': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
-  'Farmácia das Túlipas': { colaboradores: [], locais: LOCAIS_PADRAO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  // ATENÇÃO: locais ainda por definir para cada farmácia abaixo — colocar lista própria de gavetas/lineares antes de usar em produção
+  'Farmácia Dias e Brito': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Cidade Universitária': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Alto dos Moinhos': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Porfírio': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Alto da Castelhana': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia das Túlipas': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
 };
 
 const FARMACIA_SLUG = {
@@ -372,6 +422,7 @@ function popularColaboradores(farmacia) {
 function onFarmaciaChange() {
   const farmacia = document.getElementById('sel-farmacia').value;
   const cfg = FARMACIA_CONFIG[farmacia];
+  document.getElementById('header-sub').textContent = farmacia || 'Seleciona a farmácia';
   document.getElementById('input-novo-colaborador').style.display = 'none';
   document.getElementById('input-novo-colaborador').value = '';
   popularColaboradores(farmacia);
@@ -386,20 +437,23 @@ function onColaboradorChange() {
 
 // Tipo de acção
 let tipoAccao = 'contagem';
+let farmaciaFixa = ''; // definida pelo URL ?f=
+
 function setTipoAccao(tipo) {
   tipoAccao = tipo;
-  ['contagem','rapida','validades'].forEach(t => {
+  ['contagem','rapida','validades','reposicao'].forEach(t => {
     const btn = document.getElementById('btn-tipo-' + t);
     btn.className = 'btn btn-sm' + (t === tipo ? ' btn-primary' : '');
     btn.style.flex = '1';
   });
   document.getElementById('local-card').style.display = tipo === 'contagem' ? 'block' : 'none';
-  const labels = {contagem: 'Iniciar contagem', rapida: '🔍 Iniciar verificação', validades: '📅 Iniciar conferência'};
+  const labels = {contagem: 'Iniciar contagem', rapida: '🔍 Iniciar verificação', validades: '📅 Iniciar conferência', reposicao: '🔄 Iniciar reposição'};
   document.getElementById('btn-iniciar').textContent = labels[tipo];
 }
 function iniciarAccao() {
   if (tipoAccao === 'contagem') iniciarSessao();
   else if (tipoAccao === 'rapida') abrirVerificacaoRapida();
+  else if (tipoAccao === 'reposicao') abrirReposicao();
   else abrirConferenciaValidades();
 }
 
@@ -466,6 +520,147 @@ function abrirConferenciaValidades() {
   showToast('Conferência de validades — em breve');
 }
 
+// ============================================================
+// REPOSIÇÃO DE STOCK
+// ============================================================
+let reposicaoPedido = [];
+let reposicaoProdutoAtual = null;
+const scanInputReposicao = () => document.getElementById('scan-input-reposicao');
+
+function abrirReposicao() {
+  const farmacia = document.getElementById('sel-farmacia').value;
+  if (!farmacia) { showToast('Seleciona a farmácia primeiro'); return; }
+  reposicaoPedido = [];
+  reposicaoProdutoAtual = null;
+  document.getElementById('reposicao-produto').style.display = 'none';
+  document.getElementById('scan-input-reposicao').value = '';
+  renderListaReposicao();
+  showScreen('screen-reposicao');
+  scanInputReposicao().focus();
+}
+
+function cancelarReposicao() {
+  reposicaoPedido = [];
+  reposicaoProdutoAtual = null;
+  document.getElementById('reposicao-produto').style.display = 'none';
+  showScreen('screen-login');
+}
+
+scanInputReposicao().addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    const cnp = scanInputReposicao().value.trim();
+    if (cnp) processarCNPReposicao(cnp);
+    scanInputReposicao().value = '';
+  }
+});
+
+async function processarCNPReposicao(cnp) {
+  cnp = resolverCNP(cnp);
+  const produto = await buscarProduto(cnp);
+  reposicaoProdutoAtual = { ...produto, cnp };
+  document.getElementById('reposicao-nome').textContent = produto.nome;
+  document.getElementById('reposicao-cnp').textContent = 'CNP: ' + cnp;
+  document.getElementById('reposicao-stock-sifarma').textContent = produto.stockSifarma;
+  document.getElementById('reposicao-qty').value = 1;
+  document.getElementById('reposicao-produto').style.display = 'block';
+}
+
+function adicionarPedidoReposicao() {
+  if (!reposicaoProdutoAtual) return;
+  const qty = parseInt(document.getElementById('reposicao-qty').value) || 0;
+  if (qty <= 0) { showToast('Indica uma quantidade válida'); return; }
+  const existente = reposicaoPedido.find(p => p.cnp === reposicaoProdutoAtual.cnp);
+  if (existente) { existente.qty += qty; }
+  else { reposicaoPedido.push({ cnp: reposicaoProdutoAtual.cnp, nome: reposicaoProdutoAtual.nome, stockSifarma: reposicaoProdutoAtual.stockSifarma, qty }); }
+  reposicaoProdutoAtual = null;
+  document.getElementById('reposicao-produto').style.display = 'none';
+  renderListaReposicao();
+  showToast('Adicionado ao pedido');
+  scanInputReposicao().focus();
+}
+
+function cancelarReposicaoProduto() {
+  reposicaoProdutoAtual = null;
+  document.getElementById('reposicao-produto').style.display = 'none';
+  scanInputReposicao().focus();
+}
+
+function renderListaReposicao() {
+  const card = document.getElementById('reposicao-lista-card');
+  const btnEnviar = document.getElementById('btn-enviar-reposicao');
+  if (reposicaoPedido.length === 0) {
+    card.style.display = 'none';
+    btnEnviar.style.display = 'none';
+    return;
+  }
+  card.style.display = 'block';
+  btnEnviar.style.display = 'block';
+  document.getElementById('reposicao-lista').innerHTML = [...reposicaoPedido].reverse().map((p, revIdx) => {
+    const i = reposicaoPedido.length - 1 - revIdx;
+    return '<div class="contagem-item">'
+      + '<div class="contagem-dot dot-ok"></div>'
+      + '<div class="contagem-info">'
+      + '<div class="contagem-nome">' + p.nome + '</div>'
+      + '<div class="contagem-cnp">' + p.cnp + ' · Sifarma: ' + p.stockSifarma + '</div>'
+      + '</div>'
+      + '<div class="contagem-nums">'
+      + '<div class="desvio" style="color:var(--green);">×' + p.qty + '</div>'
+      + '<div class="stocks" style="cursor:pointer; text-decoration:underline;" onclick="removerPedidoReposicao(' + i + ')">remover</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function removerPedidoReposicao(i) {
+  reposicaoPedido.splice(i, 1);
+  renderListaReposicao();
+}
+
+async function submeterReposicao() {
+  if (reposicaoPedido.length === 0) { showToast('Pedido vazio'); return; }
+  const farmacia = document.getElementById('sel-farmacia').value;
+  let col = document.getElementById('sel-colaborador').value;
+  if (col === '__novo__') { col = document.getElementById('input-novo-colaborador').value.trim(); if (col) adicionarColaboradorExtra(farmacia, col); }
+
+  const dataHora = new Date().toLocaleString('pt-PT');
+  const itensOrdenados = [...reposicaoPedido].sort((a, b) => a.nome.localeCompare(b.nome));
+
+  const linhas = itensOrdenados.map(p =>
+    '<tr>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd;">' + p.nome + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd; text-align:center;">' + p.cnp + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd; text-align:center;">' + p.stockSifarma + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd; text-align:center; font-weight:700; font-size:16px;">' + p.qty + '</td>'
+    + '</tr>'
+  ).join('');
+
+  const html = '<html><head><title>Pedido de Reposição</title>'
+    + '<style>'
+    + 'body { font-family: Arial, sans-serif; padding: 20px; color:#111; }'
+    + 'h1 { font-size: 20px; margin-bottom:4px; }'
+    + '.meta { font-size: 13px; color:#555; margin-bottom:16px; }'
+    + 'table { width:100%; border-collapse: collapse; font-size: 14px; }'
+    + 'th { text-align:left; padding:8px; background:#f0f0f0; border-bottom:2px solid #999; }'
+    + '</style>'
+    + '</head><body>'
+    + '<h1>📦 Pedido de Reposição de Stock</h1>'
+    + '<div class="meta">' + (farmacia || '') + ' ' + (col ? '· ' + col : '') + ' · ' + dataHora + '</div>'
+    + '<table>'
+    + '<thead><tr><th>Produto</th><th>CNP</th><th>Stock Sifarma</th><th>Qtd a repor</th></tr></thead>'
+    + '<tbody>' + linhas + '</tbody>'
+    + '</table>'
+    + '</body></html>';
+
+  const win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => { win.print(); }, 300);
+
+  showToast(reposicaoPedido.length + ' referência(s) — a abrir impressão');
+  cancelarReposicao();
+}
+
 // Stock cache
 let stockCache = {}, altCodeMap = {}, stockTimestamp = null;
 function construirAltCodeMap() {
@@ -525,24 +720,23 @@ async function actualizarStock() {
   }, 15000);
 }
 
-// Modo admin / kiosk
 window.addEventListener('load', () => {
   document.getElementById('stock-status-info').textContent = 'Seleciona a farmácia para ver o stock.';
   const params = new URLSearchParams(window.location.search);
   const fParam = params.get('f'), lParam = params.get('l');
   const modoAdmin = params.get('admin') === '1';
+
   if (fParam) {
-    const nome = FARMACIA_SLUG[fParam] || fParam;
+    farmaciaFixa = FARMACIA_SLUG[fParam] || fParam;
     const selF = document.getElementById('sel-farmacia');
-    selF.value = nome;
+    selF.value = farmaciaFixa;
     if (!modoAdmin) selF.disabled = true;
     onFarmaciaChange();
     if (lParam) {
       setTimeout(() => {
         const s = document.getElementById('sel-local');
-        s.value = decodeURIComponent(lParam).replace(/\+/g,' ');
+        s.value = decodeURIComponent(lParam).replace(/\+/g, ' ');
         if (!modoAdmin) s.disabled = true;
-        setTipoAccao('contagem');
       }, 300);
     }
   }
@@ -588,7 +782,7 @@ function showScreen(id) {
 }
 
 // ============================================================
-// SCAN INPUT — igual à versão que funciona (doc38)
+// SCAN INPUT — igual à versão que funciona
 // ============================================================
 const scanInput = document.getElementById('scan-input');
 
@@ -689,7 +883,7 @@ function atualizarPendentes() {
   document.getElementById('lista-pendentes').innerHTML = pendentes.map(p => {
     const porLocal = contadoresPorLocal[p.cnp] || {};
     const breakdown = Object.keys(porLocal).filter(l => porLocal[l] > 0).map(l => l + ': ' + porLocal[l]).join(' · ');
-    return `<div class="contagem-item" onclick="abrirPendente('${p.cnp}')" style="cursor:pointer;"><div class="contagem-dot dot-warn"></div><div class="contagem-info"><div class="contagem-nome">${p.cached.n || 'Sem nome'}</div><div class="contagem-cnp">${p.cnp}${breakdown ? ' · ' + breakdown : ''}</div></div><div class="contagem-nums"><div class="stocks">${p.contado} / ${parseFloat(p.cached.s)||0}</div></div></div>`;
+    return '<div class="contagem-item" onclick="abrirPendente(\'' + p.cnp + '\')" style="cursor:pointer;"><div class="contagem-dot dot-warn"></div><div class="contagem-info"><div class="contagem-nome">' + (p.cached.n || 'Sem nome') + '</div><div class="contagem-cnp">' + p.cnp + (breakdown ? ' · ' + breakdown : '') + '</div></div><div class="contagem-nums"><div class="stocks">' + p.contado + ' / ' + (parseFloat(p.cached.s)||0) + '</div></div></div>';
   }).join('');
 }
 
@@ -750,7 +944,7 @@ function atualizarLista() {
     const porLocalStr = c.porLocal && Object.keys(c.porLocal).length > 1
       ? ' · ' + Object.entries(c.porLocal).map(([l,q]) => l+': '+q).join(', ')
       : c.locais && c.locais.length ? ' · ' + c.locais.join(', ') : '';
-    return `<div class="contagem-item"><div class="contagem-dot ${dotClass}"></div><div class="contagem-info"><div class="contagem-nome">${c.nome}</div><div class="contagem-cnp">${c.cnp}${c.validade?' · '+c.validade:''}${porLocalStr}</div></div><div class="contagem-nums"><div class="desvio" style="color:${desvioColor}">${(c.desvio>0?'+':'')+c.desvio}</div><div class="stocks">${c.stockSifarma} → ${c.contado}</div></div></div>`;
+    return '<div class="contagem-item"><div class="contagem-dot ' + dotClass + '"></div><div class="contagem-info"><div class="contagem-nome">' + c.nome + '</div><div class="contagem-cnp">' + c.cnp + (c.validade?' · '+c.validade:'') + porLocalStr + '</div></div><div class="contagem-nums"><div class="desvio" style="color:' + desvioColor + '">' + (c.desvio>0?'+':'')+c.desvio + '</div><div class="stocks">' + c.stockSifarma + ' → ' + c.contado + '</div></div></div>';
   }).join('');
 }
 
@@ -797,14 +991,29 @@ function novaContagem() {
   sessao = { farmacia:'', colaborador:'', zona:'', inicio:null, contagens:[] };
   produtoAtual = null; contadorAtual = 0; contadores = {}; contadoresPorLocal = {}; locaisPorCnp = {}; localAtual = '';
   document.getElementById('header-badge').textContent = '—';
-  document.getElementById('header-sub').textContent = 'Farmácia Aroeira';
+  document.getElementById('header-sub').textContent = farmaciaFixa || 'Seleciona a farmácia';
   document.getElementById('sel-farmacia').value = '';
+  document.getElementById('sel-farmacia').disabled = false;
+  document.getElementById('sel-local').disabled = false;
   popularSelect(document.getElementById('sel-colaborador'), [], 'Selecionar colaborador...', '<option value="__novo__">+ Novo colaborador</option>');
   popularSelect(document.getElementById('sel-local'), [], 'Selecionar local...');
   document.getElementById('input-novo-colaborador').style.display = 'none';
   document.getElementById('input-novo-colaborador').value = '';
   ['lista-contagens','lista-pendentes'].forEach(id => document.getElementById(id).innerHTML = '');
   ['pendentes-card','btn-finalizar-gaveta','stats-bar','lista-card','btn-submeter-wrapper','produto-atual'].forEach(id => document.getElementById(id).style.display = 'none');
+  if (farmaciaFixa) {
+    document.getElementById('sel-farmacia').value = farmaciaFixa;
+    document.getElementById('sel-farmacia').disabled = true;
+    onFarmaciaChange();
+  }
+  tipoAccao = 'contagem';
+  ['contagem','rapida','validades','reposicao'].forEach(t => {
+    const btn = document.getElementById('btn-tipo-' + t);
+    btn.className = 'btn btn-sm' + (t === 'contagem' ? ' btn-primary' : '');
+    btn.style.flex = '1';
+  });
+  document.getElementById('local-card').style.display = 'block';
+  document.getElementById('btn-iniciar').textContent = 'Iniciar contagem';
   showScreen('screen-login');
 }
 
@@ -821,6 +1030,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.22</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.29</div>
 </body>
 </html>
