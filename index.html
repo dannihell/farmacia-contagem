@@ -375,7 +375,13 @@ const OUTROS_LOCAIS = [
   'Linear OTC 1','Linear OTC 2','Linear OTC 3','Linear OTC 4',
   ...GAVETAS_BALCAO,'Móveis de Xaropes',
 ];
-const LOCAIS_PADRAO = [...G_LOCAIS, ...L_LOCAIS, ...GONDOLAS, ...OUTROS_LOCAIS, 'Armazém'];
+const LOCAIS_PADRAO = [...G_LOCAIS, ...L_LOCAIS, ...GONDOLAS, ...OUTROS_LOCAIS, 'Armazém', 'Expositor'];
+
+// Farmácia Dias e Brito: G1-G113, L1-L16, Frigorífico, Armazém, Expositor
+const G_LOCAIS_DIASBRITO = Array.from({length: 113}, (_, i) => 'G' + (i + 1));
+const L_LOCAIS_DIASBRITO = Array.from({length: 16}, (_, i) => 'L' + (i + 1));
+const LOCAIS_DIASBRITO = [...G_LOCAIS_DIASBRITO, ...L_LOCAIS_DIASBRITO, 'Frigorífico', 'Armazém', 'Expositor'];
+
 
 const FARMACIA_CONFIG = {
   'Farmácia Aroeira': {
@@ -384,7 +390,7 @@ const FARMACIA_CONFIG = {
     appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzYbzkj0GHtLoxUgI_vhSg3wRbObYuXkLJ8tWP1xhWhzTuMUJ3Op6gSvecKDEMRI8EU/exec',
   },
   // ATENÇÃO: locais ainda por definir para cada farmácia abaixo — colocar lista própria de gavetas/lineares antes de usar em produção
-  'Farmácia Dias e Brito': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Dias e Brito': { colaboradores: [], locais: LOCAIS_DIASBRITO, appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Cidade Universitária': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Alto dos Moinhos': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Porfírio': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
