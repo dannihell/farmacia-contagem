@@ -404,6 +404,11 @@ const FARMACIA_SLUG = {
   'porfirio':'Farmácia Porfírio','altodacastelhana':'Farmácia Alto da Castelhana','tulipas':'Farmácia das Túlipas',
 };
 
+function getFarmaciaSlug(nomeCompleto) {
+  for (const slug in FARMACIA_SLUG) { if (FARMACIA_SLUG[slug] === nomeCompleto) return slug; }
+  return 'aroeira';
+}
+
 function popularSelect(sel, valores, placeholder, extraOptionsHtml) {
   sel.innerHTML = '<option value="">' + placeholder + '</option>'
     + valores.map(v => '<option>' + v + '</option>').join('')
@@ -706,10 +711,11 @@ function actualizarUIStock(data) {
 async function actualizarStock() {
   const url = getStockUrl();
   if (!url) { showToast('Seleciona a farmácia primeiro'); return; }
+  const farmaciaSlug = getFarmaciaSlug(document.getElementById('sel-farmacia').value);
   const btn = document.getElementById('btn-actualizar'), el = document.getElementById('stock-status-info');
   btn.disabled = true; btn.innerHTML = 'A pedir exportacao...';
   if (el) el.textContent = 'A aguardar o servidor da farmacia...';
-  try { await fetch('https://stock-pedido.danielgds.workers.dev', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'pedirExportacao'}) }); } catch(e) {}
+  try { await fetch('https://stock-pedido.danielgds.workers.dev', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({action:'pedirExportacao', farmacia: farmaciaSlug}) }); } catch(e) {}
   const tsAntes = stockTimestamp; let tentativas = 0;
   const intervalo = setInterval(async () => {
     tentativas++;
@@ -1036,6 +1042,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.29</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.30</div>
 </body>
 </html>
