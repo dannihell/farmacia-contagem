@@ -8,7 +8,18 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0f6e56">
 <title>Inventário</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json" id="app-manifest">
+<script>
+  // Escolhe o manifest certo consoante o parâmetro ?f= ANTES da página carregar,
+  // para o "Adicionar ao ecrã principal" do Chrome respeitar o start_url correcto.
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const f = params.get('f');
+    if (f === 'aroeira' || f === 'diasbrito') {
+      document.getElementById('app-manifest').setAttribute('href', 'manifest-' + f + '.json');
+    }
+  })();
+</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   :root {
@@ -1042,6 +1053,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.32</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.33</div>
 </body>
 </html>
