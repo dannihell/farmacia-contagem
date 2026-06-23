@@ -678,12 +678,14 @@ async function submeterReposicao() {
     + '</table>'
     + '</body></html>';
 
-  const win = window.open('', '_blank');
-  win.document.write(html);
-  win.document.close();
-  setTimeout(() => { win.print(); }, 300);
+  // Adicionar botão de impressão ao HTML
+  const htmlComBotao = html.replace('</body>', '<button onclick="window.print()" style="position:fixed;bottom:20px;right:20px;padding:12px 20px;font-size:15px;background:#0f6e56;color:white;border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);">🖨️ Imprimir</button></body>').replace('<style>', '<style>@media print { button { display:none; } }');
 
-  showToast(reposicaoPedido.length + ' referência(s) — a abrir impressão');
+  // data: URL — funciona sem popup no Android
+  const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlComBotao);
+  window.location.href = dataUrl;
+
+  showToast(reposicaoPedido.length + ' referência(s) — a abrir lista');
   cancelarReposicao();
 }
 
@@ -1107,6 +1109,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.42</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.43</div>
 </body>
 </html>
