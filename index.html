@@ -399,7 +399,7 @@ const LOCAIS_DIASBRITO = [...G_LOCAIS_DIASBRITO, ...L_LOCAIS_DIASBRITO, 'Frigor�
 
 const FARMACIA_CONFIG = {
   'Farmácia Aroeira': {
-    colaboradores: ['Duarte', 'Alina', 'Jéssica', 'Tatiana', 'Matilde'],
+    colaboradores: [],
     locais: LOCAIS_PADRAO,
     appsScriptUrl: 'https://script.google.com/macros/s/AKfycbwBG8xfV9Udh6E1Ihn-TdpX0tf_x7BIuaXs-lAaMXCROBOqYy5d7KjVpUJPYhMcmzgI/exec',
   },
@@ -506,6 +506,7 @@ async function processarCNPRapida(cnp) {
   cnp = resolverCNP(cnp);
   const produto = await buscarProduto(cnp);
   rapidaProduto = { ...produto, cnp }; rapidaContador = 1;
+  if (produto.erro) tocarSomErro();
   document.getElementById('rapida-nome').textContent = produto.nome;
   document.getElementById('rapida-cnp').textContent = 'CNP: ' + cnp;
   document.getElementById('rapida-stock-sifarma').textContent = produto.stockSifarma;
@@ -690,12 +691,23 @@ async function submeterReposicao() {
 let stockCache = {}, altCodeMap = {}, stockTimestamp = null;
 function construirAltCodeMap() {
   altCodeMap = {};
-  for (const cnp in stockCache) { const c = stockCache[cnp].c; if (c && c !== cnp && !stockCache[c]) altCodeMap[c] = cnp; }
+  for (const cnp in stockCache) {
+    const c = stockCache[cnp].c;
+    if (c && c !== cnp) {
+      // Mapeia CNPEM -> CODIGO (independentemente de o CNPEM ser chave directa ou não)
+      if (!altCodeMap[c]) altCodeMap[c] = cnp;
+    }
+  }
 }
 function resolverCNP(codigo) {
-  if (stockCache[codigo]) return codigo;
-  if (codigo.length >= 8) { const u7 = codigo.slice(-7); if (/^\d{7}$/.test(u7) && stockCache[u7]) return u7; }
+  // 1. É directamente um CODIGO válido no stockCache?
+  if (stockCache[codigo] && !stockCache[codigo].c || stockCache[codigo] && stockCache[codigo].c === codigo) return codigo;
+  // 2. Está no mapa CNPEM->CODIGO?
   if (altCodeMap[codigo]) return altCodeMap[codigo];
+  // 3. Tenta os últimos 7 dígitos (EAN-13 → CNP)
+  if (codigo.length >= 8) { const u7 = codigo.slice(-7); if (/^\d{7}$/.test(u7) && stockCache[u7]) return u7; }
+  // 4. Está no stockCache directamente (CNPEM como chave)?
+  if (stockCache[codigo]) return codigo;
   return codigo;
 }
 async function verificarStatusStock() {
@@ -742,7 +754,7 @@ async function actualizarStock() {
         actualizarUIStock(data); showToast('Stock actualizado - ' + data.total + ' produtos'); btn.disabled = false;
       }
     } catch(e) {}
-    if (tentativas >= 16) { clearInterval(intervalo); if (el) el.textContent = 'Tempo esgotado.'; btn.textContent = 'Tentar de novo'; btn.disabled = false; }
+    if (tentativas >= 28) { clearInterval(intervalo); if (el) el.textContent = 'Tempo esgotado.'; btn.textContent = 'Tentar de novo'; btn.disabled = false; }
   }, 15000);
 }
 
@@ -840,7 +852,7 @@ document.addEventListener('keydown', function(e) {
 
 async function processarCNP(cnp) {
   if (document.getElementById('screen-contagem').className.indexOf('active') === -1) return;
-  cnp = resolverCNP(cnp);
+  cnp = resolverCNP(cnp.trim());
   const existente = sessao.contagens.find(c => c.cnp === cnp);
   if (existente) {
     existente.contado++; existente.desvio = existente.contado - existente.stockSifarma;
@@ -859,6 +871,23 @@ async function processarCNP(cnp) {
   atualizarPendentes();
 }
 
+// Som de erro
+function tocarSomErro() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(220, ctx.currentTime);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
+
 async function buscarProduto(cnp) {
   const cached = stockCache[cnp];
   if (cached) return { cnp, nome: cached.n || 'Sem nome', stockSifarma: parseFloat(cached.s) || 0, validade: cached.v || '' };
@@ -868,6 +897,9 @@ async function buscarProduto(cnp) {
 function mostrarProduto(produto, cnp) {
   produtoAtual = { ...produto, cnp };
   contadorAtual = contadores[cnp] || 1;
+  if (produto.erro) tocarSomErro();
+  const prodCard = document.querySelector('#produto-atual .product-card');
+  if (prodCard) prodCard.style.borderColor = produto.erro ? 'var(--red)' : 'var(--gray-border)';
   document.getElementById('prod-nome').textContent = produto.nome;
   document.getElementById('prod-cnp').textContent = 'CNP: ' + cnp;
   document.getElementById('prod-stock-sifarma').textContent = produto.stockSifarma;
@@ -987,11 +1019,27 @@ async function submeterContagem() {
   const cfg = FARMACIA_CONFIG[sessao.farmacia];
   const scriptUrl = cfg ? cfg.appsScriptUrl : 'APPS_SCRIPT_URL_AQUI';
   const btn = document.querySelector('#btn-submeter-wrapper .btn-primary');
+  const wrapper = document.getElementById('btn-submeter-wrapper');
   btn.innerHTML = '<span class="loading-spinner" style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:6px;"></span>A submeter...';
   btn.disabled = true;
+
+  // Botão de cancelar aparece ao fim de 10 segundos
+  const btnCancelar = document.createElement('button');
+  btnCancelar.className = 'btn';
+  btnCancelar.textContent = 'Cancelar e voltar';
+  btnCancelar.style.display = 'none';
+  btnCancelar.onclick = () => {
+    btn.innerHTML = 'Submeter sessão para registo';
+    btn.disabled = false;
+    btnCancelar.remove();
+  };
+  wrapper.appendChild(btnCancelar);
+  const timerCancelar = setTimeout(() => { btnCancelar.style.display = 'block'; }, 10000);
+
   try {
     if (!scriptUrl || scriptUrl === 'APPS_SCRIPT_URL_AQUI') {
       await new Promise(r => setTimeout(r, 1000));
+      clearTimeout(timerCancelar); btnCancelar.remove();
       showScreen('screen-sucesso');
       document.getElementById('sucesso-msg').textContent = sessao.contagens.length + ' produtos registados. Configura o Apps Script desta farmácia.';
       return;
@@ -1005,10 +1053,13 @@ async function submeterContagem() {
       return { data: new Date().toLocaleDateString('pt-PT'), hora: new Date().toLocaleTimeString('pt-PT'), farmacia: sessao.farmacia, colaborador: sessao.colaborador, cnp: c.cnp, nome: c.nome, stock_sifarma: c.stockSifarma, contado: c.contado, desvio: c.desvio, validade: c.validade, locais: locaisTxt };
     });
     await fetch(scriptUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }) });
+    clearTimeout(timerCancelar); btnCancelar.remove();
     showScreen('screen-sucesso');
     document.getElementById('sucesso-msg').textContent = sessao.contagens.length + ' produtos registados por ' + sessao.colaborador + '.';
   } catch(e) {
     showToast('Erro ao submeter — tenta de novo');
+    clearTimeout(timerCancelar);
+    btnCancelar.remove();
     btn.innerHTML = 'Submeter sessão para registo'; btn.disabled = false;
   }
 }
@@ -1056,6 +1107,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.34</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.42</div>
 </body>
 </html>
