@@ -386,9 +386,10 @@ const FARMACIA_CONFIG = {
     colaboradores: [],
     locais: LOCAIS_PADRAO,
     appsScriptUrl: 'https://script.google.com/macros/s/AKfycbwBG8xfV9Udh6E1Ihn-TdpX0tf_x7BIuaXs-lAaMXCROBOqYy5d7KjVpUJPYhMcmzgI/exec',
+    emailImpressora: 'farmaciaaroeira@print.epsonconnect.com',
   },
   // ATENÇÃO: locais ainda por definir para cada farmácia abaixo — colocar lista própria de gavetas/lineares antes de usar em produção
-  'Farmácia Dias e Brito': { colaboradores: [], locais: LOCAIS_DIASBRITO, appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzpugQx48WYesv8eRFl3pCjeDo6gSdzm_YaiRaHkz4VPcvAzfqk89Oc9y7htISJb2Ks/exec' },
+  'Farmácia Dias e Brito': { colaboradores: [], locais: LOCAIS_DIASBRITO, appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzpugQx48WYesv8eRFl3pCjeDo6gSdzm_YaiRaHkz4VPcvAzfqk89Oc9y7htISJb2Ks/exec', emailImpressora: 'diasebrito@print.epsonconnect.com' },
   'Farmácia Cidade Universitária': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Alto dos Moinhos': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Porfírio': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
@@ -656,14 +657,23 @@ async function submeterReposicao() {
     + '</table>'
     + '</body></html>';
 
-  // Adicionar botão de impressão ao HTML
-  const htmlComBotao = html.replace('</body>', '<button onclick="window.print()" style="position:fixed;bottom:20px;right:20px;padding:12px 20px;font-size:15px;background:#0f6e56;color:white;border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);">🖨️ Imprimir</button></body>').replace('<style>', '<style>@media print { button { display:none; } }');
+  // Enviar por email para a impressora
+  const cfg = FARMACIA_CONFIG[farmacia];
+  const emailImpressora = cfg ? cfg.emailImpressora : '';
+  const assunto = 'Pedido de Reposição — ' + (farmacia || '') + ' — ' + dataHora;
+  const corpo = itensOrdenados.map(p => p.nome + ' (CNP: ' + p.cnp + ') — Sifarma: ' + p.stockSifarma + ' — Pedir: ' + p.qty).join('\n');
 
-  // data: URL — funciona sem popup no Android
-  const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlComBotao);
-  window.location.href = dataUrl;
+  if (emailImpressora) {
+    window.location.href = 'mailto:' + emailImpressora
+      + '?subject=' + encodeURIComponent(assunto)
+      + '&body=' + encodeURIComponent(corpo);
+  } else {
+    // Fallback: data URL se não houver email de impressora configurado
+    const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+    window.location.href = dataUrl;
+  }
 
-  showToast(reposicaoPedido.length + ' referência(s) — a abrir lista');
+  showToast(reposicaoPedido.length + ' referência(s) — a abrir email');
   cancelarReposicao();
 }
 
@@ -1087,6 +1097,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.44</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.45</div>
 </body>
 </html>
