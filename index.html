@@ -228,45 +228,29 @@
 
 <!-- ECRÃ REPOSIÇÃO DE STOCK -->
 <div class="screen" id="screen-reposicao">
-  <div style="padding-top: 8px;">
-    <div class="card">
-      <div class="card-title">Ler código de barras</div>
-      <div class="scan-wrapper">
-        <input type="text" id="scan-input-reposicao" placeholder="Aguarda leitura..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric">
-      </div>
-      <div class="scan-hint">Scan do produto na gaveta a repor.</div>
-    </div>
+  <!-- SCAN compacto -->
+  <div style="display:flex; gap:6px; margin:8px 0; align-items:stretch;">
+    <input type="text" id="scan-input-reposicao" placeholder="CNP..." autocomplete="off" autocorrect="off" spellcheck="false" inputmode="numeric"
+      style="flex:1; padding:8px 10px; font-size:16px; font-family:monospace; border-radius:var(--radius-sm); border:2px solid var(--green-light); background:var(--green-bg); color:var(--text); min-width:0;">
+    <button onclick="confirmarScanReposicaoManual()"
+      style="flex:0 0 auto; padding:8px 14px; font-size:16px; font-weight:700; border-radius:var(--radius-sm); border:2px solid var(--green-light); background:var(--green); color:#fff; cursor:pointer;">OK</button>
+  </div>
 
-    <div id="reposicao-produto" style="display:none;">
-      <div class="product-card">
-        <div class="product-name" id="reposicao-nome">—</div>
-        <div class="product-cnp" id="reposicao-cnp">—</div>
-        <div class="stock-row">
-          <div class="stock-box" style="flex:1;">
-            <div class="stock-box-label">Stock total (Sifarma)</div>
-            <div class="stock-box-value" id="reposicao-stock-sifarma" style="font-size:28px;">—</div>
-          </div>
-        </div>
-        <div class="validade-row">
-          <label>Quantidade a pedir</label>
-          <input type="number" id="reposicao-qty" min="1" value="1" inputmode="numeric" style="text-align:center; font-size:18px; font-weight:700;">
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-primary btn-sm" style="flex:1;" onclick="adicionarPedidoReposicao()">✓ Adicionar ao pedido</button>
-          <button class="btn btn-sm" onclick="cancelarReposicaoProduto()">Cancelar</button>
-        </div>
-      </div>
-    </div>
+  <!-- STATS -->
+  <div class="stats-bar" id="reposicao-stats" style="display:none;">
+    <div class="stat-pill"><div class="stat-pill-num" id="reposicao-stat-refs">0</div><div class="stat-pill-label">Referências</div></div>
+    <div class="stat-pill"><div class="stat-pill-num" id="reposicao-stat-total">0</div><div class="stat-pill-label">Total unid.</div></div>
+  </div>
 
-    <div class="card" id="reposicao-lista-card" style="display:none;">
-      <div class="card-title">Pedido em curso</div>
-      <div id="reposicao-lista"></div>
-    </div>
+  <!-- LISTA -->
+  <div class="card" id="reposicao-lista-card" style="display:none;">
+    <div class="card-title">Pedido de reposição</div>
+    <div id="reposicao-lista"></div>
+  </div>
 
-    <div style="display:flex; gap:8px; margin-top:8px;">
-      <button class="btn btn-primary" id="btn-enviar-reposicao" style="flex:1; display:none;" onclick="submeterReposicao()">🖨️ Imprimir pedido</button>
-      <button class="btn" onclick="cancelarReposicao()">← Voltar</button>
-    </div>
+  <div style="display:flex; gap:8px; margin-top:8px;">
+    <button class="btn btn-primary" id="btn-enviar-reposicao" style="flex:1; display:none;" onclick="submeterReposicao()">🖨️ Imprimir pedido</button>
+    <button class="btn" onclick="cancelarReposicao()">← Voltar</button>
   </div>
 </div>
 
@@ -549,16 +533,15 @@ function abrirConferenciaValidades() {
 // ============================================================
 // REPOSIÇÃO DE STOCK
 // ============================================================
+// REPOSIÇÃO DE STOCK
+// ============================================================
 let reposicaoPedido = [];
-let reposicaoProdutoAtual = null;
 const scanInputReposicao = () => document.getElementById('scan-input-reposicao');
 
 function abrirReposicao() {
   const farmacia = document.getElementById('sel-farmacia').value;
   if (!farmacia) { showToast('Seleciona a farmácia primeiro'); return; }
   reposicaoPedido = [];
-  reposicaoProdutoAtual = null;
-  document.getElementById('reposicao-produto').style.display = 'none';
   document.getElementById('scan-input-reposicao').value = '';
   renderListaReposicao();
   showScreen('screen-reposicao');
@@ -567,9 +550,14 @@ function abrirReposicao() {
 
 function cancelarReposicao() {
   reposicaoPedido = [];
-  reposicaoProdutoAtual = null;
-  document.getElementById('reposicao-produto').style.display = 'none';
   showScreen('screen-login');
+}
+
+function confirmarScanReposicaoManual() {
+  const cnp = scanInputReposicao().value.trim();
+  if (cnp) processarCNPReposicao(cnp);
+  scanInputReposicao().value = '';
+  scanInputReposicao().focus();
 }
 
 scanInputReposicao().addEventListener('keydown', function(e) {
@@ -582,44 +570,34 @@ scanInputReposicao().addEventListener('keydown', function(e) {
 });
 
 async function processarCNPReposicao(cnp) {
-  cnp = resolverCNP(cnp);
+  cnp = resolverCNP(cnp.trim());
   const produto = await buscarProduto(cnp);
-  reposicaoProdutoAtual = { ...produto, cnp };
-  document.getElementById('reposicao-nome').textContent = produto.nome;
-  document.getElementById('reposicao-cnp').textContent = 'CNP: ' + cnp;
-  document.getElementById('reposicao-stock-sifarma').textContent = produto.stockSifarma;
-  document.getElementById('reposicao-qty').value = 1;
-  document.getElementById('reposicao-produto').style.display = 'block';
-}
-
-function adicionarPedidoReposicao() {
-  if (!reposicaoProdutoAtual) return;
-  const qty = parseInt(document.getElementById('reposicao-qty').value) || 0;
-  if (qty <= 0) { showToast('Indica uma quantidade válida'); return; }
-  const existente = reposicaoPedido.find(p => p.cnp === reposicaoProdutoAtual.cnp);
-  if (existente) { existente.qty += qty; }
-  else { reposicaoPedido.push({ cnp: reposicaoProdutoAtual.cnp, nome: reposicaoProdutoAtual.nome, stockSifarma: reposicaoProdutoAtual.stockSifarma, qty }); }
-  reposicaoProdutoAtual = null;
-  document.getElementById('reposicao-produto').style.display = 'none';
+  if (produto.erro) { tocarSomErro(); showToast('Produto não encontrado'); return; }
+  const existente = reposicaoPedido.find(p => p.cnp === cnp);
+  if (existente) {
+    existente.qty++;
+    showToast('+1 → ' + produto.nome.substring(0, 25));
+  } else {
+    reposicaoPedido.push({ cnp, nome: produto.nome, stockSifarma: produto.stockSifarma, qty: 1 });
+    showToast(produto.nome.substring(0, 30));
+  }
   renderListaReposicao();
-  showToast('Adicionado ao pedido');
-  scanInputReposicao().focus();
-}
-
-function cancelarReposicaoProduto() {
-  reposicaoProdutoAtual = null;
-  document.getElementById('reposicao-produto').style.display = 'none';
-  scanInputReposicao().focus();
 }
 
 function renderListaReposicao() {
   const card = document.getElementById('reposicao-lista-card');
   const btnEnviar = document.getElementById('btn-enviar-reposicao');
+  const stats = document.getElementById('reposicao-stats');
   if (reposicaoPedido.length === 0) {
     card.style.display = 'none';
     btnEnviar.style.display = 'none';
+    stats.style.display = 'none';
     return;
   }
+  const totalUnid = reposicaoPedido.reduce((s, p) => s + p.qty, 0);
+  document.getElementById('reposicao-stat-refs').textContent = reposicaoPedido.length;
+  document.getElementById('reposicao-stat-total').textContent = totalUnid;
+  stats.style.display = 'flex';
   card.style.display = 'block';
   btnEnviar.style.display = 'block';
   document.getElementById('reposicao-lista').innerHTML = [...reposicaoPedido].reverse().map((p, revIdx) => {
@@ -1109,6 +1087,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.43</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.44</div>
 </body>
 </html>
