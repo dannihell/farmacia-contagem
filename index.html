@@ -620,6 +620,7 @@ function renderListaReposicao() {
 function removerPedidoReposicao(i) {
   reposicaoPedido.splice(i, 1);
   renderListaReposicao();
+  scanInputReposicao().focus();
 }
 
 async function submeterReposicao() {
@@ -661,7 +662,15 @@ async function submeterReposicao() {
   const cfg = FARMACIA_CONFIG[farmacia];
   const emailImpressora = cfg ? cfg.emailImpressora : '';
   const assunto = 'Pedido de Reposição — ' + (farmacia || '') + ' — ' + dataHora;
-  const corpo = itensOrdenados.map(p => p.nome + ' (CNP: ' + p.cnp + ') — Sifarma: ' + p.stockSifarma + ' — Pedir: ' + p.qty).join('\n');
+  const corpo = 'PEDIDO DE REPOSIÇÃO\n'
+    + (farmacia || '') + (col ? ' — ' + col : '') + ' — ' + dataHora + '\n'
+    + '─'.repeat(40) + '\n\n'
+    + itensOrdenados.map((p, i) =>
+        (i + 1) + '. ' + p.nome + '\n'
+        + '   CNP: ' + p.cnp + '   |   Stock Sifarma: ' + p.stockSifarma + '   |   Pedir: ' + p.qty + ' un.'
+      ).join('\n\n')
+    + '\n\n' + '─'.repeat(40) + '\n'
+    + 'Total: ' + itensOrdenados.length + ' referências / ' + itensOrdenados.reduce((s,p) => s + p.qty, 0) + ' unidades';
 
   if (emailImpressora) {
     window.location.href = 'mailto:' + emailImpressora
@@ -1097,6 +1106,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.45</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.46</div>
 </body>
 </html>
