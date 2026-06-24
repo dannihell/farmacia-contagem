@@ -124,10 +124,11 @@
   .stat-pill-label { font-size: 10px; color: var(--text-muted); }
   .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
   @media print {
-    body * { visibility: hidden; }
-    #screen-impressao, #screen-impressao * { visibility: visible; }
-    #screen-impressao { position: fixed; top: 0; left: 0; width: 100%; }
-    #btn-voltar-impressao { display: none; }
+    body * { visibility: hidden !important; }
+    #screen-impressao { display: block !important; visibility: visible !important; position: fixed; top: 0; left: 0; width: 100%; padding: 0; }
+    #screen-impressao * { visibility: visible !important; color: black !important; background: white !important; }
+    #btn-voltar-impressao { display: none !important; }
+    .header { display: none !important; }
   }
 </style>
 </head>
@@ -1107,6 +1108,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.47</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.48</div>
 </body>
 </html>
