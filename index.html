@@ -123,7 +123,12 @@
   .stat-pill-num { font-size: 18px; font-weight: 700; }
   .stat-pill-label { font-size: 10px; color: var(--text-muted); }
   .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  @media print {
+    body * { visibility: hidden; }
+    #screen-impressao, #screen-impressao * { visibility: visible; }
+    #screen-impressao { position: fixed; top: 0; left: 0; width: 100%; }
+    #btn-voltar-impressao { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -252,6 +257,28 @@
     <button class="btn btn-primary" id="btn-enviar-reposicao" style="flex:1; display:none;" onclick="submeterReposicao()">🖨️ Imprimir pedido</button>
     <button class="btn" onclick="cancelarReposicao()">← Voltar</button>
   </div>
+</div>
+
+<!-- ECRÃ IMPRESSÃO REPOSIÇÃO -->
+<div class="screen" id="screen-impressao">
+  <div id="impressao-conteudo" style="font-family:Arial,sans-serif; padding:8px;">
+    <div style="font-size:15px; font-weight:700; margin-bottom:2px;" id="impressao-titulo">Pedido de Reposição</div>
+    <div style="font-size:11px; color:#555; margin-bottom:12px;" id="impressao-meta"></div>
+    <table style="width:100%; border-collapse:collapse; font-size:12px;" id="impressao-tabela">
+      <thead>
+        <tr style="background:#f0f0f0;">
+          <th style="text-align:left; padding:6px 8px; border-bottom:2px solid #999;">#</th>
+          <th style="text-align:left; padding:6px 8px; border-bottom:2px solid #999;">Produto</th>
+          <th style="text-align:center; padding:6px 8px; border-bottom:2px solid #999;">CNP</th>
+          <th style="text-align:center; padding:6px 8px; border-bottom:2px solid #999;">Sifarma</th>
+          <th style="text-align:center; padding:6px 8px; border-bottom:2px solid #999; font-size:14px;">Qtd</th>
+        </tr>
+      </thead>
+      <tbody id="impressao-linhas"></tbody>
+    </table>
+    <div style="margin-top:10px; font-size:11px; color:#555; border-top:1px solid #ccc; padding-top:6px;" id="impressao-total"></div>
+  </div>
+  <button id="btn-voltar-impressao" class="btn" style="margin-top:16px;" onclick="voltarDeImpressao()">← Voltar</button>
 </div>
 
 <!-- ECRÃ 2: CONTAGEM -->
@@ -631,59 +658,33 @@ async function submeterReposicao() {
 
   const dataHora = new Date().toLocaleString('pt-PT');
   const itensOrdenados = [...reposicaoPedido].sort((a, b) => a.nome.localeCompare(b.nome));
+  const totalUnid = itensOrdenados.reduce((s, p) => s + p.qty, 0);
 
-  const linhas = itensOrdenados.map(p =>
+  // Preencher ecrã de impressão
+  document.getElementById('impressao-titulo').textContent = '📦 Pedido de Reposição de Stock';
+  document.getElementById('impressao-meta').textContent = (farmacia || '') + (col ? ' · ' + col : '') + ' · ' + dataHora;
+  document.getElementById('impressao-linhas').innerHTML = itensOrdenados.map((p, i) =>
     '<tr>'
-    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd;">' + p.nome + '</td>'
-    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd; text-align:center;">' + p.cnp + '</td>'
-    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd; text-align:center;">' + p.stockSifarma + '</td>'
-    + '<td style="padding:6px 8px; border-bottom:1px solid #ddd; text-align:center; font-weight:700; font-size:16px;">' + p.qty + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #eee; color:#888;">' + (i+1) + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #eee;">' + p.nome + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:center; font-family:monospace;">' + p.cnp + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:center;">' + p.stockSifarma + '</td>'
+    + '<td style="padding:6px 8px; border-bottom:1px solid #eee; text-align:center; font-weight:700; font-size:15px;">' + p.qty + '</td>'
     + '</tr>'
   ).join('');
+  document.getElementById('impressao-total').textContent = 'Total: ' + itensOrdenados.length + ' referências / ' + totalUnid + ' unidades';
 
-  const html = '<html><head><title>Pedido de Reposição</title>'
-    + '<style>'
-    + 'body { font-family: Arial, sans-serif; padding: 20px; color:#111; }'
-    + 'h1 { font-size: 20px; margin-bottom:4px; }'
-    + '.meta { font-size: 13px; color:#555; margin-bottom:16px; }'
-    + 'table { width:100%; border-collapse: collapse; font-size: 14px; }'
-    + 'th { text-align:left; padding:8px; background:#f0f0f0; border-bottom:2px solid #999; }'
-    + '</style>'
-    + '</head><body>'
-    + '<h1>📦 Pedido de Reposição de Stock</h1>'
-    + '<div class="meta">' + (farmacia || '') + ' ' + (col ? '· ' + col : '') + ' · ' + dataHora + '</div>'
-    + '<table>'
-    + '<thead><tr><th>Produto</th><th>CNP</th><th>Stock Sifarma</th><th>Qtd a repor</th></tr></thead>'
-    + '<tbody>' + linhas + '</tbody>'
-    + '</table>'
-    + '</body></html>';
-
-  // Enviar por email para a impressora
-  const cfg = FARMACIA_CONFIG[farmacia];
-  const emailImpressora = cfg ? cfg.emailImpressora : '';
-  const assunto = 'Pedido de Reposição — ' + (farmacia || '') + ' — ' + dataHora;
-  const corpo = 'PEDIDO DE REPOSIÇÃO\n'
-    + (farmacia || '') + (col ? ' — ' + col : '') + ' — ' + dataHora + '\n'
-    + '─'.repeat(40) + '\n\n'
-    + itensOrdenados.map((p, i) =>
-        (i + 1) + '. ' + p.nome + '\n'
-        + '   CNP: ' + p.cnp + '   |   Stock Sifarma: ' + p.stockSifarma + '   |   Pedir: ' + p.qty + ' un.'
-      ).join('\n\n')
-    + '\n\n' + '─'.repeat(40) + '\n'
-    + 'Total: ' + itensOrdenados.length + ' referências / ' + itensOrdenados.reduce((s,p) => s + p.qty, 0) + ' unidades';
-
-  if (emailImpressora) {
-    window.location.href = 'mailto:' + emailImpressora
-      + '?subject=' + encodeURIComponent(assunto)
-      + '&body=' + encodeURIComponent(corpo);
-  } else {
-    // Fallback: data URL se não houver email de impressora configurado
-    const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
-    window.location.href = dataUrl;
-  }
-
-  showToast(reposicaoPedido.length + ' referência(s) — a abrir email');
+  // Guardar pedido actual antes de limpar
+  const pedidoParaImprimir = [...reposicaoPedido];
   cancelarReposicao();
+
+  // Ir para ecrã de impressão e disparar print
+  showScreen('screen-impressao');
+  setTimeout(() => { window.print(); }, 400);
+}
+
+function voltarDeImpressao() {
+  showScreen('screen-login');
 }
 
 // Stock cache
@@ -1106,6 +1107,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.46</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.47</div>
 </body>
 </html>
