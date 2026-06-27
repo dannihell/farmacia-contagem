@@ -701,13 +701,21 @@ function construirAltCodeMap() {
   }
 }
 function resolverCNP(codigo) {
-  // 1. É directamente um CODIGO válido no stockCache?
+  // 1. GS1 DataMatrix FMD — extrai AI (714) = CNPEM português
+  const m714 = codigo.match(/714(\d{7})/);
+  if (m714) {
+    const cnp714 = m714[1];
+    if (stockCache[cnp714]) return cnp714;
+    if (altCodeMap[cnp714]) return altCodeMap[cnp714];
+    return cnp714;
+  }
+  // 2. É directamente um CODIGO válido no stockCache?
   if (stockCache[codigo] && !stockCache[codigo].c || stockCache[codigo] && stockCache[codigo].c === codigo) return codigo;
-  // 2. Está no mapa CNPEM->CODIGO?
+  // 3. Está no mapa CNPEM->CODIGO?
   if (altCodeMap[codigo]) return altCodeMap[codigo];
-  // 3. Tenta os últimos 7 dígitos (EAN-13 → CNP)
+  // 4. Tenta os últimos 7 dígitos (EAN-13 → CNP)
   if (codigo.length >= 8) { const u7 = codigo.slice(-7); if (/^\d{7}$/.test(u7) && stockCache[u7]) return u7; }
-  // 4. Está no stockCache directamente (CNPEM como chave)?
+  // 5. Está no stockCache directamente?
   if (stockCache[codigo]) return codigo;
   return codigo;
 }
@@ -1108,6 +1116,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.48</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.49</div>
 </body>
 </html>
