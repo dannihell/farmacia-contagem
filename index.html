@@ -701,6 +701,8 @@ function construirAltCodeMap() {
   }
 }
 function resolverCNP(codigo) {
+  // Limpar asteriscos (prefixo/sufixo Code39) e espaços
+  codigo = codigo.replace(/\*/g, '').trim();
   // 1. GS1 DataMatrix FMD — extrai AI (714) = CNPEM português
   const m714 = codigo.match(/714(\d{7})/);
   if (m714) {
@@ -1116,6 +1118,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.49</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.50</div>
 </body>
 </html>
