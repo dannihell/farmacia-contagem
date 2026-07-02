@@ -349,7 +349,6 @@
   <!-- SUBMETER -->
   <div id="btn-submeter-wrapper" style="display:none;margin-top:4px;">
     <button class="btn btn-primary" onclick="submeterContagem()">Submeter sessão para registo</button>
-    <button class="btn" onclick="novaContagem()">Nova sessão</button>
   </div>
 </div>
 
@@ -800,6 +799,7 @@ function fecharCamara() { document.getElementById('camera-overlay').style.displa
 // Sessão
 let sessao = { farmacia:'', colaborador:'', zona:'', inicio:null, contagens:[] };
 let produtoAtual = null, contadorAtual = 0;
+let submitAbortController = null;
 let contadores = {}, contadoresPorLocal = {}, locaisPorCnp = {}, localAtual = '';
 
 function iniciarSessao() {
@@ -1070,9 +1070,11 @@ async function submeterContagem() {
       if (validadeDivergente) locaisTxt += (locaisTxt ? ' | ' : '') + '⚠ Validade Sifarma ' + validadeSifarma + ' → física ' + c.validade + ' (corrigir)';
       return { data: new Date().toLocaleDateString('pt-PT'), hora: new Date().toLocaleTimeString('pt-PT'), farmacia: sessao.farmacia, colaborador: sessao.colaborador, cnp: c.cnp, nome: c.nome, stock_sifarma: c.stockSifarma, contado: c.contado, desvio: c.desvio, validade: c.validade, locais: locaisTxt };
     });
+    if (submitAbortController) submitAbortController.abort();
+    submitAbortController = new AbortController();
     const fetchTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 30000));
     await Promise.race([
-      fetch(scriptUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }) }),
+      fetch(scriptUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }), signal: submitAbortController.signal }),
       fetchTimeout
     ]);
     clearTimeout(timerCancelar); btnCancelar.remove();
@@ -1087,6 +1089,7 @@ async function submeterContagem() {
 }
 
 function novaContagem() {
+  if (submitAbortController) { submitAbortController.abort(); submitAbortController = null; }
   sessao = { farmacia:'', colaborador:'', zona:'', inicio:null, contagens:[] };
   produtoAtual = null; contadorAtual = 0; contadores = {}; contadoresPorLocal = {}; locaisPorCnp = {}; localAtual = '';
   document.getElementById('header-badge').textContent = '—';
@@ -1129,6 +1132,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.54</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.55</div>
 </body>
 </html>
