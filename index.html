@@ -1070,7 +1070,11 @@ async function submeterContagem() {
       if (validadeDivergente) locaisTxt += (locaisTxt ? ' | ' : '') + '⚠ Validade Sifarma ' + validadeSifarma + ' → física ' + c.validade + ' (corrigir)';
       return { data: new Date().toLocaleDateString('pt-PT'), hora: new Date().toLocaleTimeString('pt-PT'), farmacia: sessao.farmacia, colaborador: sessao.colaborador, cnp: c.cnp, nome: c.nome, stock_sifarma: c.stockSifarma, contado: c.contado, desvio: c.desvio, validade: c.validade, locais: locaisTxt };
     });
-    await fetch(scriptUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }) });
+    const fetchTimeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 30000));
+    await Promise.race([
+      fetch(scriptUrl, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sessao: sessao.colaborador, linhas: payload }) }),
+      fetchTimeout
+    ]);
     clearTimeout(timerCancelar); btnCancelar.remove();
     showScreen('screen-sucesso');
     document.getElementById('sucesso-msg').textContent = sessao.contagens.length + ' produtos registados por ' + sessao.colaborador + '.';
@@ -1125,6 +1129,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.53</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.54</div>
 </body>
 </html>
