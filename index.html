@@ -408,6 +408,10 @@ const G_LOCAIS_DIASBRITO = Array.from({length: 113}, (_, i) => 'G' + (i + 1));
 const L_LOCAIS_DIASBRITO = Array.from({length: 16}, (_, i) => 'L' + (i + 1));
 const LOCAIS_DIASBRITO = [...G_LOCAIS_DIASBRITO, ...L_LOCAIS_DIASBRITO, 'Frigorífico', 'Armazém', 'Expositor'];
 
+const G_LOCAIS_CU = Array.from({length: 100}, (_, i) => 'G' + (i + 1));
+const L_LOCAIS_CU = Array.from({length: 30}, (_, i) => 'L' + (i + 1));
+const LOCAIS_CU = [...G_LOCAIS_CU, ...L_LOCAIS_CU, 'Frigorífico', 'Armazém'];
+
 
 const FARMACIA_CONFIG = {
   'Farmácia Aroeira': {
@@ -418,7 +422,7 @@ const FARMACIA_CONFIG = {
   },
   // ATENÇÃO: locais ainda por definir para cada farmácia abaixo — colocar lista própria de gavetas/lineares antes de usar em produção
   'Farmácia Dias e Brito': { colaboradores: [], locais: LOCAIS_DIASBRITO, appsScriptUrl: 'https://script.google.com/macros/s/AKfycbzpugQx48WYesv8eRFl3pCjeDo6gSdzm_YaiRaHkz4VPcvAzfqk89Oc9y7htISJb2Ks/exec', emailImpressora: 'diasebrito@print.epsonconnect.com' },
-  'Farmácia Cidade Universitária': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
+  'Farmácia Cidade Universitária': { colaboradores: [], locais: LOCAIS_CU, appsScriptUrl: 'https://script.google.com/macros/s/AKfycbz1XgfWN5jVM2gITkIJ4UmbJp_spZ8Hsc4ZbFV1fFZ5LBgfGOfZ4YHXStgLrFpTQ9ppjw/exec' },
   'Farmácia Alto dos Moinhos': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Porfírio': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
   'Farmácia Alto da Castelhana': { colaboradores: [], locais: [], appsScriptUrl: 'APPS_SCRIPT_URL_AQUI' },
@@ -1118,6 +1122,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.50</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.52</div>
 </body>
 </html>
