@@ -1049,7 +1049,10 @@ async function submeterContagem() {
     btnCancelar.remove();
   };
   wrapper.appendChild(btnCancelar);
-  const timerCancelar = setTimeout(() => { btnCancelar.style.display = 'block'; }, 10000);
+  const timerCancelar = setTimeout(() => {
+    btnCancelar.style.display = 'block';
+    wrapper.style.display = 'block';
+  }, 10000);
 
   try {
     if (!scriptUrl || scriptUrl === 'APPS_SCRIPT_URL_AQUI') {
@@ -1122,6 +1125,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.52</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.53</div>
 </body>
 </html>
