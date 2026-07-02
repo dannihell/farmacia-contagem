@@ -1103,6 +1103,12 @@ function novaContagem() {
   document.getElementById('input-novo-colaborador').value = '';
   ['lista-contagens','lista-pendentes'].forEach(id => document.getElementById(id).innerHTML = '');
   ['pendentes-card','btn-finalizar-gaveta','stats-bar','lista-card','btn-submeter-wrapper','produto-atual'].forEach(id => document.getElementById(id).style.display = 'none');
+  // Repor estado do botão submeter para evitar spinner residual
+  const btnSubmeter = document.querySelector('#btn-submeter-wrapper .btn-primary');
+  if (btnSubmeter) { btnSubmeter.innerHTML = 'Submeter sessão para registo'; btnSubmeter.disabled = false; }
+  // Remover botão cancelar residual se existir
+  const btnCancelarResidual = document.querySelector('#btn-submeter-wrapper .btn:not(.btn-primary)');
+  if (btnCancelarResidual) btnCancelarResidual.remove();
   if (farmaciaFixa) {
     document.getElementById('sel-farmacia').value = farmaciaFixa;
     document.getElementById('sel-farmacia').disabled = true;
@@ -1132,6 +1138,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.55</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.56</div>
 </body>
 </html>
