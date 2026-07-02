@@ -1,0 +1,18 @@
+{
+  "name": "Inventário — Cidade Universitária",
+  "short_name": "Cidade Univ.",
+  "description": "Contagem física de stock com scanner PDA — Farmácia Cidade Universitária",
+  "start_url": "/farmacia-contagem/?f=cidadeuniversitaria",
+  "scope": "/farmacia-contagem/",
+  "display": "standalone",
+  "background_color": "#0f6e56",
+  "theme_color": "#0f6e56",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
