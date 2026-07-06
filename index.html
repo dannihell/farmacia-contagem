@@ -744,7 +744,8 @@ function actualizarUIStock(data) {
   const el = document.getElementById('stock-status-info'), btn = document.getElementById('btn-actualizar');
   if (data && data.timestamp && data.total > 0) {
     const ts = new Date(data.timestamp);
-    if (el) el.innerHTML = '<span style="color:var(--green);font-weight:600;">✓ ' + data.total + ' produtos</span> — ' + ts.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}) + ' de ' + ts.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'});
+    const unidades = data.total_unidades ? data.total_unidades.toLocaleString('pt-PT') + ' unidades' : data.total + ' referências';
+    if (el) el.innerHTML = '<span style="color:var(--green);font-weight:600;">✓ ' + unidades + '</span> — ' + ts.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}) + ' de ' + ts.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit'});
   } else { if (el) el.textContent = 'Stock nao disponivel.'; }
   if (btn) { btn.textContent = 'Actualizar stock'; btn.disabled = false; }
 }
@@ -765,7 +766,7 @@ async function actualizarStock() {
       const data = await resp.json();
       if (data && data.timestamp && data.timestamp !== tsAntes && data.total > 0) {
         clearInterval(intervalo); stockTimestamp = data.timestamp; stockCache = data.produtos || {}; construirAltCodeMap();
-        actualizarUIStock(data); showToast('Stock actualizado - ' + data.total + ' produtos'); btn.disabled = false;
+        actualizarUIStock(data); const unidadesMsg = data.total_unidades ? data.total_unidades.toLocaleString('pt-PT') + ' unidades' : data.total + ' referências'; showToast('Stock actualizado — ' + unidadesMsg); btn.disabled = false;
       }
     } catch(e) {}
     if (tentativas >= 28) { clearInterval(intervalo); if (el) el.textContent = 'Tempo esgotado.'; btn.textContent = 'Tentar de novo'; btn.disabled = false; }
@@ -1138,6 +1139,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.56</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.57</div>
 </body>
 </html>
