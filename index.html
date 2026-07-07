@@ -390,15 +390,14 @@ function getStockUrl() {
   return FARMACIA_STOCK_URL[document.getElementById('sel-farmacia').value] || null;
 }
 
-const G_LOCAIS = Array.from({length: 100}, (_, i) => 'G' + (i + 1));
+const G_LOCAIS = Array.from({length: 126}, (_, i) => 'G' + (i + 1));
 const L_LOCAIS = Array.from({length: 30}, (_, i) => 'L' + (i + 1));
 const GONDOLAS = Array.from({length: 6}, (_, i) => 'Gôndola ' + (i + 1));
-const GAVETAS_BALCAO = Array.from({length: 27}, (_, i) => i + 1).filter(n => n !== 22).map(n => 'Gaveta Balcão ' + n);
 const OUTROS_LOCAIS = [
   'Frigorífico Público','Frigorífico Medicamentos 1','Frigorífico Medicamentos 2',
   'Beauty Point — Frente','Beauty Point — Trás',
   'Linear OTC 1','Linear OTC 2','Linear OTC 3','Linear OTC 4',
-  ...GAVETAS_BALCAO,'Móveis de Xaropes',
+  'Móveis de Xaropes',
 ];
 const LOCAIS_PADRAO = [...G_LOCAIS, ...L_LOCAIS, ...GONDOLAS, ...OUTROS_LOCAIS, 'Armazém', 'Expositor'];
 
@@ -1139,6 +1138,6 @@ document.addEventListener('click', function(e) {
 
 // Pull-to-refresh bloqueado via CSS overscroll-behavior:none no body
 </script>
-<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.57</div>
+<div id="app-version" style="position:fixed;bottom:4px;left:6px;font-size:9px;color:rgba(0,0,0,0.2);z-index:99999;pointer-events:none;font-family:monospace;">v2026-06-15.58</div>
 </body>
 </html>
